@@ -3,9 +3,9 @@ export class Imgupload {
     name: string;
     url: string;
     file: File;
-  
+
     constructor(file: File) {
-      this.file = file;
+        this.file = file;
     }
-  }
-  
+}
+

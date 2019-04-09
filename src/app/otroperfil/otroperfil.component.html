@@ -1,0 +1,232 @@
+<app-nav-top></app-nav-top>
+<section id="header" [style.background-image]="'url('+usuario.Portada+')'">
+  <div style="position: absolute;
+    top: 0;
+    right: 0;
+    width: 190px;
+    border-radius: 0px 0px 0px 24px;
+    display: flex;
+    z-index: 99;
+    height: 40px;
+    color: white;
+    background: blue;
+  " (click)="Seguir()" class="cp cambiarportada" *ngIf="!Unfollow">
+
+    <i class="material-icons my-auto ml-3">add_circle</i>
+    <b class=" my-auto pt-1 ml-2">
+      Seguir
+    </b>
+  </div>
+  <div style="position: absolute;
+    top: 0;
+    right: 0;
+    width: 190px;
+    border-radius: 0px 0px 0px 24px;
+    display: flex;
+    z-index: 99;
+    height: 40px;
+    color: white;
+    background: red;
+  " (click)="Seguir()" class="cp cambiarportada" *ngIf="Unfollow">
+    <i class="material-icons my-auto ml-3">close</i>
+    <b class=" my-auto pt-1 ml-2">
+      Dejar de seguir
+    </b>
+  </div>
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-3 h40 d-flex">
+        <div class="foto-perfil bg-info" [style.background-image]="'url('+usuario.Foto+')'">
+          <p>Cambiar Foto</p>
+        </div>
+      </div>
+      <div class="col-md-9 h40 d-flex">
+        <div class="mt-auto">
+          <h2 class="text-white" *ngIf="!isMobile"><b style="text-shadow: 2px 2px 7px black;">{{usuario.Nick}}</b></h2>
+        </div>
+        <div class="mt-auto text-white ml-auto mr-5">
+          <h5>{{usuario.Seguidores}} seguidores</h5>
+
+        </div>
+        <div class="text-white mt-auto">
+          <h5>{{usuario.Seguidos}} seguidos</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section id="feed">
+
+  <section style="background-color:white">
+    <div class="container">
+      <div class="row text-center" *ngIf="isMobile">
+        <div class="col-12">
+          <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
+        </div>
+        <div class="col-6 text-center mt-2">
+          <h6><b>{{usuario.Seguidores}}</b> <br>Seguidores</h6>
+
+        </div>
+        <div class="col-6 text-center mt-2">
+          <h6><b>{{usuario.Seguidos}}</b> <br>Seguidos</h6>
+
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isCaptura"
+          (click)="isCaptura = true; isPublicacion = false;isGrupo = false" style="border-right:1px solid gray">
+          <img src="/assets/7.png" style="width:50px;" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Capturas</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+          *ngIf="isCaptura" (click)="isCaptura = false;" style="border-right:1px solid gray">
+          <img src="/assets/7.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Capturas</a>
+        </div>
+
+        <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isPublicacion"
+          (click)="isPublicacion = true; isCaptura = false;isGrupo = false" style="border-right:1px solid gray">
+          <img src="/assets/9.png" style="width:50px;" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Publicaciones</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+          *ngIf="isPublicacion" (click)="isPublicacion = false;" style="border-right:1px solid gray">
+          <img src="/assets/9.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Publicaciones</a>
+        </div>
+
+        <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isGrupo"
+          (click)="isGrupo = true; isPublicacion = false; isCaptura = false;" style="border-right:1px solid gray">
+          <img src="/assets/4.png" style="width:50px;" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Grupos y Eventos</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+          *ngIf="isGrupo" (click)="isGrupo = false;" style="border-right:1px solid gray">
+          <img src="/assets/4.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Grupos y Eventos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container" style="min-height:100vh">
+    <div class="row" *ngIf="!isCaptura && !isPublicacion && !isGrupo">
+      <div class="col-md-4 col-12" *ngFor="let x of listadoTodo">
+        <div class="row ">
+          <div class="col-md-6">
+            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
+              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
+              </div>
+              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                <div class="d-flex">
+                  <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
+                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
+
+                  <a class="mr-3">{{x.likes}}</a>
+                  <i class="material-icons mr-3 cp " (click)="selected = x">comment</i>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
+                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
+                <p class="text-muted my-1">{{x.descripcion}}</p>
+                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiqueta:</b> <a class="ml-2"
+                    style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
+                    routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isCaptura ">
+      <div class="col-md-4 col-12" *ngFor="let x of listCapturas">
+        <div class="row ">
+          <div class="col-md-6">
+            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
+              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
+              </div>
+              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                <div class="d-flex">
+                  <i class="material-icons mr-1 cp" (click)="meGusta(x)">{{x.quienLike | like}}</i>
+                  <a class="mr-3">{{x.likes}}</a>
+                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
+
+                </div>
+              </div>
+              <div class="col-md-12">
+                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
+                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
+                <p class="text-muted my-1">{{x.descripcion}}</p>
+                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isPublicacion">
+      <div class="col-md-4 col-12" *ngFor="let x of listPublicaciones">
+        <div class="row ">
+          <div class="col-md-6">
+            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
+              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
+              </div>
+              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                <div class="d-flex">
+                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)">{{x.quienLike | like}}</i>
+                  <a class="mr-3">{{x.likes}}</a>
+                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
+
+                </div>
+              </div>
+              <div class="col-md-12">
+                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
+                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
+                <p class="text-muted my-1">{{x.descripcion}}</p>
+                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiqueta:</b> <a class="ml-2"
+                    style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
+                    routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isGrupo">
+      <div class="col-md-12">
+
+      </div>
+      <div class="col-md-12 ">
+        <div class="row" style="height:45vh">
+          <div class="col-4 d-flex">
+            <img src="/assets/6.png" style="width:50px" class="my-auto ml-auto">
+          </div>
+          <div class="col-8 d-flex">
+            <div class="my-auto">
+              <h4 class="my-0"><b>¿Querés unirte a más grupos y eventos?</b></h4>
+              <p class="text-muted">¡Explora!</p>
+              <p>
+                <button>Explorar grupos</button>
+              </p>
+            </div>
+          </div>
+          <div class="col-12">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-borrarpubli [variable]="selectedBorrar" [variable2]="key" (var2)="selectedBorrar = undefined"></app-borrarpubli>
+<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined" [on]="onlinex"></app-view>
+<app-navbar [foto]="usuario.Foto">

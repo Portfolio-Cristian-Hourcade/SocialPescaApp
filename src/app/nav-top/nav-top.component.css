@@ -1,0 +1,131 @@
+header .cont{
+    background-image: linear-gradient(to right,blue, #090993);
+    height: 8vh;
+    position: fixed;
+    width: 100%;
+    z-index: 991;
+}
+h1{
+    font-weight: bolder;
+}
+.he8{
+    height: 8vh;
+}
+.input-search{
+    border-radius: 5px 0px 0px 5px;
+    border: 0;
+}
+.perfil{
+    height: 30px;
+    width: 30px;
+    background-size: cover;
+    border-radius: 50%;
+}
+.img-feed{
+    max-height: 400px;
+    max-width: 100%;
+}
+.notif{
+    font-size: 32px;
+}
+.imagen{
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+}
+.tarjeta-feed{
+    width: 350px;
+    height: auto;
+    padding-bottom: 25px;
+    background: white;
+    box-shadow: 0px 5px 11px -1px #0000002b;
+}
+section{
+    background-image: url('/assets/3.jpg');
+    background-position: center center;
+    background-size: cover;
+    height: 93vh;
+}
+.contenedor{
+    height: 92vh;
+    overflow-y: auto;
+}
+.ft-per{
+    width: 30px;
+    border-radius: 50%;
+    height: 30px;
+
+}
+.tarjeta{
+    height: 80px;
+    background: white;
+    box-shadow: 2px 2px 9px -2px #0000002b;
+    border-radius: 7px;
+    margin-top: 1rem;
+}
+.tarjeta .col-md-4{
+    background-size: cover;
+    background-position: center center;
+}
+.ver-todos-out{
+    padding: 7px 23px;
+    background: white;
+    border: 1px solid #834dff;
+    color: #8b71ff;
+    border-radius: 5px;
+}
+.ver-todos{
+    color: white;
+    border: 0;
+    padding: 7px 23px;
+    background-image: linear-gradient(to right, #6a83ff,#83a4ff);
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px 0px #0000005e;
+}
+
+.contenedor::-webkit-scrollbar, .cont-notif::-webkit-scrollbar {
+    width: 0.5em;
+}
+.contenedor::-webkit-scrollbar-track, .cont-notif::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 3px grey;
+    background: #ffffff26;
+}
+.tarj-not:hover{
+    background-color: #eeeeee;
+    border-radius: 15px;
+}
+.contenedor::-webkit-scrollbar-thumb, .cont-notif::-webkit-scrollbar-thumb {
+    background-color: #9f9f9fbd;
+      /* outline: 1px solid slategrey; */
+      border-radius: 5px;
+
+}
+.cartel{
+    width: 500px;
+    height: 230px;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: white;
+}
+.cont-notif{
+    height: 400px;overflow: auto;
+}
+.popup{
+    background: #00000061;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.add-sp{
+    background-image: linear-gradient(to right,#3176fb,#45c3ff);
+    color: white;
+    border: 0px;
+    border-radius: 32px;
+    padding: 10px 69px;
+    font-weight: bold;
+    height: 50px;
+    box-shadow: 1px 1px 7px 0px grey;
+}

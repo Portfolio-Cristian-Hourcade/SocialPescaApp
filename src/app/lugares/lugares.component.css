@@ -1,0 +1,19 @@
+.item{
+    height: 130px;
+    background-size: cover;
+    box-shadow: inset 0px -8px 122px 7px black;
+    color:white;
+}
+.item div p{
+    font-weight: bold;
+    text-align: center;
+}
+.item div{
+    width: 100%;
+}
+input{
+    width: 100%;
+    border: 1px solid gainsboro;
+    padding: 10px;
+    border-radius: 6px;
+}

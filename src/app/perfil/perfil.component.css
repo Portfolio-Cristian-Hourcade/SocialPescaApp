@@ -1,253 +1,121 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald');
-
-.perfil{
+#header{
+    background-position: center;
     background-size: cover;
-    background-position: center center;
-    height: 85vh;
+    height: 40vh;
+    box-shadow: inset 0px -64px 20px #0000007d;
+
 }
-.foto{
-    width: 250px;
-    height: 250px;
+.h40{
+    height: 40vh;
 }
-.foto>img{
-    border-radius: 100%;
-    width: 100%;
-    box-shadow: 6px 4px 12px #040404;
-    height: 100%;
-}
-.btn-veralbum-1{
-    background: #191919;
-    color: white;
-    font-family: "Oswald";
-}
-.bg-icon{
-    background:#ffa936;
-    color:white;
-    padding:10px;
-    border-radius: 100%;
-}
-.btn-veralbum-2{
-    background: white;
-    color: #191919;
-    font-family: "Oswald";
-}
-.tarjeta-dos{
-    background: #000000f2;
+.item-hov:hover {
+    background-color: blue;
     color: white;
 }
-.display-4{
-    font-size: 2.5rem;
+.item-hov:hover img{
+    filter: invert(1);
 }
-.title{
-    text-shadow: 2px 2px 1px #1e1e1e;
-}
-.fondo-b{
-    width: 100%;
-    position: relative;
-    display: flex;
-    background: #0000007d;
-}
-.tarjeta{
-    box-shadow: 6px 0px 20px #00000087;
-}
-.menu{
-    display: flex;
-}
-@media screen and (max-width: 768px) {
-    .fondo-b{
-        display: none!important
-    }
-    .menu{
-        display: none!important;
-    }
-}
-.categoria{
-    background: #f3f3f3;
-    border: 1px solid #e7e7e7;
-    height: 80px;
-    width: 230px;
-    font-size: 20px;
-}
-
-@import url('https://fonts.googleapis.com/css?family=Oswald');
-
-@media screen and (max-width: 768px) {
-    .menu{
-        display: none!important;
-    }
-    .hide-note{
-        display:block!important;
-    }
-    .tarjeta{
-        display: flex;
-        -webkit-box-orient: vertical!important;
-        -webkit-box-direction: reverse!important;
-        -ms-flex-direction: column-reverse!important;
-        flex-direction: column-reverse!important;    
-    }
-    .fondo-a{
-        width: 100%;
-        position: relative;
-        display: flex!important;
-        background: #0000007d;
-    }
-}
-.fondo-a{
-    display: none;
-}
-.hide-note{
-    display:none;
-}
-.perfil{
-    background-size: cover;
-    background-position: center center;
-    height: 85vh;
-}
-.menu{
-    display: block;
-}
-
-.foto{
-    width: 250px;
-    height: 250px;
-}
-.foto>img{
-    border-radius: 100%;
-    width: 100%;
-    box-shadow: 6px 4px 12px #040404;
-    height: 100%;
-}
-.btn-veralbum-1{
-    background: #191919;
+button{
+    background-image: linear-gradient(to right,#3176fb,#45c3ff);
     color: white;
-    font-family: "Oswald";
-}
-.bg-icon{
-    background:#ffa936;
-    color:white;
-    padding:10px;
-    border-radius: 100%;
-}
-.btn-veralbum-2{
-    background: white;
-    color: #191919;
-    font-family: "Oswald";
-}
-.tarjeta-dos{
-    background: #000000f2;
-    color: white;
-}
-.display-4{
-    font-size: 2.5rem;
-}
-.title{
-    text-shadow: 2px 2px 1px #1e1e1e;
-}
-.fondo-b{
-    width: 100%;
-    position: relative;
-    display: flex;
-    background: #0000007d;
-}
-.tarjeta{
-    box-shadow: 6px 0px 20px #00000087;
-}
-.categoria{
-    background: #f3f3f3;
-    border: 1px solid #e7e7e7;
-    height: 80px;
-    width: 230px;
-    font-size: 20px;
+    border: 0px;
+    border-radius: 5px;
+    padding: 10px 69px;
+    font-weight: bold;
+    height: 75px;
+    box-shadow: 1px 1px 7px 0px grey;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Oswald');
+.r-ov::-webkit-scrollbar, .cont-notif::-webkit-scrollbar {
+    width: 0.5em;
+}
+.r-ov::-webkit-scrollbar-track, .cont-notif::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 3px grey;
+    background: #ffffff26;
+}
+.r-ov::-webkit-scrollbar-thumb, .cont-notif::-webkit-scrollbar-thumb {
+    background-color: #9f9f9fbd;
+      /* outline: 1px solid slategrey; */
+      border-radius: 5px;
 
-.menus{
-    z-index: 999;
-    position: absolute;
-    left: 32%;
-    width: 200px;
-    box-shadow: 2px 3px 8px #3b3b3b;
-    background: #eeeeeed9;
-    padding: 20px;
-    font-size: 21px;
 }
-@media screen and (max-width: 768px) {
-    .menu{
-        display: none!important;
-    }
-    .hide-note{
-        display:block!important;
-    }
-    .tarjeta,.tarjeta0{
-        display: flex;
-        -webkit-box-orient: vertical!important;
-        -webkit-box-direction: reverse!important;
-        -ms-flex-direction: column-reverse!important;
-        flex-direction: column-reverse!important;    
-    }
-}
-.bg-dark{
-    background: #151516!important;
-}
-.cover{
+
+
+
+.imagen{
     height: 350px;
     background-size: cover;
+    background-position: center;
 }
-.hide-note{
-    display:none;
+.bg-b{
+    background-color:blue!important;
+    color:white!important;
+}
+.tarjeta-feed{
+    width: 350px;
+    height: auto;
+    padding-bottom: 25px;
+    background: white;
+    box-shadow: 0px 5px 11px -1px #0000002b;
+}
+.contenedor{
+    height: 92vh;
+    overflow-y: auto;
+}
+.ft-per{
+    width: 30px;
+    border-radius: 50%;
+    height: 30px;
+
 }
 
-.perfil{
-    background-size: cover;
-    background-position: center center;
-    height: 85vh;
-}
-.menu{
-    display: block;
-}
-.foto{
-    width: 250px;
-    height: 250px;
-}
-.foto>img{
-    border-radius: 100%;
-    width: 100%;
-    box-shadow: 6px 4px 12px #040404;
-    height: 100%;
-}
-.btn-veralbum-1{
-    background: #191919;
-    color: white;
-    font-family: "Oswald";
-}
-.bg-icon{
-    background:#ffa936;
-    color:white;
-    padding:10px;
-    border-radius: 100%;
-}
-.btn-veralbum-2{
-    background: white;
-    color: #191919;
-    font-family: "Oswald";
-}
-.tarjeta-dos,.tarjeta1{
-    background: #000000f2;
-    color: white;
-}
-.display-4{
-    font-size: 2.5rem;
-}
-.title{
-    text-shadow: 2px 2px 1px #1e1e1e;
-}
-.fondo-b{
-    width: 100%;
+.foto-perfil{
+    margin-top: auto;
     position: relative;
-    display: flex;
-    background: #0000007d;
+    top: 25px;
+    border-radius: 6px;
+    box-shadow: 2px 2px 7px 1px #0000006e;
+    background-size: cover;
+    height: 30vh;
+    width: 30vh;
+    z-index: 99;
+    background-position: center;
+
 }
-.tarjeta,.tarjeta0{
-    box-shadow: 6px 0px 20px #00000087;
+.foto-perfil p{
+    visibility: hidden;
+}
+.foto-perfil:hover{
+    filter: grayscale(1.0);
+    display: flex;
+    cursor: pointer;
+}
+.foto-perfil:hover p{
+    visibility: visible;
+    color:white;
+    margin:auto;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#feed{
+    background-image: url('/assets/3.jpg')!important;
+    background-position: center center;
+    background-size: cover;
+
+}
+.h13{
+    height: 13vh;
+}
+@media screen and (max-width: 768px){
+    .foto-perfil{
+        margin: auto;
+        height: 20vh;
+        width: 20vh;
+    }
+    .cambiarportada{
+        margin-top:8vh;
+    }
+    .tarjeta-feed{
+        width: 100%;
+    }
 }

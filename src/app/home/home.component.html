@@ -1,220 +1,50 @@
-<!-- <div class="d-flex bg-negro" style="width:100%;height:100vh">
-  <div class="mx-auto my-auto">
-  <h1 class="text-white efectoentr">
-    <a class="t1">P</a>
-    <a class="t2">H</a>
-    <a class="t3">A</a>
-    <a class="t4">L</a>
-    <a class="t5">P</a>
-    <a class="t6">H</a>
-    <a class="t7">A</a>
-    <a class="t8">G</a>
-    <a class="t9">O</a>
-    <a class="t10">L</a>
-    <a class="t11">F</a>
-  </h1>
+<app-nav-top></app-nav-top>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row contenedor" style="margin-bottom:4rem">
+          <div class="col-md-4" *ngFor="let x of listadoTodos" >
+            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
+              <div class="col-md-12 imagen cp" (click)="selected = x"  [style.background-image]="'url('+x.foto+')'">
+              </div>
+              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                <div class="d-flex">
+                  <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
+                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
+                  <a class="mr-3">{{x.likes}}</a>
+                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
+                  <i class="material-icons ml-auto cp" *ngIf="(thisNick !== x.Nick)" routerLink="/perfil/{{x.Nick}}">account_circle</i>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per" routerLink="/perfil/{{x.Nick}}">
+                  <b class="ml-1 cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}"> {{x.Nick}}</b></p>
+                <p class="text-muted my-0">{{x.descripcion}}</p>
+                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiquetas:</b> <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas" routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="popup d-flex" *ngIf="isNick">
+  <div class="mx-auto my-auto cartel text-center">
+    <h2>¡Ya casi terminamos!</h2>
+    <p class="text-muted">Solo falta que escribas tu nick de pescador.</p>
+    <input name="nick" [(ngModel)]="usuario.Nick" type="text"
+      style="padding: 10px 20px;margin-bottom: 20px;border-radius: 5px;border: 1px solid gainsboro;"
+      placeholder="Mi nombre de usuario">
+    <p>
+      <button class="add-sp" (click)="AgregarNick()">¡Empezar a usar SPesca!</button>
+    </p>
+  </div>
 </div>
-</div> -->
-<span class="v{{inicio}}">
-
-  <section class="fondo-l" *ngIf="popup">
-    <div class="fondo-l">
-
-    </div>
-    <div class="popup">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 mt-3 text-center">
-            <a class="display-3 ">
-              ATENCIÓN
-            </a>
-          </div>
-          <div class="col-12 mt-5">
-            <a class="h2">
-              El sitio que usted está entrando contiene contenido para mayores de 18 años. Por favor, si usted es menor
-              de edad, no continue en la navegación de la página. Si acepta circular en la página, estará aceptando los
-              terminos y condiciones de la misma.
-            </a>
-          </div>
-
-          <div class="col-12 text-center mt-4">
-            <button class="btn btn-primary" (click)="Cerrar()"><a class="h2">Acepto los terminos y
-                condiciones</a></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <header [style.background-image]="fondo">
-    <div class="h100 oscur">
-
-      <div class="container-fluid h100">
-        <div class="row h100">
-          <div class="col-12 menu">
-            <i class="material-icons ml-auto text-white" style="font-size:45px;" *ngIf="!Menu"
-              (click)="Menu = true">menu</i>
-          </div>
-          <div class="col-md-2 bg-left db-hide" *ngIf="Menu">
-            <i class="material-icons clear" (click)="Menu = false">clear</i>
-            <div class="row h100 text-white">
-              <div class="col-md-12 text-center mt-3">
-                <a class="h5"><img src="/assets/logoAlpha.png" style="width:70%"></a>
-              </div>
-              <div class="col-md-12 px-0">
-                <mat-list class="text-white">
-                  <mat-list-item>
-                    <div class="input-group">
-                      <input type="text" placeholder="Categorias & Modelos" class="form-control" />
-                      <span class="input-group-addon" style="padding:6px 20px;">
-                        <i class="glyphicon glyphicon-search" style="position: relative;
-                            right: 5px;
-                            top: 3px;"></i>
-                      </span>
-                    </div>
-                  </mat-list-item>
-                  <mat-list-item *ngIf="ok"><button mat-raised-button class="registro" data-toggle="modal"
-                      data-target="#registro">REGISTRATE</button></mat-list-item>
-                  <mat-list-item *ngIf="ok"><button mat-raised-button class="registro" data-toggle="modal"
-                      data-target="#iniciar">
-                      INICIAR SESION </button></mat-list-item>
-                  <mat-list-item *ngIf="!ok"><button mat-raised-button class="registro" (click)="cerrar()">
-                      CERRAR SESION </button></mat-list-item>
-                  <mat-list-item class="cp" routerLink="/modelos"> Modelos <i class="material-icons move-r cp;" style="position: relative;
-                  top: 1px;">keyboard_arrow_right</i>
-                  </mat-list-item>
-                  <mat-list-item class="cp" routerLink="/categorias"> Categorias <i class="material-icons move-r cp;"
-                      style="position: relative;
-                  top: 1px;">keyboard_arrow_right</i>
-                  </mat-list-item>
-                  <mat-list-item class="cp" routerLink="/trabajos"> Mis trabajos <i class="material-icons move-r cp;"
-                      style="position: relative;
-                  top: 1px;">keyboard_arrow_right</i>
-                  </mat-list-item>
-                  <mat-list-item class="cp" routerLink="/contacto"> Contacto
-                  </mat-list-item>
-                  <mat-list-item>
-                    <p class="text-center" class="cp">Terminos y Condiciones </p>
-                  </mat-list-item>
-                </mat-list>
-              </div>
-              <div class="col-md-12">
-                <!-- <button mat-raised-button class="registro mb-3">REGISTRATE</button>
-            <button mat-raised-button class="registro"> INICIAR SESION  </button> -->
-                <p class="text-center mt-4">
-                  <a href="info@phalphagolf.com"><i class="fa fa-envelope-o text-white" style="font-size:24px"></i></a>
-                  <a href="https://www.instagram.com/ph.alpha.golf/"><i class="fa fa-instagram mx-3 cp text-white"
-                      style="font-size:24px"></i></a>
-                  <a href="https://twitter.com/phalphagolf"><i class="fa fa-twitter cp text-white"
-                      style="font-size:24px"></i></a>
-                </p>
-              </div>
-
-            </div>
-          </div>
-          <div class="col-md-10 py-3 pl-5 d-flex">
-
-            <div class="mt-auto" style="width: 100%;">
-              <div class="mt-4">
-                <p class="h1 text-white display-3 t-title" id="titulo1">{{portada.nombrePack}}</p>
-                <p class="h2 text-white display-4 t-title2" id="subtitulo1"
-                  style="font-size:40px;position:relative;top:-10px;text-shadow: 2px 2px 4px #00000099;">
-                  {{portada.modelo}}</p>
-                <p class="mb-3 mt-2"><button mat-raised-button class="album " id="album"
-                    routerLink="/{{portada.modelo}}/{{portada.nombrePack}}">
-                    <b>VER ALBUM</b> <i class="material-icons  cp;">keyboard_arrow_right</i>
-                  </button></p>
-                <p style="text-align:end" class="text-white mb-1">
-                  <i class="material-icons f-32 b-r cp" (click)="moverIzquierda()">keyboard_arrow_left</i>
-                  <i class="material-icons f-32 b-r cp" (click)="moverDerecha()">keyboard_arrow_right</i>
-
-                </p>
-                <div class="bg-dark display-x">
-                  <div class="cont-img" *ngFor="let x of listadoPack" (click)="Seleccionar(x)">
-                    <img src="{{x.portada}}" class="item-img">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="modal fade" id="iniciar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 325px;">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <h3 class="os" style="font-family: Oswald;">INICIAR SESION</h3>
-              </div>
-              <div class="col-md-12 my-4">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-user"></i>
-                  <input type="text" placeholder="Email" class="form-control" name="emaill" [(ngModel)]="email" />
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-eye-close"></i>
-                  <input type="password" placeholder="Contraseña" class="form-control" name="contral"
-                    [(ngModel)]="contra" />
-                </div>
-              </div>
-              <div class="col-md-12 mt-3">
-                  <b class="my-3 text-danger" *ngIf="validarRegistro">* Error al iniciar sesion, por favor revise los
-                      campos</b>
-                <button class="btn btn-primary btn-inicio" (click)="iniciarSesion()">INICIAR SESION</button>
-              </div>
-              <div class="col-12 my-1">
-                <h3><small>¿Olvidaste tu cuenta?</small></h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id="registro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 325px;">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <h3 class="os" style="font-family: Oswald;">INICIAR SESION</h3>
-              </div>
-              <div class="col-md-12 my-4">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-user"></i>
-                  <input type="text" placeholder="Email" name="email" class="form-control" [(ngModel)]="email" />
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-eye-close"></i>
-                  <input type="password" placeholder="Contraseña" name="contra" class="form-control"
-                    [(ngModel)]="contra" />
-                </div>
-              </div>
-              <div class="col-md-12 mt-3">
-                <b class="my-3 text-danger" *ngIf="validarRegistro">* Error al iniciar sesion, por favor revise los
-                  campos</b>
-                <button class="btn btn-primary btn-inicio" style="background: white;
-              color: #2f2f2f;
-              box-shadow: 1px 1px 1px grey;" (click)="registro()">CREAR CUENTA</button>
-              </div>
-              <div class="col-12 my-1">
-                <h3><small>¿Olvidaste tu cuenta?</small></h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</span>
+<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined"></app-view>
+<app-navbar></app-navbar>

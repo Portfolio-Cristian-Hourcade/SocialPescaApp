@@ -1,0 +1,30 @@
+section{
+    z-index: 2;
+    background-color: #000000bd;
+    position: fixed;
+    display: flex;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+
+}
+.foto{
+    background-size: cover!important;
+    background-position: center!important;
+}
+input{
+    width: 100%;
+    padding: 10px 15px;
+    margin-top: 30px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+}
+section #sc{
+    background: white;
+    padding: 20px;
+    margin: auto;
+    width: 30%;
+    border-radius: 10px;
+    box-shadow: 1px 1px 9px 0px #00000075;
+    height: 27vh;
+}

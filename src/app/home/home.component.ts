@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../services/usuario.service';
-import { keyframes } from '@angular/animations';
+import { SesionService } from '../services/sesion.service';
+import { Usuario } from '../interfaces/usuario';
 
 @Component({
   selector: 'app-home',
@@ -9,200 +9,305 @@ import { keyframes } from '@angular/animations';
 })
 export class HomeComponent implements OnInit {
 
-  Menu: boolean;
-  listadoPack;
-  portada;
-  fondo;
-  fondoActivo;
-  position: number;
-  inicio;
-  popup;
-  email;
-  contra;
-  cliente;
-  ok;
+  url = "https://pbs.twimg.com/media/CpAyNN4WAAEknnf.jpg";
+  key;
+  listadoTodos: any[];
+  usuario;
+  isNick: boolean;
+  thisNick;
+  quienSigo: any[];
+  selected;
+
   constructor(
-    private dashboardService: UsuarioService
+    private sesionService: SesionService
   ) {
-    this.ok = true;
-    this.cliente = null;
-    this.validarRegistro = false;
-    this.email = "";
-    this.contra = "";
-    this.inicio = "0";
-    this.portada = "";
-    this.fondo = "";
-    this.fondoActivo = "";
-    this.popup = true;
-    this.Menu = false;
-    this.position = 0;
+    this.isNick = false;
+    this.usuario = {};
   }
-
-
 
   ngOnInit() {
-    this.cliente = localStorage.getItem("cliente");
-    if(this.cliente === null){
-      this.ok = true;
-    }else{
-      this.ok = false;
-    }
-    if (localStorage.getItem("modal") === "true") {
-      this.popup = false;
-    }
-    this.dashboardService.returnListPacks()
+    this.listadoTodos = [];
+    let primeraVez = true;
+    let primeraVez2 = true;
+
+    this.sesionService.listadoUsuario()
       .snapshotChanges()
       .subscribe(data => {
-        this.listadoPack = [];
-        data.forEach(element => {
-          let x = element.payload.toJSON();
-          x["$key"] = element.key;
-          this.listadoPack.push(x);
-        });
-        this.fondo = "url(" + this.listadoPack[0].portada + ")";
-        this.fondoActivo = this.listadoPack[0].portada;
-        this.inicio = "1";
-        this.portada = this.listadoPack[0];
+        if (primeraVez) {
+
+          data.map(element => {
+            let x = element.payload.toJSON();
+            if (x["Correo"] === localStorage.getItem("cliente")) {
+              x["$key"] = element.key;
+              this.thisNick = x["Nick"];
+              this.key = x["$key"]
+              if (x["Nick"] === undefined || x["Nick"] === null || x["Nick"] === "") {
+                this.isNick = true;
+                x["Nick"] = "";
+              }
+              this.usuario = x;
+              if (this.usuario.quienSeguidos !== undefined) {
+                let aux = this.usuario.quienSeguidos;
+                this.quienSigo = [];
+                Object.keys(aux).map(key => {
+                  this.quienSigo.push(aux[key]);
+                });
+              }
+            }
+          });
+          let aux3 = true;
+
+          this.sesionService.listadoPublicacion(this.key)
+            .snapshotChanges()
+            .subscribe(data => {
+              if (aux3) {
+
+                data.forEach(element => {
+                  let z = element.payload.toJSON();
+                  z["$key"] = element.key;
+                  z["keypadre"] = this.key;
+                  z["fperfil"] = this.usuario.Foto;
+                  let auxilar = z["etiqueta"];
+                  // z["etiqueta"] = auxilar.replace(/,/g, " ");
+                  this.listadoTodos.push(z);
+                  var n, i, k, aux;
+                  n = this.listadoTodos.length;
+                  for (k = 1; k < n; k++) {
+                    for (i = 0; i < (n - k); i++) {
+                      var j = this.listadoTodos[i].fecha.split("-");
+                      if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
+                        aux = this.listadoTodos[i];
+                        this.listadoTodos[i] = this.listadoTodos[i + 1];
+                        this.listadoTodos[i + 1] = aux;
+                      }
+                    }
+                  }
+                });
+                aux3 = false;
+              }
+            });
+          let aux4 = true;
+
+          this.sesionService.listadoCaptuas(this.key)
+            .snapshotChanges()
+            .subscribe(data => {
+              if (aux4) {
+
+                data.forEach(element => {
+                  let z = element.payload.toJSON();
+                  z["$key"] = element.key;
+                  z["keypadre"] = this.key;
+                  z["fperfil"] = this.usuario.Foto;
+                  this.listadoTodos.push(z);
+                  var n, i, k, aux;
+                  n = this.listadoTodos.length;
+                  for (k = 1; k < n; k++) {
+                    for (i = 0; i < (n - k); i++) {
+                      var j = this.listadoTodos[i].fecha.split("-");
+                      if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
+                        aux = this.listadoTodos[i];
+                        this.listadoTodos[i] = this.listadoTodos[i + 1];
+                        this.listadoTodos[i + 1] = aux;
+                      }
+                    }
+                  }
+                });
+                aux4 = false;
+              }
+            });
+          primeraVez = false;
+        }
+
+
+        this.sesionService.listadoUsuario()
+          .snapshotChanges()
+          .subscribe(data => {
+            if (primeraVez2) {
+
+              data.forEach(element => {
+
+                let y = element.payload.toJSON();
+                y["$key"] = element.key;
+                if (this.quienSigo !== undefined)
+
+                  this.quienSigo.map(element => {
+                    if (element === y["Nick"]) {
+                      let aux = true;
+                      this.sesionService.listadoCaptuas(y["$key"])
+                        .snapshotChanges()
+                        .subscribe(data => {
+                          if (aux) {
+
+                            data.forEach(element => {
+                              let z = element.payload.toJSON();
+                              z["$key"] = element.key;
+                              z["keypadre"] = y["$key"];
+                              z["fperfil"] = y["Foto"];
+                              this.listadoTodos.push(z);
+                              var n, i, k, aux;
+                              n = this.listadoTodos.length;
+                              for (k = 1; k < n; k++) {
+                                for (i = 0; i < (n - k); i++) {
+                                  var j = this.listadoTodos[i].fecha.split("-");
+                                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
+                                    aux = this.listadoTodos[i];
+                                    this.listadoTodos[i] = this.listadoTodos[i + 1];
+                                    this.listadoTodos[i + 1] = aux;
+                                  }
+                                }
+                              }
+                            });
+                            aux = false;
+                          }
+                        });
+                      let aux2 = true;
+
+                      this.sesionService.listadoPublicacion(y["$key"])
+                        .snapshotChanges()
+                        .subscribe(data => {
+                          if (aux2) {
+
+                            data.forEach(element => {
+                              let z = element.payload.toJSON();
+                              z["$key"] = element.key;
+                              z["keypadre"] = y["$key"];
+                              z["fperfil"] = y["Foto"];
+                              this.listadoTodos.push(z);
+                              var n, i, k, aux;
+                              n = this.listadoTodos.length;
+                              for (k = 1; k < n; k++) {
+                                for (i = 0; i < (n - k); i++) {
+                                  var j = this.listadoTodos[i].fecha.split("-");
+                                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
+                                    aux = this.listadoTodos[i];
+                                    this.listadoTodos[i] = this.listadoTodos[i + 1];
+                                    this.listadoTodos[i + 1] = aux;
+                                  }
+                                }
+                              }
+                            });
+                            aux2 = false;
+                          }
+                        });
+                    }
+                  });
+              });
+              primeraVez2 = false;
+              var n, i, k, aux;
+              n = this.listadoTodos.length;
+              for (k = 1; k < n; k++) {
+                for (i = 0; i < (n - k); i++) {
+                  var j = this.listadoTodos[i].fecha.split("-");
+                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
+                    aux = this.listadoTodos[i];
+                    this.listadoTodos[i] = this.listadoTodos[i + 1];
+                    this.listadoTodos[i + 1] = aux;
+                  }
+                }
+              }
+            }
+
+          });
       });
-    if (window.innerWidth > 769) {
-      this.Menu = true;
-    }
-
-
-
-
-
-
-
-    this.dashboardService.returnListClient()
-    .snapshotChanges()
-    .subscribe(data => {
-      let x = true;
-      this.variables = [];
-      data.forEach(element => {
-        let x = element.payload.toJSON();
-        this.variables.push(x);
-      });
-    });
-  }
-  variables;
-  Seleccionar(obj) {
-    this.portada = obj;
-    this.fondo = "url(" + this.portada.portada + ")";
-    this.fondoActivo = this.portada.portada
-
-    this.Animaciones()
   }
 
-  Cerrar() {
-    this.popup = false;
-    localStorage.setItem("modal", "true")
-    this.Animaciones();
-  }
-
-  Animaciones() {
-
-    document.getElementById("titulo1").style.animation = 'none';
-    document.getElementById("titulo1").offsetHeight; /* trigger reflow */
-    document.getElementById("titulo1").style.animation = null;
-
-    document.getElementById("subtitulo1").style.animation = 'none';
-    document.getElementById("subtitulo1").offsetHeight; /* trigger reflow */
-    document.getElementById("subtitulo1").style.animation = null;
-
-    document.getElementById("album").style.animation = 'none';
-    document.getElementById("album").offsetHeight; /* trigger reflow */
-    document.getElementById("album").style.animation = null;
-
-
-  }
-
-  moverDerecha() {
-    let position;
-    let aux = 0;
-    this.listadoPack.forEach(element => {
-      if (element.portada === this.fondoActivo) {
-        position = aux;
-      } else {
-        aux++;
-      }
-    });
-    this.fondoActivo = this.listadoPack[position + 1].portada;
-    this.fondo = "url(" + this.listadoPack[position + 1].portada + ")";
-    this.portada = this.listadoPack[position + 1];
-    this.Animaciones()
-
-  }
-  moverIzquierda() {
-    let position;
-    let aux = 0;
-    this.listadoPack.forEach(element => {
-      if (element.portada === this.fondoActivo) {
-        position = aux;
-      } else {
-        aux++;
-      }
-    });
-    if (position > 0) {
-
-      this.fondo = "url(" + this.listadoPack[position - 1].portada + ")";
-      this.fondoActivo = this.listadoPack[position - 1].portada;
-
-      this.portada = this.listadoPack[position - 1];
-      this.Animaciones()
-    }
-
-  }
-
-  validarRegistro;
-  iniciarSesion(){
-    let x = false;
-    this.variables.forEach(element => {
-      if(element.email === this.email && element.contra === this.contra){
-        this.validarRegistro = false;
-        x = true;
-      } 
-    });
-    if(x){
-      localStorage.setItem("cliente", this.email);
+  AgregarNick() {
+    if (this.usuario.Nick !== "") {
+      this.isNick = false;
+      this.sesionService.updateNick(this.usuario);
       location.reload();
-    }else{
-      this.validarRegistro = true;
     }
   }
-  registro() {
-    console.log(this.email);
-    let obj = {
-      email: "",
-      contra: ""
-    };
-    let x = true;
-      this.variables.forEach(element => {
-        if(element.email === this.email){
-          this.validarRegistro = true;
-          x = false;
-        } 
+
+  meGusta(x) {
+
+    if (x.quienLike === undefined) {
+      x.likes = 1;
+      x.quienLike = [];
+      x.quienLike.push(localStorage.getItem("cliente"));
+      this.sesionService.meGustaCap(x);
+      this.usuario.publi = x.foto;
+      let obj = this.usuario;
+      obj.$key = x.keypadre;
+      if (this.key !== x.keypadre) {
+        this.sesionService.nuevaNotificacion(this.usuario);
+      }
+    } else {
+
+      var aux = false;
+      var position;
+      var array = [];
+      Object.keys(x.quienLike).map(function (key) {
+        array.push(x.quienLike[key]);
+        if (x.quienLike[key] === localStorage.getItem("cliente")) {
+          aux = true;
+          position = key;
+        }
       });
-      if(x){
-        if(this.email !== "" && this.contra !== ""){
-          x = true;
-          console.log(this.email)
-          obj.email = this.email;
-          obj.contra = this.contra;
-          this.dashboardService.nuevoCliente(obj);
-          localStorage.setItem("cliente",this.email);
-          location.reload();
-        }else{
-          this.validarRegistro = true;
+      if (aux) {
+        x.likes = x.likes - 1;
+        array = array.slice(1, position);
+        x.quienLike = [];
+        x.quienLike = array;
+      } else {
+        x.likes = x.likes + 1;
+        array.push(localStorage.getItem("cliente"));
+        x.quienLike = [];
+        x.quienLike = array;
+        this.usuario.publi = x.foto;
+        let obj = this.usuario;
+        obj.$key = x.keypadre;
+        if (this.key !== x.keypadre) {
+          this.sesionService.nuevaNotificacion(obj);
         }
       }
-      
+      this.sesionService.meGustaCap(x);
+    }
 
-    
   }
-  cerrar(){
-    localStorage.clear();
-    location.reload();
+  meGustaP(x) {
 
+    if (x.quienLike === undefined) {
+      x.likes = 1;
+      x.quienLike = [];
+      x.quienLike.push(localStorage.getItem("cliente"));
+      this.sesionService.meGustaPub(x);
+      this.usuario.publi = x.foto;
+      let obj = this.usuario;
+      obj.$key = x.keypadre;
+      if(this.key !== x.keypadre){
+        this.sesionService.nuevaNotificacion(this.usuario);
+      } 
+    } else {
+
+      var aux = false;
+      var position;
+      var array = [];
+      Object.keys(x.quienLike).map(function (key) {
+        array.push(x.quienLike[key]);
+        if (x.quienLike[key] === localStorage.getItem("cliente")) {
+          aux = true;
+          position = key;
+        }
+      });
+      if (aux) {
+        x.likes = x.likes - 1;
+        array = array.slice(1, position);
+        x.quienLike = [];
+        x.quienLike = array;
+      } else {
+        x.likes = x.likes + 1;
+        array.push(localStorage.getItem("cliente"));
+        x.quienLike = [];
+        x.quienLike = array;
+        this.usuario.publi = x.foto;
+        let obj = this.usuario;
+        obj.$key = x.keypadre;
+        if (this.key !== x.keypadre) {
+          this.sesionService.nuevaNotificacion(this.usuario);
+        }
+      }
+      this.sesionService.meGustaPub(x);
+    }
   }
 }

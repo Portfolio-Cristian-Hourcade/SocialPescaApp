@@ -1,0 +1,18 @@
+.tarjeta{
+    margin: auto!important;
+    padding: 5px;
+    box-shadow: 1px 0px 5px 0px grey;
+    background-image: linear-gradient(to right, blue , #78caeb);
+    border-radius: 4px;
+    color: white;
+}
+
+.tarjeta img{
+    filter: invert(1);
+}
+.container{
+    height: 84vh;
+}
+.row{
+    height: 100%;
+}

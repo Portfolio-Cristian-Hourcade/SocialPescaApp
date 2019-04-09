@@ -1,0 +1,142 @@
+<section>
+  <div class="container-fluid">
+    <div class="row top">
+      <div class="col-12 d-flex">
+        <div class="mr-auto my-auto d-flex">
+          <i class="material-icons" routerLink="/home" *ngIf="!mensaje">keyboard_arrow_left</i>
+          <i class="material-icons" (click)="mensaje = false" *ngIf="mensaje">keyboard_arrow_left</i>
+
+        </div>
+        <div class="ml-auto my-auto">
+          Mensajes
+        </div>
+      </div>
+    </div>
+
+    <!-- HEADER MENSAJES -->
+
+    <div class="row" style="height:8vh">
+      <div class="col-12 d-flex text-center" style="height:100%">
+        <div class="mx-auto my-auto">
+
+          <b style="font-size:20px" *ngIf="!mensaje">Mensajes</b>
+          <b style="font-size:20px"
+            *ngIf="mensaje">{{(mensaje.Responsable2 === NickOnline) ? mensaje.Responsable1 : mensaje.Responsable2 }}</b>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="!mensaje"   >
+      <div class="col-12 my-3" >
+        <mat-form-field style="width:100%">
+          <input matInput type="text" name="sd" (keyup)="filtro($event.target.value)" placeholder="Nuevo mensaje para">
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- ./ -->
+
+    <!-- BODY DE MENSAJES -->
+
+    <div class="row"
+      style="overflow:auto; height: 64vh;background: hsl(0, 0%, 96%);    box-shadow: inset 0px 11px 46px -13px #a7a7a7;"
+      *ngIf="mensaje" id="mensajes">
+      <div class="col-12 d-flex mt-auto">
+        <div style="width:100%" id="tamano">
+          <p style="border-radius: 5px;box-shadow: 1px 1px 1px 1px gainsboro;background: white;padding: 10px 50px 10px 10px;max-width: 70%;"
+            class="{{(NickOnline === x.quien) ? 'ml-auto' : ''}} mensaje"
+            [style.background-color]="(NickOnline === x.quien) ? '#d0f4ff' : 'white'"
+            *ngFor="let x of mensaje.mensajes">
+            {{x.mensaje}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+
+
+
+
+
+    <!-- LISTADO DE USUARIOS PARA CHATEAR -->
+
+    <div *ngIf="listadoVista">
+      <div *ngIf="!mensaje && listadoVista.length !== 0" style="height:64vh; overflow:auto">
+        <div class="row mt-4" *ngFor="let x of listadoVista">
+          <div class="col-2 d-flex">
+            <div class="my-auto">
+              <img src="{{x.Foto}}" style="width: 40px;height: 40px;border-radius: 20px;">
+            </div>
+          </div>
+          <div class="col-10 d-flex">
+            <div class="my-auto">
+              <p class="mb-0"><b>{{x.Nick}}</b></p>
+              <p class="mb-0"><button (click)="NuevoMensaje(x)">Nuevo Mensaje</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+
+
+    <!-- LISTADO DE CHATS INICIADOS -->
+
+    <div *ngIf="!mensaje">
+      <div class="row mt-3" style="position:relative" *ngFor="let x of listadoMensajes">
+        <div *ngIf="!x.view" style="width: 20px;
+        left: 92%;
+        bottom: 78%;
+        border-radius: 50%;
+        z-index: 2;
+        position: absolute;
+        height: 20px;
+        background-color: #00c4ff;"></div>
+        <div class="col-2 d-flex">
+          <div class="my-auto">
+            <img src="{{(x.Responsable2 === NickOnline) ? x.Responsable1Foto : x.Responsable2Foto }}"
+              style="width: 40px;height: 40px;border-radius: 20px;">
+          </div>
+        </div>
+        <div class="col-10 d-flex" (click)="abrir(x)">
+          <div class="my-auto" style="    background: #f4f4f4;
+          border: 1px solid #e0e0e0;
+          box-shadow: 1px 1px 8px -3px black;
+          border-radius: 6px;
+          padding: 5px 5px 5px 15px;
+          width: 100%;">
+            <p class="mb-0"><b>{{(x.Responsable2 === NickOnline) ? x.Responsable1 : x.Responsable2 }}</b></p>
+            <p class="mb-0"><small>{{(x.quien === NickOnline) ? 'Yo' : x.quien}}: {{x.ultimo}} </small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ./ -->
+    <div class="row" *ngIf="listadoMensajes.length === 0 && !mensaje && listadoVista.length === 0">
+      <div class="col-12 text-center">
+        <h5 class="text-muted">No hay ningun mensaje</h5>
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- ENVIAR MENSAJES, FOOTER DE MENSAJES -->
+  <div class="container" style="height: calc(20vh - 70px)!important; height:20vh;" *ngIf="mensaje">
+    <div class="row" style="height:100%">
+      <div class="col-9 d-flex">
+        <div class="mx-auto my-auto" style="width:100%">
+          <input type="text" (keyup.enter)="enviar()" name="texto"  autocomplete="off" [(ngModel)]="texto" placeholder="Enviar mensaje"
+            style="width: 100%;padding: 8px 10px;border-radius: 5px;border: 1px solid gainsboro;">
+        </div>
+      </div>
+      <div class="col-3 d-flex pl-0">
+        <div class="mx-auto my-auto" style="width:100%">
+          <button style="width:100%" class="d-flex" (click)="enviar()"><i
+              class="material-icons d-flex mx-auto">send</i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

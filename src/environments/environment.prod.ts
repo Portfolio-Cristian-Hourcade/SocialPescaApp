@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   firebase : {
-    apiKey: "AIzaSyA3e2Yjbi1RcHhWntZKtsAe8xFuQC-84uA",
-    authDomain: "phalphagolfs.firebaseapp.com",
-    databaseURL: "https://phalphagolfs.firebaseio.com",
-    projectId: "phalphagolfs",
-    storageBucket: "phalphagolfs.appspot.com",
-    messagingSenderId: "829520334779"
+    apiKey: "AIzaSyCOfr3oueAhQDVKTB4CBKFns1gwXznpSTA",
+    authDomain: "socialpesca-b4535.firebaseapp.com",
+    databaseURL: "https://socialpesca-b4535.firebaseio.com",
+    projectId: "socialpesca-b4535",
+    storageBucket: "socialpesca-b4535.appspot.com",
+    messagingSenderId: "1047307543610"
   }
 };

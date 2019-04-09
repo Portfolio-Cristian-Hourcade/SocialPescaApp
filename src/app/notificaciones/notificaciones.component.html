@@ -1,0 +1,36 @@
+<section *ngIf="notificaciones">
+  <div class="container-fluid">
+    <div class="row top">
+      <div class="col-12 d-flex">
+        <div class="mr-auto my-auto d-flex">
+          <i class="material-icons" (click)="noti()">keyboard_arrow_left</i>
+        </div>
+        <div class="ml-auto my-auto">
+          Notificaciones
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-12 text-center">
+        <b style="font-size:20px">Nuevas notificaciones</b>
+      </div>
+    </div>
+    <div class="row" *ngFor="let x of listadoNotif">
+      <div class="col-2 d-flex">
+        <div class="my-auto">
+          <img src="{{x.Foto}}" style="    width: 40px;
+          height: 40px;
+          border-radius: 20px;">
+        </div>
+      </div>
+      <div class="col-8">
+        <a *ngIf="x.Accion === 'le gusta una publicacion'">A </a> <b routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</b> {{x.Accion}}.
+      </div>
+      <div class="col-2 d-flex pl-0">
+        <div class="my-auto">
+          <img src="{{x.Publicacion}}" style="width:40px;height:40px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

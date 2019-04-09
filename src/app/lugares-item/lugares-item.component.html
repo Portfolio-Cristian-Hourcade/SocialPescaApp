@@ -1,0 +1,68 @@
+<app-nav-top></app-nav-top>
+
+<header class="d-flex" [style.background-image]="'url('+Portada+')'">
+  <div class="mt-auto mx-auto">
+    <i class="material-icons" *ngFor="let x of item.Fotos"
+      (click)="Portada = x">{{(Portada === x) ? 'lens' : 'panorama_fish_eye'}}</i>
+  </div>
+</header>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="h3">{{item.Nombre}}</h1>
+        <p>Rank: {{item.Opinion}}</p>
+
+      </div>
+      <div class="col-12 text-center">
+        <a href="{{item.Ubicacion}}" target="_blank">
+          <button>Abrir ubicacion<i class="material-icons">add_location</i></button>
+        </a>
+      </div>
+    </div>
+    <div class="row my-5">
+      <div class="col-12">
+        <p>La <b>Temporada alta de pesca</b> en este lugar es de {{item.TemporadaAlta}}. Y la <b>Temporada baja de
+            pesca</b>
+          es de {{item.TemporadaBaja}}</p>
+      </div>
+    </div>
+    <div class="row mb-5">
+      <div class="col-12 my-2 text-center">
+        <b>Especies</b>
+      </div>
+      <div class="col-6 text-center" *ngFor="let x of item.Peces">
+        {{x}}
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col-12 my-2 text-center">
+        <b>Carnadas</b>
+      </div>
+      <div class="col-6 text-center" *ngFor="let x of item.Carnada">
+        {{x}}
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col-12 my-2 text-center">
+        <b>Alojamientos certificados</b>
+      </div>
+      <div class="col-12 text-center" *ngFor="let x of item.Alojamiento">
+        {{x}} <i class="material-icons" style="font-size:20px">touch_app</i>
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col-12 my-2 text-center">
+        <b>Guias certificados</b>
+      </div>
+      <div class="col-12 text-center" *ngFor="let x of item.Guia">
+        {{x}} <i class="material-icons" style="font-size:20px">touch_app</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-navbar></app-navbar>

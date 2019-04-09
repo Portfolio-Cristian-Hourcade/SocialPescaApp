@@ -1,0 +1,25 @@
+<section *ngIf="variable !== undefined">
+  <div id="sc">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3>¿Queres borrar esta publicación?</h3>
+      </div>
+      <div class="col-6 mt-3 d-flex">
+        <button (click)="borrar()"style="padding: 10px 30px;
+        background: red;
+        color: white;
+        border: 0;
+        border-radius: 5px;
+        box-shadow: 1px 1px 7px 0px black;" class="mx-auto">Borrar</button>
+      </div>
+      <div class="col-6 mt-3 d-flex">
+          <button style="padding: 10px 30px;
+          background: blue;
+          color: white;
+          border: 0;
+          border-radius: 5px;
+          box-shadow: 1px 1px 7px 0px black;" class="mx-auto" (click)="cerrar()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</section>

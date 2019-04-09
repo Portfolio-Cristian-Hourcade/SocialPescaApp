@@ -1,17 +1,49 @@
-<div class="py-4 b-shadow">
-  <div class="container">
-    <div class="row text-danger">
-      <div class="col-6">
-          <b class="h5">Nombre de marca</b>
+<header>
+  <div class="container" *ngIf="!isMobile">
+    <div class="row">
+    </div>
+    <div class="col-md-6 d-flex he8">
+      <div class="text-white my-auto mr-auto">
+        <h1 class="my-0">SPesca</h1>
       </div>
-      <div class="col-md-6 display-none-mobile">
-        <a class="mr-4 h5">Planes</a>
-        <a class="mr-4 h5">Quienes somos</a>
-        <a class="mr-4 h5">Denuncias</a>
-      </div>
-      <div class="col-md-6 col-6 d-flex">
-        <b class="ml-auto my-auto d-flex bolder h4">Contactanos</b>
+    </div>
+    <div class="col-md-6 he8 d-flex">
+      <div class="ml-auto my-auto d-flex">
+        <i class="material-icons text-white notif mr-3 cp" routerLink="/nueva-publicacion">camera_alt</i>
+        <i class="material-icons text-white notif mr-3 cp" routerLink="/home">home</i>
+        <i class="material-icons text-white notif mr-3 cp" routerLink="/explorar">search</i>
+        <i class="material-icons text-white notif mr-3 cp">location_on</i>
+
+        <i class="material-icons text-white notif mr-3 cp">favorite</i>
+        <i class="material-icons text-white notif mr-3 cp">question_answer</i>
+        <div class="perfil cp" [style.background-image]="'url('+fotografia+')'" routerLink="/perfil"></div>
       </div>
     </div>
   </div>
-</div>
+  <div class="container" *ngIf="isMobile">
+    <div class="row">
+      <div class="col-3 he8 d-flex">
+        <div class="mx-auto my-auto d-flex">
+          <i class="material-icons text-white notif mr-3 cp" routerLink="/home">home</i>
+        </div>
+      </div>
+      <div class="col-3 he8 d-flex">
+        <div class="mx-auto my-auto d-flex">
+          <i class="material-icons text-white notif mr-3 cp" routerLink="/explorar">search</i>
+        </div>
+      </div>
+      <div class="col-3 he8 d-flex">
+        <div class="mx-auto my-auto d-flex">
+          <i class="material-icons text-white notif mr-3 cp" routerLink="/novedad">person_pin</i>
+        </div>
+      </div>
+
+      <!-- <i class="material-icons text-white notif mr-3 cp">favorite</i> -->
+      <div class="cp col-3 d-flex" routerLink="/perfil">
+      <div  class=" my-auto mx-auto">
+        <img src="{{fotografia}}" style="width:35px;height:35px;border-radius:50%;">
+      </div>
+      </div>
+    </div>
+  </div>
+</header>

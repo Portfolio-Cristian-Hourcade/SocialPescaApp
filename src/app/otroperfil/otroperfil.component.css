@@ -1,0 +1,92 @@
+#header{
+    background-position: center;
+    background-size: cover;
+    height: 40vh;
+    box-shadow: inset 0px -64px 20px #0000007d;
+
+}
+.h40{
+    height: 40vh;
+}
+.item-hov:hover {
+    background-color: blue;
+    color: white;
+}
+.item-hov:hover img{
+    filter: invert(1);
+}
+button{
+    background-image: linear-gradient(to right,#3176fb,#45c3ff);
+    color: white;
+    border: 0px;
+    border-radius: 5px;
+    padding: 10px 69px;
+    font-weight: bold;
+    height: 75px;
+    box-shadow: 1px 1px 7px 0px grey;
+}
+.imagen{
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+}
+.bg-b{
+    background-color:blue!important;
+    color:white!important;
+}
+.tarjeta-feed{
+    width: 350px;
+    height: auto;
+    padding-bottom: 25px;
+    background: white;
+    box-shadow: 0px 5px 11px -1px #0000002b;
+}
+
+.contenedor{
+    height: 92vh;
+    overflow-y: auto;
+}
+.ft-per{
+    width: 30px;
+    border-radius: 50%;
+    height: 30px;
+
+}
+
+.foto-perfil{
+    margin-top: auto;
+    z-index:99;
+    background-position: center;
+    position: relative;
+    top: 25px;
+    border-radius: 6px;
+    box-shadow: 2px 2px 7px 1px #0000006e;
+    background-size: cover;
+    height: 30vh;
+    width: 30vh;
+}
+.foto-perfil p{
+    visibility: hidden;
+}
+#feed{
+    background-image: url('/assets/3.jpg')!important;
+    background-position: center center;
+    background-size: cover;
+
+}
+.h13{
+    height: 13vh;
+}
+@media screen and (max-width: 768px){
+    .foto-perfil{
+        margin: auto;
+        height: 20vh;
+        width: 20vh;
+    }
+    .cambiarportada{
+        margin-top:8vh;
+    }
+    .tarjeta-feed{
+        width: 100%;
+    }
+}

@@ -1,0 +1,52 @@
+
+<app-notificaciones (var)="notificacion = false;" [variable]="notificacion"></app-notificaciones>
+<header style="height:8vh" *ngIf="isMobile">
+  <div class="cont">
+    <div class="container">
+      <div class="row">
+        <div class="col-3 he8 d-flex">
+          <div class="mr-auto my-auto">
+            <img src="/assets/add.png" style="width:25px; height:25px;filter:invert(1)" routerLink="/nueva-publicacion">
+          </div>
+        </div>
+        <div class="col-9 d-flex">
+          <div class="ml-auto my-auto d-flex" style="position:relative">
+
+            <i class="material-icons text-white notif cp mr-3" (click)="notificacion = true">favorite</i>
+            <div  (click)="notificacion = true" *ngIf="notificaciones > 0" style="width: 22px;
+            height: 22px;
+            background: red;
+            display: flex;
+            border-radius: 22px;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            left: 25%;
+            bottom: 18px;
+        ">
+              <a class="mx-auto my-auto">
+                {{(notificaciones > 9) ? '9+' : notificaciones}}  
+              </a>
+            </div>
+            <i class="ml-auto material-icons text-white notif cp" routerLink="/mensajes">question_answer</i>
+            <div *ngIf="Mensajes > 0" routerLink="/mensajes" style="width: 22px;
+            height: 22px;
+            background: red;
+            display: flex;
+            border-radius: 22px;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            left: 80%;
+            bottom: 18px;
+        ">
+              <a class="mx-auto my-auto">
+                {{(Mensajes > 9) ? '9+' : Mensajes }}  
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

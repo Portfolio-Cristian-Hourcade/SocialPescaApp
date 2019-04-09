@@ -1,0 +1,11 @@
+section{
+    background:white;
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 200vh;
+}
+.top{
+    border-bottom: 1px solid gainsboro;
+    height: 8vh;
+}

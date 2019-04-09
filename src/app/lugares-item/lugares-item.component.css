@@ -1,0 +1,21 @@
+header{
+    height: 50vh;
+    background-size: cover;
+    background-position: center center;
+    box-shadow: inset 0px -41px 14px -7px #000000b5;
+}
+header div i{
+    color:white;
+}
+button{
+    background-image: linear-gradient(to right,#3176fb,#45c3ff);
+    color: white;
+    border: 0px;
+    border-radius: 32px;
+    padding: 0px 40px;
+    font-weight: bold;
+    height: 50px;
+    box-shadow: 1px 1px 7px 0px grey;
+    display: flex;
+    margin: auto;
+}

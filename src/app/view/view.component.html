@@ -1,0 +1,42 @@
+<section *ngIf="variable !== undefined">
+  <div id="sc">
+    <div class="row mr-0" style="height:100%;position: relative;">
+      <div class="bg-info cp" (click)="cerrar()" style="z-index: 9;
+      position: absolute;
+      top: 0px;
+      left: 47.5%;
+      height: 50px;
+      padding: 0px 15px;
+      width: 60px;
+      border-radius: 0px 0px 23px 23px;
+      display: flex;
+      color: white;">
+        <i class="material-icons d-flex mx-auto my-auto ">close</i></div>
+      <div class="col-md-6  col-12 foto" *ngIf="isMobile" [style.background-image]="'url('+variable.foto+')'">
+
+      </div>
+      <div class="col-md-6 col-12" style="padding: 20px 50px;overflow: auto;
+      height: 55vh;" >
+        <h2>{{variable.Nick}}</h2>
+        <h5 class="text-muted" style="height:140px">{{variable.descripcion}}</h5>
+        <p class="text-muted my-0" *ngIf="variable.pescado"><b>Pescado:</b>{{variable.pescado}}.</p>
+        <p class="text-muted my-0" *ngIf="variable.forma"><b>Estilo:</b>{{variable.forma}}. </p>
+        <p class="text-muted my-0" *ngIf="variable.donde"><b>Lugar:</b> {{variable.donde}}.</p>
+        <p class="text-muted my-0" *ngIf="variable.etiqueta"><b>Etiqueta:</b> {{variable.etiqueta}}.</p>
+        <input type="text" placeholder="Escribi un comentario (Enter para enviar)" name="sd" [(ngModel)]="comentario"
+          (keyup.enter)="comentar()">
+        <p *ngIf="!this.variable.comentarios"><small class="text-muted">Sin comentarios</small></p>
+        <div style="height:50%;
+        overflow-y: auto;">
+          <div class="my-2" *ngFor="let x of this.variable.comentarios">
+            <p class="my-2"><img src="{{x.foto}}" class="mr-3" style="width:50px;border-radius:50%"> <b>{{x.Nick}}:</b>
+              {{x.comentario}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6  col-12 foto" *ngIf="!isMobile" [style.background-image]="'url('+variable.foto+')'">
+
+      </div>
+    </div>
+  </div>
+</section>

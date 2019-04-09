@@ -1,0 +1,166 @@
+<app-nav-top></app-nav-top>
+<section class="contenedor">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center my-3">
+        <h2>¿Que te gustaría explorar?</h2>
+      </div>
+      <div class="col-md-4 col-4">
+        <div class="row tarjeta-i mx-2"
+          (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos">
+          <div class="col-md-3 d-flex">
+            <div class="my-auto mx-auto">
+              <img src="/assets/6.png" style="width:40px">
+            </div>
+          </div>
+          <div class="col-md-9 d-flex" *ngIf="!isMobile">
+            <div class="my-auto mr-auto">
+              <mat-form-field style="width:100%">
+                <input matInput type="text"
+                  (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos"
+                  (keyup)="Escribiendo($event.target.value)" placeholder="Nombre de nick">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="col-md-4 col-4">
+        <div class="row tarjeta-i mx-2 cp" *ngIf="!isPerfil"
+          (click)="isPerfil = true;isGrupo = false;isBusqueda=false; ">
+          <div class="col-md-4 d-flex">
+            <div class="my-auto mx-auto">
+              <img src="/assets/usuarios.png" style="width:40px">
+            </div>
+          </div>
+          <div class="col-md-8 d-flex" *ngIf="!isMobile">
+            <div class="my-auto mr-auto">
+              <p class="my-0"><b>Perfiles</b></p>
+            </div>
+          </div>
+        </div>
+        <div class="row tarjeta-i cp mx-2 text-white"
+          style="background-image: linear-gradient(to right, #6a83ff,#83a4ff);" *ngIf="isPerfil"
+          (click)="isPerfil = false;">
+          <div class="col-md-4 d-flex">
+            <div class="my-auto mx-auto">
+              <img src="/assets/usuarios.png" style="width:40px;filter: invert(1);">
+            </div>
+          </div>
+          <div class="col-md-4 d-flex" *ngIf="!isMobile">
+            <div class="my-auto mr-auto">
+              <p class="my-0"><b>Perfiles</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-4">
+        <div class="row tarjeta-i mx-2 cp" *ngIf="!isGrupo" (click)="isGrupo= true;isPerfil=false;isBusqueda=false;">
+          <div class="col-md-4 d-flex">
+            <div class="my-auto mx-auto">
+              <img src="/assets/4.png" style="width:40px">
+            </div>
+          </div>
+          <div class="col-md-4 d-flex" *ngIf="!isMobile">
+            <div class="my-auto mr-auto">
+              <p class="my-0"><b>Grupos & Eventos</b></p>
+            </div>
+          </div>
+        </div>
+        <div class="row tarjeta-i cp mx-2 text-white"
+          style="background-image: linear-gradient(to right, #6a83ff,#83a4ff);" *ngIf="isGrupo"
+          (click)="isGrupo = false;">
+          <div class="col-md-4 d-flex">
+            <div class="my-auto mx-auto">
+              <img src="/assets/4.png" style="width:40px;filter: invert(1);">
+            </div>
+          </div>
+          <div class="col-md-8 d-flex" *ngIf="!isMobile">
+            <div class="my-auto mr-auto">
+              <p class="my-0"><b>Grupos & Eventos</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isBusqueda && isMobile">
+        <div class="col-12">
+          <mat-form-field style="width:100%">
+            <input matInput type="text"
+              (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos"
+              (keyup)="Escribiendo($event.target.value)" placeholder="Nombre de nick">
+          </mat-form-field>
+        </div>
+      </div>
+    <div class="row mt-4" *ngIf="isBusqueda">
+      <div class="col-12">
+        <div class="row tarjeta-mobile" *ngFor="let x of listadoTodosView" style="width: 350px;
+        margin: auto;
+        height: 60px;
+        box-shadow: 2px 2px 6px #ebebeb;
+    background: white;
+    border-bottom: 1px solid gainsboro;">
+          <div class="col-3 d-flex">
+            <div class="my-auto">
+              <img src="{{x.Foto}}" class="ft-per" style="height:50px;width:50px;">
+            </div>
+          </div>
+          <div class="col-9 px-0 d-flex">
+            <div class="my-auto" style="width:100%">
+              <p class="my-0" style="width:100%">{{x.Nick}}
+                <b style="text-align:end">
+                  <button class="btn-seguir ml-2" routerLink="/perfil/{{x.Nick}}" *ngIf="myNick !== x.Nick">Ver</button>
+                  <button class="btn-seguir ml-2" routerLink="/perfil" *ngIf="myNick === x.Nick">Ver</button>
+                </b>
+    
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="isGrupo">
+      <div class="col-12 text-center">
+        <h4 class="text-muted">¡Ups! Parece que todavía los grupos y eventos no estan funcionando... :(</h4>
+      </div>
+      <div class="col-12 text-center">
+        <button routerLink="/nuevo-grupo">Crear nuevo grupo</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:4rem;" *ngIf="isPerfil">
+      <div class="col-md-4" *ngFor="let x of listPerfil">
+        <div class="row tarjeta-feed mx-auto mt-3 mb-3">
+          <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
+          </div>
+          <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+            <div class="d-flex">
+              <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
+              <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
+              <a class="mr-3">{{x.likes}}</a>
+              <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
+              <i class="material-icons ml-auto cp" routerLink="/perfil/{{x.Nick}}">account_circle</i>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per" routerLink="/perfil/{{x.Nick}}">
+              <b class="ml-1 cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}"> {{x.Nick}}</b>
+            </p>
+            <p class="text-muted my-0">{{x.descripcion}}</p>
+            <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+            <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+            <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+            <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiquetas:</b> {{x.etiqueta}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined"></app-view>
+
+<app-navbar></app-navbar>
