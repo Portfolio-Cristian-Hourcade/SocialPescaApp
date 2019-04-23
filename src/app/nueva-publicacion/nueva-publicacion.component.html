@@ -1,5 +1,5 @@
 <app-nav-top></app-nav-top>
-<section>
+<section style="padding-top:8vh;">
   <div class="container pt-3 cont">
     <div class="row">
       <div class="col-md-6 col-6">
@@ -7,7 +7,11 @@
           (click)="isCaptura = true;isPublicacion = false;imagen.length=0;isFoto = false">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/7.png" style="width:40px">
+              <img src="/assets/7.png" style="width: 40px;position: relative;left: calc(70% - 40px);">
+              <p class="mb-0 text-center" style="font-size: 11px;">Nueva captura
+              <br>
+                <b>¡Sumás 10 puntos!</b>
+            </p>
             </div>
           </div>
           <div class="col-md-8 d-flex" *ngIf="!isMobile">
@@ -21,7 +25,8 @@
           (click)="isCaptura = false;">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/7.png" style="width:40px;filter: invert(1);">
+              <img src="/assets/7.png" style="width: 40px;position: relative;left: calc(70% - 40px);filter: invert(1);">
+              <p style="font-size: 11px;">Nueva captura</p>
             </div>
           </div>
           <div class="col-md-8 d-flex" *ngIf="!isMobile">
@@ -36,7 +41,8 @@
           (click)="isPublicacion = true; isCaptura = false;imagen.length=0;isFoto = false" *ngIf="!isPublicacion">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/8.png" style="width:40px">
+                <img src="/assets/8.png" style="width: 40px;position: relative;left: calc(70% - 40px);">
+                <p style="font-size: 11px;">Nueva publicación</p>
             </div>
           </div>
           <div class="col-md-8 d-flex" *ngIf="!isMobile">
@@ -50,7 +56,8 @@
           (click)="isPublicacion = false">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/8.png" style="width:40px;filter: invert(1);">
+                <img src="/assets/8.png" style="width: 40px;position: relative;left: calc(70% - 40px);filter:invert(1)">
+                <p style="font-size: 11px;">Nueva publicación</p>  
             </div>
           </div>
           <div class="col-md-8 d-flex" *ngIf="!isMobile">
@@ -98,6 +105,7 @@
           <p><input type="text" placeholder="¿Donde fue pescado?" name="sd" [(ngModel)]="cliente.Capturas.donde"></p>
           <p class="text-danger" *ngIf="isProblema"> ¡No podes agregar una captura sin agregar la información!</p>
           <p><button (click)="agregarPublicacion()">Publicar captura</button></p>
+          <p><b>¡Con esta captura estarías sumando 10 puntos!</b></p>
         </div>
       </div>
     </div>
@@ -123,7 +131,10 @@
             <textarea placeholder="Escribí una descripcion de la foto" name="sd"
               [(ngModel)]="cliente.Publicacion.descripcion"></textarea>
           </p>
-          <p class="mb-0"><input type="text" placeholder="¿Estabas con alguien?" name="sd"
+
+          ¿Estabas con alguien?<input type="checkbox" class="ml-3" style="width:auto"
+            placeholder="¿Estabas con alguien?" (click)="etiqueta1 = (etiqueta1 === true) ? false : true">
+          <p class="mb-0" *ngIf="etiqueta1"><input type="text" placeholder="¿Con quien estabas?" name="sd"
               (keyup)="filtrar($event.target.value)" [(ngModel)]="cliente.Publicacion.etiqueta"></p>
           <div *ngIf="listadoFiltrado.length !== 0" style="    position: absolute;
         background: white;

@@ -23,11 +23,13 @@ export class OtroperfilComponent implements OnInit {
   Nick;
   onlinex;
   isMobile: boolean;
+  puntos;
 
   constructor(
     private usuarioService: SesionService,
     private activatedRoute: ActivatedRoute
   ) {
+    this.puntos = 0;
     this.isGrupo = false;
     this.isCaptura = false;
     this.isPublicacion = false;
@@ -36,6 +38,7 @@ export class OtroperfilComponent implements OnInit {
       Portada: ""
     }
     this.isMobile = false;
+
   }
   url = "https://pbs.twimg.com/media/CpAyNN4WAAEknnf.jpg";
 
@@ -64,8 +67,16 @@ export class OtroperfilComponent implements OnInit {
           }
           if (x["Nick"] === this.activatedRoute.snapshot.paramMap.get("nick")) {
 
+
             x["$key"] = element.key;
             this.usuario = x;
+            if (x["Puntos"] !== undefined) {
+              Object.keys(this.usuario.Puntos).map(elemento => {
+                this.puntos = this.usuario.Puntos[elemento].puntos + this.puntos;
+              });
+            } else {
+              this.puntos = 0;
+            }
 
             this.aux = this.usuario.quienSeguidores;
             this.key = element.key;
@@ -188,8 +199,10 @@ export class OtroperfilComponent implements OnInit {
         x.quienLike = [];
         x.quienLike = array;
         this.usuario.publi = x.foto;
+        let auxUsuario = this.usuario;
+        auxUsuario.Nick = this.onlinex.Nick;
         if (this.key !== x.keypadre) {
-          this.usuarioService.nuevaNotificacion(this.usuario);
+          this.usuarioService.nuevaNotificacion(auxUsuario);
         }
       }
       this.usuarioService.modificarGeneralCaptura(x);
@@ -285,13 +298,14 @@ export class OtroperfilComponent implements OnInit {
 
       /** Si los seguidores de la cuenta es diferente a 0 */
     } else {
-      console.log("entra aca");
+
       let aux = this.usuario.quienSeguidores;
       let boolean = true;
+
       /** Buscamos si el usuario online esta en la lista de seguidores **/
       Object.keys(aux).map(element => {
-        console.log(aux[element]);
-        console.log(this.onlinex.Nick)
+        // console.log(aux[element]);
+        // console.log(this.onlinex.Nick)
         if (aux[element] === this.onlinex.Nick) {
           boolean = false;
         } else {
@@ -303,23 +317,29 @@ export class OtroperfilComponent implements OnInit {
       if (boolean) {
         if (this.onlinex.quienSeguidos === undefined || this.onlinex.quienSeguidos === null) {
           this.onlinex.quienSeguidos = [this.usuario.Nick];
+          array.push(this.onlinex.Nick);
+
           this.onlinex.Seguidos = 1;
         } else {
+          console.log("este usuario online tiene seguidos")
           var arrayAux = []
           var aux2 = this.onlinex.quienSeguidos;
           console.log(aux2);
-          console.log(this.onlinex);
-          if(aux2 !== undefined){
+          if (aux2 !== undefined) {
             Object.keys(aux2).map(key => {
               arrayAux.push(aux2[key]);
             });
-          }else{
+            arrayAux.push(this.usuario.Nick);
+
+          } else {
             arrayAux = [];
             arrayAux.push(this.usuario.Nick);
+
           }
           this.onlinex.quienSeguidos = arrayAux;
           this.onlinex.Seguidos = this.onlinex.Seguidos + 1;
           array.push(this.onlinex.Nick);
+
         }
         this.usuario.Seguidores = this.usuario.Seguidores + 1;
         /** Si esta en la lista **/
@@ -327,11 +347,10 @@ export class OtroperfilComponent implements OnInit {
         var arrayAux = []
         var aux2 = this.onlinex.quienSeguidos;
         Object.keys(aux2).map(key => {
-
+          console.log(aux2[key]);
           if (aux2[key] !== this.usuario.Nick) {
             arrayAux.push(aux2[key]);
           }
-
         });
         if (arrayAux[0] === undefined) {
           arrayAux = null;
@@ -340,12 +359,16 @@ export class OtroperfilComponent implements OnInit {
         this.onlinex.Seguidos = this.onlinex.Seguidos - 1;
         this.usuario.Seguidores = this.usuario.Seguidores - 1;
       }
-      console.log(arrayAux);
+      console.log(array);
       this.usuarioService.updateNick(this.onlinex);
       this.usuario.quienSeguidores = array;
+      // console.log(this.usuario);
     }
     this.usuarioService.updateNick(this.usuario);
 
+
+
+    // COLOR BOTON
     if (this.usuario.quienSeguidores !== undefined) {
       if (this.onlinex !== undefined) {
         let boolean = false;

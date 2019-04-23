@@ -1,5 +1,5 @@
 <app-nav-top></app-nav-top>
-<section>
+<section style="padding-top: 8vh;">
   <div class="container">
     <div class="row my-3">
       <div class="col-12 text-center">
@@ -7,12 +7,19 @@
         <input type="text" placeholder="¿Qué pez te gustaría pescar?" (keyup)="filtro($event.target.value)">
       </div>
     </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <a>Si conoces un lugar que te gustaría que aparezca, sos guia o tenes un local <a
+            href="https://wa.me/541138459621">Contactanos</a></a>
+      </div>
+    </div>
     <div class="row mt-5">
       <div class="col-12 text-center">
         <h5>Top Lugares</h5>
       </div>
     </div>
-    <div class="row" *ngIf="JsonFiltro.length === 0">
+    <div class="row" style="    background-color: #e6e6e6;
+    min-height: 80vh;" *ngIf="JsonFiltro.length === 0">
 
       <div class="col-6 item d-flex" *ngFor="let x of JsonLugares" routerLink="/lugares/{{x.Slug}}"
         [style.background-image]="'url('+x.Portada+')'">
@@ -23,7 +30,8 @@
       </div>
 
     </div>
-    <div class="row" *ngIf="JsonFiltro !== []">
+    <div class="row" style="    background-color: #e6e6e6;
+    min-height: 80vh;" *ngIf="JsonFiltro !== []">
 
       <div class="col-6 item d-flex" *ngFor="let x of JsonFiltro" routerLink="/lugares/{{x.Slug}}"
         [style.background-image]="'url('+x.Portada+')'">
@@ -32,7 +40,7 @@
           <p class="mb-0 mx-auto">Rank: {{x.Opinion}}</p>
         </div>
       </div>
-    
+
     </div>
 
   </div>

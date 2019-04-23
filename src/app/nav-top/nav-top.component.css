@@ -1,10 +1,33 @@
 header .cont{
-    background-image: linear-gradient(to right,blue, #090993);
+    /* background-image: linear-gradient(to right,blue, #090993); */
+    /* background-image: linear-gradient(to right,#0092ff, #81ccf1);
+
     height: 8vh;
     position: fixed;
     width: 100%;
-    z-index: 991;
+    z-index: 991; */
 }
+
+header .cont{
+    background-image: linear-gradient(to right,#0092ff, #81ccf1);
+    height: 8vh;
+    margin-left: auto;
+    position: fixed;
+    width: 34%;
+    border-radius: 10px 0px 0px 30px;
+    display: flex;
+    left: calc(100% - 34%);
+    box-shadow: 1px 0px 7px 0px grey;
+}
+
+header{
+    z-index: 1;
+    position:fixed;
+}
+.container{
+    margin:auto;
+}
+
 h1{
     font-weight: bolder;
 }

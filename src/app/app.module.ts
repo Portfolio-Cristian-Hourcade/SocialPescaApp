@@ -79,6 +79,15 @@ import { NuevogrupoComponent } from './nuevogrupo/nuevogrupo.component';
 import { TravelComponent } from './travel/travel.component';
 import { LugaresComponent } from './lugares/lugares.component';
 import { LugaresItemComponent } from './lugares-item/lugares-item.component';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { DetallePubliComponent } from './detalle-publi/detalle-publi.component';
+import { NegociosComponent } from './negocios/negocios.component';
+import { InvitaramigoComponent } from './invitaramigo/invitaramigo.component';
+import { TablaComponent } from './tabla/tabla.component';
+import { LogintiendasComponent } from './logintiendas/logintiendas.component';
+import { PerfiltiendaComponent } from './perfiltienda/perfiltienda.component';
+import { NuevoproductoComponent } from './nuevoproducto/nuevoproducto.component';
+import { OtroperfiltiendaComponent } from './otroperfiltienda/otroperfiltienda.component';
 
 
 @NgModule({
@@ -103,9 +112,18 @@ import { LugaresItemComponent } from './lugares-item/lugares-item.component';
     TravelComponent,
     LugaresComponent,
     LugaresItemComponent,
+    DetallePubliComponent,
+    NegociosComponent,
+    InvitaramigoComponent,
+    TablaComponent,
+    LogintiendasComponent,
+    PerfiltiendaComponent,
+    NuevoproductoComponent,
+    OtroperfiltiendaComponent,
   ],
   imports: [
     AppRoutingModule,
+    AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),

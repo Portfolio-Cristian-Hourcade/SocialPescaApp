@@ -8,24 +8,26 @@ section{
     background-image: url('/assets/3.jpg');
     background-position: center center;
     background-size: cover;
-    height: 93vh;
 }
 .contenedor{
-    height: 92vh;
-    overflow-y: auto;
 }
 section{
     background-image: url('/assets/3.jpg');
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
-    height: 93vh;
+}
+.br-l{
+    border-left:1px solid gainsboro;
 }
 .tarjeta-i{
     background: white;
-    border-radius: 8px;
-    height: 8vh;
-    box-shadow: 1px 1px 1px 1px #8080806e;
+    border-top: 1px solid gainsboro;
+    border-bottom:1px solid gainsboro;
+    height: 10vh;
+    width: 100%;
+    margin: auto;
+    background-color: white;
 }
 
 #contenedor-img{
@@ -134,16 +136,28 @@ button{
     font-size: 32px;
 }
 .imagen{
-    height: 350px;
+    /* height: 350px; */
     background-size: cover;
     background-position: center;
 }
+.imagen{
+    position: relative;
+	width: 97%;
+}
+h2{
+    font-size: 1.2rem;
+}
+.imagen{
+    content: "";
+	display: block;
+	padding-top: 100%;
+}
 .tarjeta-feed{
-    width: 350px;
-    height: auto;
-    padding-bottom: 25px;
-    background: white;
-    box-shadow: 0px 5px 11px -1px #0000002b;
+    /* width: 350px; */
+    /* height: auto; */
+    /* padding-bottom: 25px; */
+    /* background: white; */
+    /* box-shadow: 0px 5px 11px -1px #0000002b; */
 }
 .tarjeta-feed:hover{
     transform: scale(1.01);

@@ -4,6 +4,10 @@ export interface Usuario {
     Apellido?: string;
     Contrasena?: string;
     Correo?: string;
+    Puntos?:{
+        puntos:number,
+        fecha:string;
+    };
     Notificacion?:{
         Foto?:string;
         Nick?:string;

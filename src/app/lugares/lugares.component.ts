@@ -11,8 +11,7 @@ export class LugaresComponent implements OnInit {
   JsonFiltro : any[]
   constructor() {
     this.JsonLugares = [
-      {Nombre:"Mar Del Túyu",Portada:"/assets/mue.jpg",Slug:"muelle-mdt",Opinion:"Excelente",Peces:["corvina","raya","chucho","burriqueta","brotola","vagre","lenguado"]},
-      {Nombre:"Playa Verde",Portada:"/assets/2.jpeg",Slug:"muelle-mdt",Opinion:"Bueno",Peces:["corvina","raya","chucho","burriqueta","brotola","vagre","lenguado","cazon"]},
+      {Nombre:"Mar Del Túyu",Portada:"/assets/mue.jpg",Slug:"muelle-mdt",Opinion:"Excelente",Peces:["corvina","raya","chucho","burriqueta","brotola","bagre","lenguado"]},
   ];
   this.JsonFiltro = [];
   }
@@ -20,7 +19,6 @@ export class LugaresComponent implements OnInit {
 
 
   ngOnInit() {
-    // console.log(this.JsonLugares);
   }
 
   filtro(value){

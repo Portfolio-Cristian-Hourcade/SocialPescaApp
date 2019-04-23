@@ -31,23 +31,31 @@ h1{
     font-size: 32px;
 }
 .imagen{
-    height: 350px;
+    width: 100%;
+    padding-top: 100%;
     background-size: cover;
     background-position: center;
 }
 .tarjeta-feed{
     width: 350px;
-    height: auto;
     padding-bottom: 25px;
     background: white;
     box-shadow: 0px 5px 11px -1px #0000002b;
 }
 .tarjeta-feed:hover{
-    transform: scale(1.01);
-    -moz-transform: scale(1.01);
-    -webkit-transform: scale(1.01);
-    -o-transform: scale(1.01);
 }
+.empezar{
+    animation: boton 2s;
+}
+@keyframes boton{
+    0%{
+        transform:translate(0,100%);
+    }
+    100%{
+        transform:translate(0,0);
+    }
+}
+
 section{
     background-image: url('/assets/3.jpg');
     background-position: center center;
@@ -56,7 +64,6 @@ section{
 }
 .contenedor{
     height: 92vh;
-    overflow-y: auto;
 }
 .ft-per{
     width: 30px;
@@ -140,7 +147,6 @@ section{
 @media screen and (max-width: 768px) {
     .tarjeta-feed{
     width: auto!important;
-    height: auto;
     padding-bottom: 25px;
     background: white;
     box-shadow: 0px 5px 11px -1px #0000002b;

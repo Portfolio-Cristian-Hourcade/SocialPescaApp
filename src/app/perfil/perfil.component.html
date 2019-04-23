@@ -2,7 +2,7 @@
 
 <section id="header" [style.background-image]="'url('+usuario.Portada+')'">
   <div style="position: absolute;
-  top: 0;
+  top: -8vh;
   width: 165px;
   border-radius: 0px 0px 24px 0px;
   display: flex;
@@ -42,14 +42,16 @@
   <section style="background-color:white">
     <div class="container">
       <div class="row text-center" *ngIf="isMobile">
-        <div class="col-12 text-center">
+        <div class="col-12 my-3 text-center">
           <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
         </div>
-        <div class="col-6 text-center mt-2">
+        <div class="col-4 text-center mt-2">
           <h6><b>{{usuario.Seguidores}}</b> <br>Seguidores</h6>
-
         </div>
-        <div class="col-6 text-center mt-2">
+        <div class="col-4 text-center mt-2">
+            <h6><b>{{puntos}}</b> <br>Puntos</h6>
+          </div>
+        <div class="col-4 text-center mt-2">
           <h6><b>{{usuario.Seguidos}}</b> <br>Seguidos</h6>
 
         </div>
@@ -61,7 +63,7 @@
           <img src="/assets/7.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
           *ngIf="isCaptura" (click)="isCaptura = false;" style="border-right:1px solid gray">
           <img src="/assets/7.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
@@ -72,7 +74,7 @@
           <img src="/assets/9.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
           *ngIf="isPublicacion" (click)="isPublicacion = false;" style="border-right:1px solid gray">
           <img src="/assets/9.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
@@ -83,7 +85,7 @@
           <img src="/assets/4.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-color:blue!important;color:white;"
+        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
           *ngIf="isGrupo" (click)="isGrupo = false;" style="border-right:1px solid gray">
           <img src="/assets/4.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
@@ -93,92 +95,39 @@
   </section>
 
   <div class="container" style="min-height:100vh; margin-bottom: 4rem">
-    <div class="row r-ov" *ngIf="!isCaptura && !isPublicacion && !isGrupo">
-      <div class="col-12 col-md-4" *ngFor="let x of listadoTodo">
-        <div class="row ">
-          <div class="col-md-6">
-            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
-              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
-              </div>
-              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
-                <div class="d-flex">
-                  <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
-                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
-
-                  <a class="mr-3">{{x.likes}}</a>
-                  <i class="material-icons mr-3 cp " (click)="selected = x">comment</i>
-                  <i class="material-icons cp ml-auto" (click)="selectedBorrar = x">more_horiz</i>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
-                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
-                <p class="text-muted my-1">{{x.descripcion}}</p>
-                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
-                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
-                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
-                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiqueta:</b> <a class="ml-2"
-                    style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
-                    routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
-
+    <div class="row mt-1" *ngIf="!isCaptura && !isPublicacion && !isGrupo">
+      <div class="col-md-4 col-4" *ngFor="let x of listadoTodo">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row mb-5 r-ov" *ngIf="isCaptura">
-      <div class="col-12 col-md-4" *ngFor="let x of listCapturas">
-        <div class="row ">
-          <div class="col-md-6">
-            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
-              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
-              </div>
-              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
-                <div class="d-flex">
-                  <i class="material-icons mr-1 cp" (click)="meGusta(x)">{{x.quienLike | like}}</i>
-                  <a class="mr-3">{{x.likes}}</a>
-                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
-                  <i class="material-icons cp ml-auto" (click)="selectedBorrar = x">more_horiz</i>
-
-                </div>
-              </div>
-              <div class="col-md-12">
-                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
-                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
-                <p class="text-muted my-1">{{x.descripcion}}</p>
-                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
-                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
-                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+    <div class="row mt-1" *ngIf="isCaptura">
+      <div class="col-md-4 col-4" *ngFor="let x of listCapturas">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row mb-5 r-ov" *ngIf="isPublicacion">
-      <div class="col-12 col-md-4" *ngFor="let x of listPublicaciones">
-        <div class="row ">
-          <div class="col-md-6">
-            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
-              <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
-              </div>
-              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
-                <div class="d-flex">
-                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)">{{x.quienLike | like}}</i>
-                  <a class="mr-3">{{x.likes}}</a>
-                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
-                  <i class="material-icons cp ml-auto" (click)="selectedBorrar = x">more_horiz</i>
-
-                </div>
-              </div>
-              <div class="col-md-12">
-                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per">
-                  <b class="ml-1" style="position: relative;top: 2px;"> {{x.Nick}}</b></p>
-                <p class="text-muted my-1">{{x.descripcion}}</p>
-                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiqueta:</b> <a class="ml-2"
-                    style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
-                    routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
+    <div class="row mt-1" *ngIf="isPublicacion">
+      <div class="col-md-4 col-4" *ngFor="let x of listPublicaciones">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
               </div>
             </div>
           </div>

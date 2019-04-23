@@ -31,6 +31,7 @@ export class BusquedaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isPerfil = true;
     if (window.innerWidth < 768) {
       this.isMobile = true;
     }
@@ -44,8 +45,14 @@ export class BusquedaComponent implements OnInit {
           Data.map(element => {
             let x = element.payload.toJSON();
             x["$key"] = element.key;
-            this.listadoTodos.push(x);
+            if(x["Nick"] !== undefined){
+              this.listadoTodos.push(x);
+            }
             if (x["Correo"] === localStorage.getItem("cliente")) {
+              this.usuario = x;
+              this.myNick = x["Nick"];
+            }
+            if (x["Correo"] === localStorage.getItem("tienda")) {
               this.usuario = x;
               this.myNick = x["Nick"];
             }
@@ -70,6 +77,7 @@ export class BusquedaComponent implements OnInit {
                 });
             }
           });
+          this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
           this.listadoTodos = this.listadoTodos.sort(function () { return Math.random() - 0.5 });
           primeraVez = false;
         }
@@ -84,7 +92,7 @@ export class BusquedaComponent implements OnInit {
       this.usuario.publi = x.foto;
       let obj = this.usuario;
       obj.$key = x.keypadre;
-      if(x.Correo !== localStorage.getItem("cliente")){
+      if (x.Correo !== localStorage.getItem("cliente")) {
         this.dashboardService.nuevaNotificacion(this.usuario);
       }
       this.dashboardService.meGustaCap(x);
@@ -111,11 +119,11 @@ export class BusquedaComponent implements OnInit {
         x.quienLike = [];
         x.quienLike = array;
         this.usuario.publi = x.foto;
-      let obj = this.usuario;
-      obj.$key = x.keypadre;
-      if(x.Correo !== localStorage.getItem("cliente")){
-        this.dashboardService.nuevaNotificacion(this.usuario);
-      }
+        let obj = this.usuario;
+        obj.$key = x.keypadre;
+        if (x.Correo !== localStorage.getItem("cliente")) {
+          this.dashboardService.nuevaNotificacion(this.usuario);
+        }
       }
       this.dashboardService.meGustaCap(x);
     }
@@ -129,7 +137,7 @@ export class BusquedaComponent implements OnInit {
       this.usuario.publi = x.foto;
       let obj = this.usuario;
       obj.$key = x.keypadre;
-      if(x.Correo !== localStorage.getItem("cliente")){
+      if (x.Correo !== localStorage.getItem("cliente")) {
         this.dashboardService.nuevaNotificacion(this.usuario);
       }
       this.dashboardService.meGustaPub(x);
@@ -157,29 +165,33 @@ export class BusquedaComponent implements OnInit {
         this.usuario.publi = x.foto;
         let obj = this.usuario;
         obj.$key = x.keypadre;
-        if(x.Correo !== localStorage.getItem("cliente")){
+        if (x.Correo !== localStorage.getItem("cliente")) {
           this.dashboardService.nuevaNotificacion(this.usuario);
-        } 
+        }
       }
       this.dashboardService.meGustaPub(x);
     }
   }
   Escribiendo(value) {
-    if (value.lenght === 0) {
-      this.listadoTodosView = [];
+    if (value.lenght < 1) {
+      this.listadoTodosView = this.listadoTodos;
     }
     this.listadoTodosView = [];
     this.listadoTodos.forEach(element => {
-      if (element.Nick.match(value)) {
-        let aux = {
-          Nick: element.Nick,
-          Foto: element.Foto,
-          Seguidores: element.Seguidores,
-          Seguidos: element.Seguidos
+      console.log(element.Nick);
+      if (element.Nick !== undefined) {
+        if (element.Nick.toUpperCase().match(value.toUpperCase())) {
+          let aux = {
+            Nick: element.Nick,
+            Foto: element.Foto,
+            Seguidores: element.Seguidores,
+            Seguidos: element.Seguidos
+          }
+          this.listadoTodosView.push(aux);
         }
-        this.listadoTodosView.push(aux);
       }
     });
-
   }
+
 }
+

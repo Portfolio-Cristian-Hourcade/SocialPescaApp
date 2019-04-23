@@ -1,12 +1,12 @@
 <app-nav-top></app-nav-top>
-<section class="contenedor">
+<section class="contenedor" style="padding-top:8vh">
   <div class="container">
     <div class="row">
       <div class="col-12 text-center my-3">
         <h2>¿Que te gustaría explorar?</h2>
       </div>
-      <div class="col-md-4 col-4">
-        <div class="row tarjeta-i mx-2"
+      <div class="col-md-4 col-4 px-0">
+        <div class="row tarjeta-i "
           (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos">
           <div class="col-md-3 d-flex">
             <div class="my-auto mx-auto">
@@ -23,15 +23,14 @@
             </div>
           </div>
         </div>
-        
+
       </div>
 
-      <div class="col-md-4 col-4">
-        <div class="row tarjeta-i mx-2 cp" *ngIf="!isPerfil"
-          (click)="isPerfil = true;isGrupo = false;isBusqueda=false; ">
+      <div class="col-md-4 col-4 px-0 br-l">
+        <div class="row tarjeta-i cp" *ngIf="!isPerfil" (click)="isPerfil = true;isGrupo = false;isBusqueda=false; ">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/usuarios.png" style="width:40px">
+              <img src="/assets/7.png" style="width:40px">
             </div>
           </div>
           <div class="col-md-8 d-flex" *ngIf="!isMobile">
@@ -40,12 +39,11 @@
             </div>
           </div>
         </div>
-        <div class="row tarjeta-i cp mx-2 text-white"
-          style="background-image: linear-gradient(to right, #6a83ff,#83a4ff);" *ngIf="isPerfil"
-          (click)="isPerfil = false;">
+        <div class="row tarjeta-i cp text-white" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);"
+          *ngIf="isPerfil" (click)="isPerfil = false;">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
-              <img src="/assets/usuarios.png" style="width:40px;filter: invert(1);">
+              <img src="/assets/7.png" style="width:40px;filter: invert(1);">
             </div>
           </div>
           <div class="col-md-4 d-flex" *ngIf="!isMobile">
@@ -56,8 +54,8 @@
         </div>
       </div>
 
-      <div class="col-md-4 col-4">
-        <div class="row tarjeta-i mx-2 cp" *ngIf="!isGrupo" (click)="isGrupo= true;isPerfil=false;isBusqueda=false;">
+      <div class="col-md-4 col-4 px-0 br-l">
+        <div class="row tarjeta-i  cp" *ngIf="!isGrupo" (click)="isGrupo= true;isPerfil=false;isBusqueda=false;">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
               <img src="/assets/4.png" style="width:40px">
@@ -69,9 +67,8 @@
             </div>
           </div>
         </div>
-        <div class="row tarjeta-i cp mx-2 text-white"
-          style="background-image: linear-gradient(to right, #6a83ff,#83a4ff);" *ngIf="isGrupo"
-          (click)="isGrupo = false;">
+        <div class="row tarjeta-i cp  text-white" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);"
+          *ngIf="isGrupo" (click)="isGrupo = false;">
           <div class="col-md-4 d-flex">
             <div class="my-auto mx-auto">
               <img src="/assets/4.png" style="width:40px;filter: invert(1);">
@@ -85,16 +82,16 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="isBusqueda && isMobile">
-        <div class="col-12">
-          <mat-form-field style="width:100%">
-            <input matInput type="text"
-              (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos"
-              (keyup)="Escribiendo($event.target.value)" placeholder="Nombre de nick">
-          </mat-form-field>
-        </div>
+    <div class="row mt-3" *ngIf="isBusqueda && isMobile">
+      <div class="col-12">
+        <mat-form-field style="width:100%">
+          <input matInput type="text"
+            (click)="isPerfil=false;isGrupo=false;isBusqueda=true;listadoTodosView = listadoTodos"
+            (keyup)="Escribiendo($event.target.value)" placeholder="Nombre de nick">
+        </mat-form-field>
       </div>
-    <div class="row mt-4" *ngIf="isBusqueda">
+    </div>
+    <div class="row mt-4" *ngIf="isBusqueda" style="height:43vh;overflow:auto;">
       <div class="col-12">
         <div class="row tarjeta-mobile" *ngFor="let x of listadoTodosView" style="width: 350px;
         margin: auto;
@@ -111,10 +108,16 @@
             <div class="my-auto" style="width:100%">
               <p class="my-0" style="width:100%">{{x.Nick}}
                 <b style="text-align:end">
-                  <button class="btn-seguir ml-2" routerLink="/perfil/{{x.Nick}}" *ngIf="myNick !== x.Nick">Ver</button>
-                  <button class="btn-seguir ml-2" routerLink="/perfil" *ngIf="myNick === x.Nick">Ver</button>
+                  <button class="btn-seguir ml-2" routerLink="/perfil/{{x.Nick}}"
+                    *ngIf="myNick !== x.Nick && !x.Tienda">Ver</button>
+                  <button class="btn-seguir ml-2" routerLink="/perfil"
+                    *ngIf="myNick === x.Nick && !x.Tienda">Ver</button>
+                  <button class="btn-seguir ml-2" routerLink="/tienda/{{x.Nick}}"
+                    *ngIf="myNick !== x.Nick && x.Tienda">Ver</button>
+                  <button class="btn-seguir ml-2" routerLink="/mitienda"
+                    *ngIf="myNick === x.Nick && x.Tienda">Ver</button>
                 </b>
-    
+
               </p>
             </div>
           </div>
@@ -131,7 +134,7 @@
       </div>
     </div>
 
-    <div class="row" style="margin-bottom:4rem;" *ngIf="isPerfil">
+    <!-- <div class="row" style="margin-bottom:4rem;" *ngIf="isPerfil">
       <div class="col-md-4" *ngFor="let x of listPerfil">
         <div class="row tarjeta-feed mx-auto mt-3 mb-3">
           <div class="col-md-12 imagen cp" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
@@ -158,9 +161,18 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+    <div class="row" style="margin-bottom:4rem;" *ngIf="isPerfil">
+      <div class="col-4 px-0" style="margin-top:1%;" *ngFor="let x of listPerfil"
+        routerLink="/publicacion/{{x.keypadre}}/{{x.key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">
+        <div class="imagen cp mx-auto" (click)="selected = x" [style.background-image]="'url('+x.foto+')'">
+
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined"></app-view>
 
 <app-navbar></app-navbar>

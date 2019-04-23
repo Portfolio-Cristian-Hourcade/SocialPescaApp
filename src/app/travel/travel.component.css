@@ -1,6 +1,7 @@
 .tarjeta{
     margin: auto!important;
     padding: 5px;
+    width:45%;
     box-shadow: 1px 0px 5px 0px grey;
     background-image: linear-gradient(to right, blue , #78caeb);
     border-radius: 4px;

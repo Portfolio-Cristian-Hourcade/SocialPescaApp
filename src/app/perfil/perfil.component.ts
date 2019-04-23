@@ -22,6 +22,7 @@ export class PerfilComponent implements OnInit {
   selectedBorrar;
   usuario;
   key: string;
+  puntos;
   constructor(
     private usuarioService: SesionService
   ) {
@@ -31,6 +32,7 @@ export class PerfilComponent implements OnInit {
     this.usuario = {
       Portada: ""
     }
+    this.puntos = 0;
     this.isMobile = false;
   }
   url = "https://pbs.twimg.com/media/CpAyNN4WAAEknnf.jpg";
@@ -45,6 +47,7 @@ export class PerfilComponent implements OnInit {
     this.usuarioService.listadoUsuario()
       .snapshotChanges()
       .subscribe(Data => {
+        this.puntos = 0;
         Data.map(element => {
           let x = element.payload.toJSON();
           if (x["Correo"] === localStorage.getItem("cliente")) {
@@ -56,6 +59,15 @@ export class PerfilComponent implements OnInit {
 
             x["$key"] = element.key;
             this.usuario = x;
+            
+            if(x["Puntos"]!== undefined){
+              Object.keys(this.usuario.Puntos).map(elemento => {
+                this.puntos = this.usuario.Puntos[elemento].puntos + this.puntos;
+              });
+            }else{
+              this.puntos = 0;
+            }
+
             this.key = element.key;
             let varFoto = x["Foto"];
             if (x["Publicacion"] !== undefined) {

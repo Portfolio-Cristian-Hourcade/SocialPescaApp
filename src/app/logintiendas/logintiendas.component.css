@@ -1,0 +1,43 @@
+.cabeza{
+    height: 15vh;
+    margin-top:5vh;
+}
+.fondo{
+    background-image:url('/assets/asd.jpg'); 
+    background-position: center center;
+    background-size: cover;
+}
+.cuerpo{
+    height: 80vh;
+    margin-bottom: 5vh;
+}
+
+input{
+    width: 90%;
+    background: #e8e8e8;
+    border: 0;
+    padding: 10px 10px;
+    border-radius: 4px;
+}
+
+button{
+    width: 80%;
+    padding: 10px;
+    background-image: linear-gradient(to right,blue,#00c2ff);
+    color: white;
+    border-radius: 10px;
+    border: 0;
+    font-weight: bold;
+    box-shadow: 1px 1px 6px 0px grey;
+}
+
+.tarjeta{
+    border-radius: 6px;
+    padding: 10px;
+    width: 80%;
+    height: 55%;
+    background: white;
+    box-shadow: 0px 4px 30px -1px #3e3e3e9c;
+    margin-left: auto;
+    margin-right: auto;
+}

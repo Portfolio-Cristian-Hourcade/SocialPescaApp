@@ -10,15 +10,17 @@ export class NavTopComponent implements OnInit {
 
   isMobile: boolean;
   notificacion: boolean;
-
+  menu: boolean;
   constructor(
     private dashboardService: SesionService
   ) {
+    this.menu = false;
     this.isMobile = false;
     this.notificacion = false;
   }
   Mensajes : number;
   NickOnline;
+  key;
   notificaciones : number;
   ngOnInit() {
     this.notificaciones =  0;
@@ -33,6 +35,7 @@ export class NavTopComponent implements OnInit {
         let x = element.payload.toJSON();
         x["$key"] = element.key;
         if (x["Correo"] === localStorage.getItem("cliente")) {
+          this.key = x["$key"];
           this.NickOnline = x["Nick"];
           this.dashboardService.listadoNotificaciones(x["$key"])
           .snapshotChanges()
@@ -101,5 +104,23 @@ export class NavTopComponent implements OnInit {
       });
   }
 
+  cerrar(){
+    localStorage.clear();
+    location.href="/inicio";
+  }
+  compartir(){
+    if (window.navigator && window.navigator['share']) {
 
+      
+      window.navigator['share']({
+        title: 'Este es el codigo de referido para tu amigo para SocialPesca',
+        text: '¡Registraté en SocialPesca y unite a una hermosa comunidad de pesca latinoamericana!',
+        url: "https://www.socialpesca.com/inicio/"+this.key
+      })
+        .then(() => console.log('¡Se comapartio con exito!'))
+        .catch((error) => console.log('Hubo un error en comapartir', error));
+    } else {
+      alert("Tu navegador no permite compartir esta publicación :'(");
+    }
+  }
 }

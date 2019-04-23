@@ -15,207 +15,173 @@ export class HomeComponent implements OnInit {
   usuario;
   isNick: boolean;
   thisNick;
+  isNickError;
   quienSigo: any[];
   selected;
-
+  listadoUsuario: any[];
+  Listado: any[];
+  carga;
+  usuarioOnline: any;
+  uno;
+  dos;
+  tres;
   constructor(
     private sesionService: SesionService
   ) {
+    this.carga = false;
+    this.uno = true;
+    this.dos = false;
+    this.tres = false;
+    this.usuarioOnline = null;
+    this.isNickError = false;
     this.isNick = false;
     this.usuario = {};
+    this.Listado = [];
+  }
+
+  cantidad;
+  list() {
+    this.cantidad = 0;
+    this.sesionService.listadoUsuario()
+      .snapshotChanges()
+      .subscribe(data => {
+        this.listadoUsuario = [];
+        let Usuarios = [];
+        this.Listado = [];
+        let arraySeguidores = [];
+        data.map(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          if (x["Correo"] === localStorage.getItem("cliente")) {
+            if (x["Nick"] === undefined) {
+              this.isNick = true;
+            } else {
+              this.isNick = false;
+            }
+            this.key = element.key;
+            let aux = x["quienSeguidos"];
+            this.usuarioOnline = x;
+            if (aux !== undefined) {
+              Object.keys(aux).map(elements => {
+                arraySeguidores.push(aux[elements]);
+              });
+            }
+            arraySeguidores.push(x["Nick"]);
+          }
+          Usuarios.push(x);
+          this.listadoUsuario.push(x);
+        });
+        this.Listado = [];
+        Usuarios.map(elemento => {
+          arraySeguidores.forEach(padre => {
+            if (padre === elemento.Nick) {
+              if (elemento.Capturas !== undefined) {
+                let y = 0;
+                Object.keys(elemento.Capturas).map(key => {
+                  let z = elemento.Capturas[key];
+                  z.$key = Object.keys(elemento.Capturas)[y];
+                  z.keypadre = elemento.$key;
+                  z.fperfil = elemento.Foto;
+                  z.Correo = elemento.Correo;
+                  this.Listado.push(z);
+                  y++;
+                });
+              }
+              if (elemento.Publicacion !== undefined) {
+                let y = 0;
+                Object.keys(elemento.Publicacion).map(key => {
+                  let k = elemento.Publicacion[key];
+                  k.$key = Object.keys(elemento.Publicacion)[y];
+                  k.keypadre = elemento.$key;
+                  k.fperfil = elemento.Foto;
+                  k.Correo = elemento.Correo;
+                  this.Listado.push(k);
+                  y++;
+                });
+              }
+            }
+          });
+        });
+
+        for (let j = 0; j < this.Listado.length; j++) {
+          for (let c = 0; c < this.Listado.length - 1; c++) {
+            let aux = this.Listado[c].fecha.split("-");
+            let aux2 = this.Listado[c + 1].fecha.split("-");
+            let fecha = aux[0].split("/");
+            let fecha2 = aux2[0].split("/");
+
+            if (aux[0] === aux2[0]) {
+              if (aux[1] < aux2[1]) {
+                var temp = this.Listado[c];
+                this.Listado[c] = this.Listado[c + 1];
+                this.Listado[c + 1] = temp;
+              }
+            } else if (Number(fecha[2]) === Number(fecha2[2])) {
+              if (Number(fecha[1]) === Number(fecha2[1])) {
+                if (Number(fecha[0]) < Number(fecha2[0])) {
+                  var temp = this.Listado[c];
+                  this.Listado[c] = this.Listado[c + 1];
+                  this.Listado[c + 1] = temp;
+
+                }
+              } else if (Number(fecha[1]) < Number(fecha[2])) {
+                var temp = this.Listado[c];
+                this.Listado[c] = this.Listado[c + 1];
+                this.Listado[c + 1] = temp;
+              }
+            } else if (Number(fecha[2]) < Number(fecha2[2])) {
+              var temp = this.Listado[c];
+              this.Listado[c] = this.Listado[c + 1];
+              this.Listado[c + 1] = temp;
+            }
+
+          }
+        }
+        this.cantidad = this.Listado.length;
+        this.carga = true;
+      });
   }
 
   ngOnInit() {
     this.listadoTodos = [];
-    let primeraVez = true;
-    let primeraVez2 = true;
+    this.listadoUsuario = [];
+    this.list();
+  }
 
-    this.sesionService.listadoUsuario()
-      .snapshotChanges()
-      .subscribe(data => {
-        if (primeraVez) {
-
-          data.map(element => {
-            let x = element.payload.toJSON();
-            if (x["Correo"] === localStorage.getItem("cliente")) {
-              x["$key"] = element.key;
-              this.thisNick = x["Nick"];
-              this.key = x["$key"]
-              if (x["Nick"] === undefined || x["Nick"] === null || x["Nick"] === "") {
-                this.isNick = true;
-                x["Nick"] = "";
-              }
-              this.usuario = x;
-              if (this.usuario.quienSeguidos !== undefined) {
-                let aux = this.usuario.quienSeguidos;
-                this.quienSigo = [];
-                Object.keys(aux).map(key => {
-                  this.quienSigo.push(aux[key]);
-                });
-              }
-            }
-          });
-          let aux3 = true;
-
-          this.sesionService.listadoPublicacion(this.key)
-            .snapshotChanges()
-            .subscribe(data => {
-              if (aux3) {
-
-                data.forEach(element => {
-                  let z = element.payload.toJSON();
-                  z["$key"] = element.key;
-                  z["keypadre"] = this.key;
-                  z["fperfil"] = this.usuario.Foto;
-                  let auxilar = z["etiqueta"];
-                  // z["etiqueta"] = auxilar.replace(/,/g, " ");
-                  this.listadoTodos.push(z);
-                  var n, i, k, aux;
-                  n = this.listadoTodos.length;
-                  for (k = 1; k < n; k++) {
-                    for (i = 0; i < (n - k); i++) {
-                      var j = this.listadoTodos[i].fecha.split("-");
-                      if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
-                        aux = this.listadoTodos[i];
-                        this.listadoTodos[i] = this.listadoTodos[i + 1];
-                        this.listadoTodos[i + 1] = aux;
-                      }
-                    }
-                  }
-                });
-                aux3 = false;
-              }
-            });
-          let aux4 = true;
-
-          this.sesionService.listadoCaptuas(this.key)
-            .snapshotChanges()
-            .subscribe(data => {
-              if (aux4) {
-
-                data.forEach(element => {
-                  let z = element.payload.toJSON();
-                  z["$key"] = element.key;
-                  z["keypadre"] = this.key;
-                  z["fperfil"] = this.usuario.Foto;
-                  this.listadoTodos.push(z);
-                  var n, i, k, aux;
-                  n = this.listadoTodos.length;
-                  for (k = 1; k < n; k++) {
-                    for (i = 0; i < (n - k); i++) {
-                      var j = this.listadoTodos[i].fecha.split("-");
-                      if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
-                        aux = this.listadoTodos[i];
-                        this.listadoTodos[i] = this.listadoTodos[i + 1];
-                        this.listadoTodos[i + 1] = aux;
-                      }
-                    }
-                  }
-                });
-                aux4 = false;
-              }
-            });
-          primeraVez = false;
-        }
-
-
-        this.sesionService.listadoUsuario()
-          .snapshotChanges()
-          .subscribe(data => {
-            if (primeraVez2) {
-
-              data.forEach(element => {
-
-                let y = element.payload.toJSON();
-                y["$key"] = element.key;
-                if (this.quienSigo !== undefined)
-
-                  this.quienSigo.map(element => {
-                    if (element === y["Nick"]) {
-                      let aux = true;
-                      this.sesionService.listadoCaptuas(y["$key"])
-                        .snapshotChanges()
-                        .subscribe(data => {
-                          if (aux) {
-
-                            data.forEach(element => {
-                              let z = element.payload.toJSON();
-                              z["$key"] = element.key;
-                              z["keypadre"] = y["$key"];
-                              z["fperfil"] = y["Foto"];
-                              this.listadoTodos.push(z);
-                              var n, i, k, aux;
-                              n = this.listadoTodos.length;
-                              for (k = 1; k < n; k++) {
-                                for (i = 0; i < (n - k); i++) {
-                                  var j = this.listadoTodos[i].fecha.split("-");
-                                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
-                                    aux = this.listadoTodos[i];
-                                    this.listadoTodos[i] = this.listadoTodos[i + 1];
-                                    this.listadoTodos[i + 1] = aux;
-                                  }
-                                }
-                              }
-                            });
-                            aux = false;
-                          }
-                        });
-                      let aux2 = true;
-
-                      this.sesionService.listadoPublicacion(y["$key"])
-                        .snapshotChanges()
-                        .subscribe(data => {
-                          if (aux2) {
-
-                            data.forEach(element => {
-                              let z = element.payload.toJSON();
-                              z["$key"] = element.key;
-                              z["keypadre"] = y["$key"];
-                              z["fperfil"] = y["Foto"];
-                              this.listadoTodos.push(z);
-                              var n, i, k, aux;
-                              n = this.listadoTodos.length;
-                              for (k = 1; k < n; k++) {
-                                for (i = 0; i < (n - k); i++) {
-                                  var j = this.listadoTodos[i].fecha.split("-");
-                                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
-                                    aux = this.listadoTodos[i];
-                                    this.listadoTodos[i] = this.listadoTodos[i + 1];
-                                    this.listadoTodos[i + 1] = aux;
-                                  }
-                                }
-                              }
-                            });
-                            aux2 = false;
-                          }
-                        });
-                    }
-                  });
-              });
-              primeraVez2 = false;
-              var n, i, k, aux;
-              n = this.listadoTodos.length;
-              for (k = 1; k < n; k++) {
-                for (i = 0; i < (n - k); i++) {
-                  var j = this.listadoTodos[i].fecha.split("-");
-                  if (this.listadoTodos[i].fecha < this.listadoTodos[i + 1].fecha) {
-                    aux = this.listadoTodos[i];
-                    this.listadoTodos[i] = this.listadoTodos[i + 1];
-                    this.listadoTodos[i + 1] = aux;
-                  }
-                }
-              }
-            }
-
-          });
-      });
+  compartir(x) {
+    console.log(x);
+    if (window.navigator && window.navigator['share']) {
+      window.navigator['share']({
+        title: 'Esta es una publicacion de SocialPesca',
+        text: '¡Mirá esta publicación de SocialPesca!',
+        url: 'https://www.socialpesca.com/publicacion/' + x.keypadre + "/" + x.key + "/" + ((x.forma === undefined) ? 'publicacion' : 'captura'),
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      alert('Tu navegador no permite compartir esta publicación');
+    }
   }
 
   AgregarNick() {
-    if (this.usuario.Nick !== "") {
-      this.isNick = false;
-      this.sesionService.updateNick(this.usuario);
-      location.reload();
+    if (this.usuarioOnline.Nick !== "") {
+      let aux = true;
+      this.Listado.forEach(element => {
+        if (element.Nick === undefined) {
+          element.Nick = "";
+        }
+        if (element.Nick === this.usuarioOnline.Nick) {
+          aux = false;
+          this.isNickError = true;
+        }
+      });
+
+      if (aux) {
+        this.isNick = false;
+        this.sesionService.listadoUsuario();
+        this.sesionService.updateNick(this.usuarioOnline);
+        location.reload();
+      }
     }
   }
 
@@ -227,11 +193,14 @@ export class HomeComponent implements OnInit {
       x.quienLike.push(localStorage.getItem("cliente"));
       this.sesionService.meGustaCap(x);
       this.usuario.publi = x.foto;
-      let obj = this.usuario;
-      obj.$key = x.keypadre;
+      this.usuario.Foto = this.usuarioOnline.Foto;
+      this.usuario.$key = x.keypadre;
+      this.usuario.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/captura';
+
       if (this.key !== x.keypadre) {
-        this.sesionService.nuevaNotificacion(this.usuario);
+        this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
       }
+
     } else {
 
       var aux = false;
@@ -255,16 +224,32 @@ export class HomeComponent implements OnInit {
         x.quienLike = [];
         x.quienLike = array;
         this.usuario.publi = x.foto;
-        let obj = this.usuario;
-        obj.$key = x.keypadre;
+        this.usuario.Foto = this.usuarioOnline.Foto;
+        this.usuario.$key = x.keypadre;
+        this.usuario.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/captura';
         if (this.key !== x.keypadre) {
-          this.sesionService.nuevaNotificacion(obj);
+          this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
         }
       }
       this.sesionService.meGustaCap(x);
+
     }
 
   }
+
+  Siguiente() {
+    if (this.dos === false) {
+      this.dos = true;
+    } else {
+      if (this.tres === false) {
+        this.tres = true;
+      } else {
+        this.uno = false;
+      }
+    }
+  }
+
+
   meGustaP(x) {
 
     if (x.quienLike === undefined) {
@@ -273,11 +258,12 @@ export class HomeComponent implements OnInit {
       x.quienLike.push(localStorage.getItem("cliente"));
       this.sesionService.meGustaPub(x);
       this.usuario.publi = x.foto;
-      let obj = this.usuario;
-      obj.$key = x.keypadre;
-      if(this.key !== x.keypadre){
-        this.sesionService.nuevaNotificacion(this.usuario);
-      } 
+      this.usuario.Foto = this.usuarioOnline.Foto;
+      this.usuario.$key = x.keypadre;
+      this.usuario.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/publicacion';
+      if (this.key !== x.keypadre) {
+        this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
+      }
     } else {
 
       var aux = false;
@@ -301,10 +287,11 @@ export class HomeComponent implements OnInit {
         x.quienLike = [];
         x.quienLike = array;
         this.usuario.publi = x.foto;
-        let obj = this.usuario;
-        obj.$key = x.keypadre;
+        this.usuario.Foto = this.usuarioOnline.Foto;
+        this.usuario.$key = x.keypadre;
+        this.usuario.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/publicacion';
         if (this.key !== x.keypadre) {
-          this.sesionService.nuevaNotificacion(this.usuario);
+          this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
         }
       }
       this.sesionService.meGustaPub(x);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../interfaces/usuario';
 import { SesionService } from '../services/sesion.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-entrada',
@@ -34,6 +34,7 @@ export class EntradaComponent implements OnInit {
   ListadoUsuarios: Usuario[];
   constructor(
     private Router: Router,
+    private ActivatedRoute: ActivatedRoute,
     private sesionService: SesionService,
   ) {
     this.nuevoUsuario = {};
@@ -41,10 +42,13 @@ export class EntradaComponent implements OnInit {
     this.Correo = "";
     this.isUsuario = false;
     this.CrearCuenta = false;
+    this.puntos;
     this.IniciarSesion = false;
   }
-
+  puntos;
   ngOnInit() {
+    this.sesionService.nuevo();
+
     localStorage.clear();
     this.sesionService.listadoUsuario()
       .snapshotChanges()
@@ -53,9 +57,15 @@ export class EntradaComponent implements OnInit {
         this.ListadoCorreo = [];
         this.ListadoCorreo = data.map(result => {
           let x = result.payload.toJSON()
+          x["$key"] = result.key;
+          if (x["$key"] === this.ActivatedRoute.snapshot.paramMap.get("key")) {
+            if (x["Puntos"] !== undefined) {
+              this.puntos = x["Puntos"];
+            }
+          }
           if (localStorage.getItem("cliente") !== null) {
             if (localStorage.getItem("cliente") === x["Correo"]) {
-              this.Router.navigateByUrl("/home");
+              // location.href="/home";
             }
           }
           this.ListadoUsuarios.push(x);
@@ -97,11 +107,41 @@ export class EntradaComponent implements OnInit {
 
   registro() {
     if (!this.isNombre && !this.isApellido && !this.isContrasena && !this.isCorreo && !this.isPais) {
+      if (this.ActivatedRoute.snapshot.paramMap.get("key") !== null) {
+        var f = new Date();
+        if (this.puntos === undefined) {
+          this.puntos = {
+            puntos: this.puntos + 50,
+            fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+          }
+        } else {
+          let points = 0;
+          Object.keys(this.puntos).map(element => {
+            points = this.puntos[element].puntos + points;
+          });
+          this.puntos = {
+            puntos: points + 50,
+            fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+          }
+        }
+        this.sesionService.Referido(this.puntos, this.ActivatedRoute.snapshot.paramMap.get("key"));
+      }
+
       this.nuevoUsuario.Foto = "/assets/usuario.png";
       this.nuevoUsuario.Portada = "/assets/1.jpg";
-
-      this.sesionService.nuevoUsuario(this.nuevoUsuario);
-      localStorage.setItem("cliente", this.nuevoUsuario.Correo);
+      let aux = true;
+      this.ListadoUsuarios.forEach(element => {
+        if (element.Correo === this.nuevoUsuario.Correo) {
+          aux = false;
+        }
+      });
+      if (aux) {
+        this.sesionService.nuevoUsuario(this.nuevoUsuario);
+        localStorage.setItem("cliente", this.nuevoUsuario.Correo);
+        location.href = "/home";
+      } else {
+        this.isCorreo = true;
+      }
     }
   }
 
@@ -111,10 +151,10 @@ export class EntradaComponent implements OnInit {
     } else {
       let x = true;
       this.ListadoUsuarios.forEach(element => {
-        if (element.Correo === this.Correo && element.Contrasena === this.Contrasena) {
+        if (element.Correo.toUpperCase() === this.Correo.toUpperCase() && element.Contrasena === this.Contrasena) {
           x = false;
           localStorage.setItem("cliente", this.Correo);
-          this.Router.navigateByUrl("/home");
+          location.href = "/home";
         }
       });
       if (x) {

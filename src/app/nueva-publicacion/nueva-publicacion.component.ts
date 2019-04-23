@@ -23,9 +23,13 @@ export class NuevaPublicacionComponent implements OnInit {
 
   cliente: Usuario;
   listNick;
+  etiqueta1: boolean;
+  etiqueta2: boolean;
   constructor(
     private usuarioService: SesionService
   ) {
+    this.etiqueta1 = false;
+    this.etiqueta2 = false;
     this.isMobile = false;
     this.isCarga = false;
     this.isFoto = false;
@@ -127,9 +131,30 @@ export class NuevaPublicacionComponent implements OnInit {
   }
 
   agregar() {
-    if (this.imagen === undefined || this.imagen === null || this.imagen.length === 0 || this.cliente.Publicacion.descripcion === "" || this.cliente.Publicacion.etiqueta === "") {
+    if (this.imagen === undefined || this.imagen === null || this.imagen.length === 0 || this.cliente.Publicacion.descripcion === "") {
       this.isProblema = true;
     } else {
+      if (this.cliente.Publicacion.etiqueta === "") {
+        this.cliente.Publicacion.etiqueta = "nadie";
+      }
+
+      let f = new Date();
+      if (this.cliente.Puntos === undefined) {
+        this.cliente.Puntos = {
+          puntos: 10,
+          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+        }
+      } else {
+        let puntos = 0;
+        Object.keys(this.cliente.Puntos).map(key => {
+          puntos = puntos + this.cliente.Puntos[key].puntos;
+        }); 
+        this.cliente.Puntos = {
+          puntos: puntos + 10,
+          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+        }
+      }
+
       this.isCarga = true;
       const file = this.imagen;
       this.currentFileUpload = new Imgupload(file[0]);
@@ -145,40 +170,55 @@ export class NuevaPublicacionComponent implements OnInit {
       const file = this.imagen;
       this.currentFileUpload = new Imgupload(file[0]);
       this.currentFileUpload.$key = Math.random();
+      let f = new Date();
+      if (this.cliente.Puntos === undefined) {
+        this.cliente.Puntos = {
+          puntos: 10,
+          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+        }
+      } else {
+        let puntos = 0;
+        Object.keys(this.cliente.Puntos).map(key => {
+          puntos = puntos + this.cliente.Puntos[key].puntos;
+        }); 
+        this.cliente.Puntos = {
+          puntos: puntos + 10,
+          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
+        }
+      }
       this.usuarioService.pushFileToStorage(this.currentFileUpload, this.cliente);
     }
   }
 
-  
+
   listadoFiltrado;
   filtrar(value) {
     let aux;
     if (value.indexOf(",") !== -1) {
       aux = value.split(",");
-      value = aux[aux.length-1];
+      value = aux[aux.length - 1];
     }
-      this.listadoFiltrado = [];
-      this.listNick.forEach(element => {
-        if (element.Nick.toUpperCase().match(value.toUpperCase())) {
-          this.listadoFiltrado.push(element);
-        }
-      });
-    
-  }
-  agregarEtiqueta(x){
-    let aux = <HTMLInputElement> document.getElementById("etiqueta1");
-    if(this.cliente.Publicacion.etiqueta.indexOf(",") !== -1){
-      let aux3 = this.cliente.Publicacion.etiqueta.split(",");
-      let value = ","+aux3[aux3.length-1];
-      console.log(value);
+    this.listadoFiltrado = [];
+    this.listNick.forEach(element => {
+      if (element.Nick.toUpperCase().match(value.toUpperCase())) {
+        this.listadoFiltrado.push(element);
+      }
+    });
 
-      this.cliente.Publicacion.etiqueta = this.cliente.Publicacion.etiqueta.replace(value,",");
+  }
+  agregarEtiqueta(x) {
+    let aux = <HTMLInputElement>document.getElementById("etiqueta1");
+    if (this.cliente.Publicacion.etiqueta.indexOf(",") !== -1) {
+      let aux3 = this.cliente.Publicacion.etiqueta.split(",");
+      let value = "," + aux3[aux3.length - 1];
+
+      this.cliente.Publicacion.etiqueta = this.cliente.Publicacion.etiqueta.replace(value, ",");
       this.cliente.Publicacion.etiqueta = this.cliente.Publicacion.etiqueta + x.Nick + ","
-    }else{
+    } else {
       this.cliente.Publicacion.etiqueta = "";
-      this.cliente.Publicacion.etiqueta = x.Nick+',';
+      this.cliente.Publicacion.etiqueta = x.Nick + ',';
     }
-    this.listadoFiltrado.length=0
+    this.listadoFiltrado.length = 0
   }
 }
 

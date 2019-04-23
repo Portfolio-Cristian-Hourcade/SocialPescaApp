@@ -1,50 +1,120 @@
 <app-nav-top></app-nav-top>
-<section>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="row contenedor" style="margin-bottom:4rem">
-          <div class="col-md-4" *ngFor="let x of listadoTodos" >
-            <div class="row tarjeta-feed mx-auto mt-3 mb-3">
-              <div class="col-md-12 imagen cp" (click)="selected = x"  [style.background-image]="'url('+x.foto+')'">
-              </div>
-              <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
-                <div class="d-flex">
-                  <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
-                  <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
-                  <a class="mr-3">{{x.likes}}</a>
-                  <i class="material-icons mr-3 cp" (click)="selected = x">comment</i>
-                  <i class="material-icons ml-auto cp" *ngIf="(thisNick !== x.Nick)" routerLink="/perfil/{{x.Nick}}">account_circle</i>
+<section *ngIf="carga">
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row contenedor">
+            <div class="col-12 mt-5 text-center" *ngIf="Listado.length === 0">
+              <h3 class="text-muted ">¡No estas siguendo a nadie! Empezá a seguir pescadores y comunica con ellos <a
+                  routerLink="/explorar">Explorar</a></h3>
+            </div>
+            <div class="col-md-4 px-0" *ngFor="let x of Listado; let z = index">
+              <div class="row tarjeta-feed mx-auto " [style.margin-bottom]="(z === cantidad-1) ? '11vh' : '2vh'">
+                <div class="col-12 d-flex" style="height:8vh">
+                  <div class="my-auto mr-auto">
+                    <a><b>{{x.Nick}}</b></a>
+                    <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+                      *ngIf="(x.Nick !== usuarioOnline.Nick)" routerLink="/perfil/{{x.Nick}}">Ver
+                      perfil</a>
+
+                    <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+                      *ngIf="(x.Nick === usuarioOnline.Nick)" routerLink="/perfil">Ver perfil</a>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12">
-                <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per" routerLink="/perfil/{{x.Nick}}">
-                  <b class="ml-1 cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}"> {{x.Nick}}</b></p>
-                <p class="text-muted my-0">{{x.descripcion}}</p>
-                <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
-                <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
-                <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
-                <p class="text-muted my-0" *ngIf="x.etiqueta"><b>Etiquetas:</b> <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas" routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a></p>
+                <div class="col-md-12  cp px-0"
+                  routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">
+                  <img src="{{x.foto}}" style="width:100%;height:auto">
+                  <!-- <div class="col-md-12 imagen cp" (click)="selected = x"  [style.background-image]="'url('+x.foto+')'"> -->
+                </div>
+                <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                  <div class="d-flex">
+                    <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
+                    <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
+                    <a class="mr-3">{{x.likes}}</a>
+                    <i class="material-icons mr-3 cp"
+                      routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">comment</i>
+                      <i class="material-icons ml-auto my-auto"
+                      (click)="compartir(x)">share</i>
+          
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per" routerLink="/perfil/{{x.Nick}}">
+                    <b class="ml-1 cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}">
+                      {{x.Nick}}</b></p>
+                  <p class="text-muted my-0">{{x.descripcion}}</p>
+                  <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+                  <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+                  <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+                  <p class="text-muted my-0" *ngIf="x.etiqueta">
+                    <a *ngIf="x.etiqueta !== 'nadie'">
+                      <b>Etiquetas:</b>
+                      <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
+                        routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a>
+                    </a>
+                  </p>
+
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <div class="popup d-flex" *ngIf="isNick">
+
+    <div class="mx-auto my-auto cartel text-center">
+      <h2>¡Ya casi terminamos!</h2>
+      <p class="text-muted">Solo falta que escribas tu nick de pescador.</p>
+      <input name="nick" [(ngModel)]="usuarioOnline.Nick" type="text"
+        style="padding: 10px 20px;margin-bottom: 20px;border-radius: 5px;border: 1px solid gainsboro;"
+        placeholder="Mi nombre de usuario">
+      <p *ngIf="isNickError"><small>Ya existe un usuario con este nick ¡Proba con otro!</small></p>
+      <p>
+        <button class="add-sp" (click)="AgregarNick()">¡Empezar a usar SPesca!</button>
+      </p>
+    </div>
   </div>
+  <app-navbar></app-navbar>
+
 </section>
 
-<div class="popup d-flex" *ngIf="isNick">
-  <div class="mx-auto my-auto cartel text-center">
-    <h2>¡Ya casi terminamos!</h2>
-    <p class="text-muted">Solo falta que escribas tu nick de pescador.</p>
-    <input name="nick" [(ngModel)]="usuario.Nick" type="text"
-      style="padding: 10px 20px;margin-bottom: 20px;border-radius: 5px;border: 1px solid gainsboro;"
-      placeholder="Mi nombre de usuario">
-    <p>
-      <button class="add-sp" (click)="AgregarNick()">¡Empezar a usar SPesca!</button>
-    </p>
+
+<div style="height:103vh;position:fixed; z-index:999999; background-color:white;width:100%;top:0" *ngIf="uno && isNick">
+  <div class="container">
+    <div class="row " style="height:65vh;margin-top:5vh">
+      <div class="col-12">
+        <img src="/assets/tuto.jpg" style="width: 100%;">
+      </div>
+      <div class="col-12 mt-4 text-center">
+        <p><b>¡Bienvenido a SocialPesca!</b></p>
+        <p *ngIf="uno && !dos">En SocialPesca vas a poder compartir fotos de buenos momentos y capturas con
+          pescadores.
+        </p>
+        <p *ngIf="dos && !tres">Además, ¡Vas a poder buscar lugares para ir a pescar con tus amigos!</p>
+        <p *ngIf="tres">Y esto no es todo, ¡Vas a poder <b>sumar puntos</b> por cada Captura que publiques, y así,
+          conseguir <b>beneficios</b> en tiendas de pesca y guias certificados!</p>
+        <p *ngIf="tres"> <b>¡Hora de disfrutar SocialPesca!</b></p>
+      </div>
+    </div>
+    <div class="row" style="height:25vh; margin-bottom:5vh">
+
+      <div class="col-12 mt-4 d-flex">
+        <div class=" mt-auto {{((tres)?'mx-auto':'ml-auto')}}" style="width:100%">
+          <button class="{{((tres) ?  'empezar' : 'nn')}} " style="
+      border: 0;
+      color:white;
+      padding: 15px 25px;
+      width:100%;
+      border-radius: 5px;
+      background-image: linear-gradient(to right,#3176fb,#45c3ff);
+      box-shadow: 1px 1px 5px 0px grey;   
+      font-weight: bold;" (click)="Siguiente()">{{((tres) ?  '¡Empezá a usar SocialPesca!' : 'Siguiente')}}</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined"></app-view>
-<app-navbar></app-navbar>

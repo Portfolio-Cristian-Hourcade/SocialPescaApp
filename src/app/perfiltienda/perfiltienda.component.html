@@ -1,0 +1,128 @@
+<app-nav-top></app-nav-top>
+
+<section id="header" [style.background-image]="'url('+usuario.Portada+')'">
+  <div style="position: absolute;
+  top: -8vh;
+  width: 165px;
+  border-radius: 0px 0px 24px 0px;
+  display: flex;
+  z-index:99;
+  height: 40px;
+  background: white;" (click)="CambiarPortada()" class="cp cambiarportada">
+    <b class="ml-2 my-auto">
+      Cambiar Portada
+    </b>
+  </div>
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-3 h40 d-flex">
+        <div class="foto-perfil bg-info" [style.background-image]="'url('+usuario.Foto+')'" (click)="CambiarFoto()">
+          <p>Cambiar Foto</p>
+        </div>
+      </div>
+      <div class="col-md-9 h40 d-flex">
+
+        <div class="mt-auto">
+          <h2 class="text-white"><b style="text-shadow: 2px 2px 7px black;" *ngIf="!isMobile">{{usuario.Nick}}</b></h2>
+        </div>
+        <div class="mt-auto text-white ml-auto mr-5">
+          <h5>{{usuario.Seguidores}} Seguidores</h5>
+
+        </div>
+        <div class="text-white mt-auto">
+          <h5>{{usuario.Seguidos}} Seguidos</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<section id="feed" class="">
+  <section style="background-color:white">
+    <div class="container">
+      <div class="row text-center" *ngIf="isMobile">
+        <div class="col-12 my-3 text-center">
+          <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-12 text-center item-hov d-flex h13 cp" style="background: #f0f0f085;">
+          <div class="mx-auto my-auto">
+            <p class="text-center mb-0"><i class="material-icons">store</i></p>
+            <p class="text-center mb-0"> <a class="ml-2 " style="font-size: 5vw;"> Nuestros productos</a></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="container" style="min-height:100vh; margin-bottom: 4rem">
+    <div class="row mt-1" *ngIf="!isCaptura && !isPublicacion && !isGrupo">
+      <div class="col-md-4 col-4" *ngFor="let x of listadoTodo">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-1" *ngIf="isCaptura">
+      <div class="col-md-4 col-4" *ngFor="let x of listCapturas">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-1" *ngIf="isPublicacion">
+      <div class="col-md-4 col-4" *ngFor="let x of listPublicaciones">
+        <div class="row"
+          routerLink="/publicacion/{{usuario.$key}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura' }}">
+          <div class="col-md-6 px-0 ">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.foto+')'">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-5" *ngIf="isGrupo">
+      <div class="col-md-12">
+
+      </div>
+      <div class="col-md-12 ">
+        <div class="row" style="height:45vh">
+          <div class="col-4 d-flex">
+            <img src="/assets/6.png" style="width:50px" class="my-auto ml-auto">
+          </div>
+          <div class="col-8 d-flex">
+            <div class="my-auto">
+              <h4 class="my-0"><b>¿Querés unirte a más grupos y eventos?</b></h4>
+              <p class="text-muted">¡Explora!</p>
+              <p>
+                <button routerLink="/explorar">Explorar grupos</button>
+              </p>
+            </div>
+          </div>
+          <div class="col-12">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-borrarpubli [variable]="selectedBorrar" [variable2]="key" (var2)="selectedBorrar = undefined"></app-borrarpubli>
+<app-navbar [foto]="usuario.Foto">

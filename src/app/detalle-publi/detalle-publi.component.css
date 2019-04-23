@@ -1,0 +1,45 @@
+section{
+
+
+}
+.foto img{
+    background-size: cover!important;
+    background-position: center!important;
+    width:100%; 
+}
+.foto::before img{
+    content: "";
+	display: block;
+    padding-top: 100%;
+}
+input{
+    width: 70%;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+}
+section #sc{
+    background: white;
+    border-radius: 10px;
+    box-shadow: 1px 1px 9px 0px #00000075;
+}
+@media screen and (max-width: 768px){
+    .foto{
+    }
+
+
+}
+
+
+.reload{
+    animation: reload 2s infinite;
+}
+
+@keyframes reload {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

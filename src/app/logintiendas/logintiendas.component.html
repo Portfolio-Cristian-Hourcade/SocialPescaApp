@@ -1,0 +1,23 @@
+<section>
+  <div class="container fondo">
+    <div class="row cabeza"></div>
+    <div class="row cuerpo">
+      <div class="tarjeta">
+        <div class="text-center mb-4 mt-2"><a class="h4">Tienda SocialPesca</a></div>
+        <div class="text-center mt-2">
+          <input type="text" placeholder="Email" name="email" [(ngModel)]="correo" >
+        </div>
+        <div class="text-center mt-2">
+          <input type="password" placeholder="Contraseña" name="email" [(ngModel)]="contrasena">
+        </div>
+        <div class="text-center mt-3">
+          <a style="font-size: 12px;">Para que tu experiencia sea la mejor, tu sesión será recordada.</a>
+        </div>
+      </div>
+
+      <div class="col-12 text-center">
+        <button (click)="login()">Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+</section>

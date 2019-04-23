@@ -1,0 +1,94 @@
+<app-nav-top></app-nav-top>
+<section *ngIf="cargando" style="height: 80vh;display: flex;">
+  <i class="material-icons mx-auto my-auto display-4 reload">cached</i>
+</section>
+
+<section style="padding-bottom:8vh" *ngIf="!cargando">
+  <div class="container ">
+
+
+    <div class="row" style="background: #f6f6f6;min-height: 100vh">
+      <div class="col-12 px-4 d-flex" style="height: 8vh;background:white">
+        <b style="font-size:14px;    position: relative;top: 1px;" class="mr-auto my-auto">
+          {{variable.Nick}}
+
+          <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+            *ngIf="(variable.Nick !== usuarioOnline.Nick) && !variable.precio"
+            routerLink="/perfil/{{variable.Nick}}">Ver perfil</a>
+
+          <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+            *ngIf="(variable.Nick === usuarioOnline.Nick) && !variable.precio" routerLink="/perfil">Ver perfil</a>
+
+          <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+            *ngIf="(variable.Nick === usuarioOnline.Nick) && variable.precio" routerLink="/mitienda">Ver perfil</a>
+
+          <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
+            *ngIf="(variable.Nick !== usuarioOnline.Nick) && variable.precio" routerLink="/tienda/{{variable.Nick}}">Ver perfil</a>
+
+        </b>
+    
+
+      </div>
+
+      <div class="col-12 foto px-0" style="    min-height: 100vh;">
+        <img src="{{variable.foto}}">
+        <div class="px-4 d-flex" style="height:8vh;border-bottom: 1px solid gainsboro;background: white;">
+          <i class="material-icons mr-1 cp my-auto" (click)="meGusta(variable)"
+            *ngIf="variable.forma !== undefined && !variable.precio">{{variable.quienLike | like}}</i>
+          <i class="material-icons mr-1 cp my-auto" (click)="meGustaP(variable)"
+            *ngIf="variable.forma === undefined  && !variable.precio">{{variable.quienLike | like}}</i>
+            <i class="material-icons mr-1 cp my-auto" (click)="meGustaProducto(variable)"
+            *ngIf="variable.forma !== undefined && variable.precio">{{variable.quienLike | like}}</i>
+          <a class="mr-3  my-auto">{{variable.likes}}</a>
+          <i class="material-icons ml-auto my-auto" (click)="borrar()"
+            *ngIf="usuarioOnline.Nick === variable.Nick">delete_outline</i>
+          <i class="material-icons {{((usuarioOnline.Nick === variable.Nick)?'ml-2':'ml-auto')}} my-auto"
+            (click)="compartir()">share</i>
+
+        </div>
+
+        <div class="px-4 mt-2">
+          <p class="mb-4"><b style="font-size:14px">{{variable.Nick}}</b> {{variable.descripcion}}
+            <p class="my-0" *ngIf="variable.envio"><b>Formas de envio:</b> {{variable.envio}}.</p>
+            <p class="my-0" *ngIf="variable.precio"><b>Forma de pago:</b> {{variable.forma}}.</p>
+            <p class="my-0" *ngIf="variable.precio"><b>Precio:</b> ${{variable.precio}}.</p>
+            <p class="my-4 text-center" *ngIf="variable.link"><a style="    background-image: linear-gradient(to right,#0092ff, #81ccf1);
+              color: white;
+              padding: 10px 30px;
+              font-weight: bold;
+              border-radius: 5px;
+              box-shadow: 1px 1px 7px 0px grey; " href="{{variable.link}}">Comprar producto</a></p>
+
+            <p class="my-0" *ngIf="variable.pescado"><b>Pescado:</b> {{variable.pescado}}.</p>
+            <p class=" my-0" *ngIf="variable.forma && !variable.precio"><b>Estilo:</b> {{variable.forma}}. </p>
+            <p class=" my-0" *ngIf="variable.donde"><b>Lugar:</b> {{variable.donde}}.</p>
+            <p class=" my-0" *ngIf="variable.etiqueta">
+              <a *ngIf="variable.etiqueta !== 'nadie'">
+                <b>Etiquetas:</b>
+                <a class="ml-2" style="word-break:break-all" *ngFor="let x of variable.etiqueta | etiquetas"
+                  routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a>
+              </a>
+            </p>
+
+            <div class="d-flex mt-3" *ngIf="!variable.precio">
+              <input type="text" placeholder="Agregar un comentario" name="sd" [(ngModel)]="comentario" id="comentar">
+              <a class="text-info mx-auto my-auto" (click)="comentar()">Publicar</a>
+            </div>
+            <p *ngIf="!this.variable.comentarios"><small class="text-muted">Sin reseñas</small></p>
+
+            <div style="height:50%;overflow-y: auto;" *ngIf="comentarios">
+              <div class="my-2" *ngFor="let x of comentarios">
+                <p class="my-2"><img src="{{x.foto}}" class="mr-3" style="width:25px;height:25px;border-radius:50%">
+                  <b>{{x.Nick}}:</b>
+                  {{x.comentario}}</p>
+              </div>
+            </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<app-navbar></app-navbar>

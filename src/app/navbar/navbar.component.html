@@ -1,3 +1,26 @@
+<section *ngIf="lightBox" style="height: 100%;
+position: fixed;
+width: 100%;
+z-index: 999999999999;
+background: transparent;
+top: 0;" class="d-flex" (click)="registro()">
+  <div class="mx-auto py-3 my-auto" style="    width: 80%;
+  height: 200px;
+  background: white;
+  box-shadow: 1px 1px 1px 1px gainsboro;
+  border-radius: 7px;" *ngIf="modal">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <p><b>¡Hola!</b> Para poder interactuar con esta publicación tenes que estar registrado en <a
+              href="https://www.socialpesca.com/inicio">SocialPesca</a></p>
+          <p class="text-center"><button routerLink="/inicio">Registrate</button> O <button routerLink="/inicio">Inicia
+              sesion</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <header>
   <div class="container" *ngIf="!isMobile">
     <div class="row">
@@ -10,7 +33,7 @@
     <div class="col-md-6 he8 d-flex">
       <div class="ml-auto my-auto d-flex">
         <i class="material-icons text-white notif mr-3 cp" routerLink="/nueva-publicacion">camera_alt</i>
-        <i class="material-icons text-white notif mr-3 cp" routerLink="/home">home</i>
+        <i class="material-icons text-white notif mr-3 cp " routerLink="/home">home</i>
         <i class="material-icons text-white notif mr-3 cp" routerLink="/explorar">search</i>
         <i class="material-icons text-white notif mr-3 cp">location_on</i>
 
@@ -21,28 +44,49 @@
     </div>
   </div>
   <div class="container" *ngIf="isMobile">
-    <div class="row">
+    <div class="row" style="position:relative">
       <div class="col-3 he8 d-flex">
-        <div class="mx-auto my-auto d-flex">
-          <i class="material-icons text-white notif mr-3 cp" routerLink="/home">home</i>
+        <div class="mx-auto my-auto d-flex {{(url.indexOf('/home') !== -1) ? 'selected' : 'nin' }}">
+          <i class="material-icons text-white mx-auto my-auto {{(url.indexOf('/home') !== -1) ? 'nin' : 'mr-3' }} notif cp"
+            routerLink="/home">home</i>
         </div>
       </div>
-      <div class="col-3 he8 d-flex">
-        <div class="mx-auto my-auto d-flex">
-          <i class="material-icons text-white notif mr-3 cp" routerLink="/explorar">search</i>
+      <div class="col-3 he8 d-flex pl-0">
+        <div class="mx-auto my-auto d-flex  {{(url.indexOf('/explorar') !== -1) ? 'selected' : 'nin' }}">
+          <i class="material-icons text-white notif mx-auto my-auto {{(url.indexOf('/explorar') !== -1) ? 'nin' : 'mr-3' }} cp"
+            routerLink="/explorar">search</i>
         </div>
       </div>
-      <div class="col-3 he8 d-flex">
-        <div class="mx-auto my-auto d-flex">
-          <i class="material-icons text-white notif mr-3 cp" routerLink="/novedad">person_pin</i>
+      <div class="action" *ngIf="!tienda" routerLink="/nueva-publicacion">
+        <img src="/assets/add.png" class="mx-auto my-auto" style="width:25px; height:25px;filter:invert(1)">
+      </div>
+      <div class="action" *ngIf="tienda" routerLink="/nuevo-producto">
+        <img src="/assets/add.png" class="mx-auto my-auto" style="width:25px; height:25px;filter:invert(1)">
+      </div>
+      <div class="col-3 he8 d-flex pr-0">
+        <div class="mx-auto my-auto d-flex  {{(url.indexOf('/novedad') !== -1) ? 'selected' : 'nin' }}">
+          <img src="/assets/11.png" class="mx-auto my-auto" style="width:25px; height:25px;filter:invert(1)"
+            routerLink="/novedad">
+          <!-- <i class="material-icons text-white notif mx-auto my-auto {{(url.indexOf('/novedad') !== -1) ? 'nin' : 'mr-3' }} cp" routerLink="/novedad">person_pin</i> -->
         </div>
       </div>
 
       <!-- <i class="material-icons text-white notif mr-3 cp">favorite</i> -->
-      <div class="cp col-3 d-flex" routerLink="/perfil">
-      <div  class=" my-auto mx-auto">
-        <img src="{{fotografia}}" style="width:35px;height:35px;border-radius:50%;">
+      <div class="cp col-3 d-flex" *ngIf="!tienda" routerLink="/perfil">
+        <div class=" my-auto mx-auto {{(url.indexOf('/perfil') !== -1) ? 'selected' : 'nin' }}">
+          <img *ngIf="(url.indexOf('/perfil') === -1)" src="{{fotografia}}"
+            style="width:35px;height:35px;border-radius:50%;">
+          <img *ngIf="(url.indexOf('/perfil') !== -1)" src="{{fotografia}}"
+            style="width:100%;height:100%;border-radius:50%;">
+        </div>
       </div>
+      <div class="cp col-3 d-flex" *ngIf="tienda" routerLink="/mitienda">
+        <div class=" my-auto mx-auto {{(url.indexOf('/mitienda') !== -1) ? 'selected' : 'nin' }}">
+          <img *ngIf="(url.indexOf('/mitienda') === -1)" src="{{fotografia}}"
+            style="width:35px;height:35px;border-radius:50%;">
+          <img *ngIf="(url.indexOf('/mitienda') !== -1)" src="{{fotografia}}"
+            style="width:100%;height:100%;border-radius:50%;">
+        </div>
       </div>
     </div>
   </div>

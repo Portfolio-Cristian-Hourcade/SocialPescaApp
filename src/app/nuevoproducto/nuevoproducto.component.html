@@ -1,0 +1,70 @@
+<app-nav-top></app-nav-top>
+<section style="padding-top:8vh;">
+  <div class="container pt-3 cont">
+
+    <div class="row" style="margin-bottom:5rem">
+      <div class=" col-md-6 col-12 d-flex pt-5" id="contenedor-img">
+        <div class="mx-auto my-auto" *ngIf="isFoto" id="img" style="height: 100%">
+
+        </div>
+        <div class="mx-auto my-auto" style="height: 100%" *ngIf="!isFoto && !isMobile">
+
+          <label class="labelFile text-center mx-auto" id="labelFile">
+            <i class="material-icons">photo_camera</i>
+            <input type="file" id="upload-file" (change)="seleccionarFoto($event)">
+          </label>
+        </div>
+        <div class="mx-auto my-auto" *ngIf="!isFoto && isMobile">
+          <label class="labelFile text-center mx-auto" id="labelFile">
+            <i class="material-icons">photo_camera</i>
+            <input type="file" id="upload-file" (change)="seleccionarFoto($event)">
+          </label>
+        </div>
+
+        <button
+          style="position:absolute;top:60px;left:0px;background-image: linear-gradient(to right,#3176fb,#45c3ff);border:0;border-radius:5px;padding:10px 34px;color:white"
+          *ngIf="isFoto" (click)="BorrarImagen()">Cambiar foto</button>
+      </div>
+      <div class="col-md-6 pt-5 col-12">
+        <div id="formulario">
+          <p><b>Nueva captura</b></p>
+          <p>
+            <textarea placeholder="Escribí una descripcion del producto" name="sd"
+              [(ngModel)]="cliente.Capturas.descripcion"></textarea>
+          </p>
+          <p><input type="text" placeholder="¿Cuál es el precio?" name="sd" [(ngModel)]="cliente.Capturas.precio"></p>
+          <p><input type="text" placeholder="¿Forma de envio?" [(ngModel)]="cliente.Capturas.envio"></p>
+          <p><input type="text" placeholder="¿Forma de pago?" name="sd" [(ngModel)]="cliente.Capturas.forma"></p>
+          <p><input type="text" placeholder="Link del producto (Mercadolibre, Mercadopago, Whatsapp)" name="sd" [(ngModel)]="cliente.Capturas.link"></p>
+          <p class="text-danger" *ngIf="isProblema"> ¡No podes agregar una captura sin agregar la información!</p>
+          <p><button (click)="agregarPublicacion()">Publicar captura</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="popup" *ngIf="ErrorImg">
+  <div style="background: white;
+  height: 200px;
+  padding: 35px;
+  margin: auto;
+  border-radius: 8px;">
+    <h2>¡Ups! Ha surgido un error</h2>
+    <p>La imagen que estas tratando de subir es muy pesada.</p>
+    <p>Por favor, intentá renderizarla, o buscá otra.</p>
+    <p class="text-center"><button (click)="ErrorImg = false;">¡Entendido!</button></p>
+  </div>
+</section>
+
+
+
+<div class="popup-carga d-flex" *ngIf="isCarga">
+  <div class="mx-auto my-auto text-white">
+    <div class="text-center">
+      <i class="fa fa-gear" id="spinner"></i>
+    </div>
+    <p>Publicando...</p>
+  </div>
+</div>
+<app-navbar></app-navbar>

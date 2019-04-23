@@ -5,6 +5,8 @@ import 'firebase/storage';
 import { Usuario } from '../interfaces/usuario';
 import { Imgupload } from '../interfaces/imgupload';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +21,7 @@ export class SesionService {
 
   constructor(
     private fireBase: AngularFireDatabase,
+    private auth: AngularFireAuth,
     private location: Router
   ) { }
 
@@ -26,6 +29,14 @@ export class SesionService {
   /**
    * @param usuario Objeto de tipo Usuario en el registro
    */
+
+  nuevo() {
+    firebase.auth().signInAnonymously().catch(function (error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
+  }
+
   nuevoUsuario(usuario: Usuario) {
     this.listadoUsuarios = this.fireBase.list('usuario');
     this.listadoUsuarios.push({
@@ -67,7 +78,7 @@ export class SesionService {
       Responsable2Foto: obj.Responsable2Foto,
       mensajes: obj.mensajes
     });
-    
+
   }
 
   listadoNotificaciones(key) {
@@ -90,6 +101,9 @@ export class SesionService {
     if (usuario.quienSeguidores === undefined) {
       usuario.quienSeguidores = null;
     }
+    if(usuario.Puntos === undefined){
+      usuario.Puntos = null;
+    }
     this.listadoUsuarios.update(usuario.$key, {
       Nombre: usuario.Nombre,
       Apellido: usuario.Apellido,
@@ -101,6 +115,7 @@ export class SesionService {
       Seguidos: usuario.Seguidos,
       Pais: usuario.Pais,
       Nick: usuario.Nick,
+      Puntos:usuario.Puntos,
       Foto: usuario.Foto,
       Portada: usuario.Portada,
       Capturas: usuario.Capturas,
@@ -134,6 +149,34 @@ export class SesionService {
       }
     );
   }
+
+  nuevoProducto(fileUpload: Imgupload, cliente?) {
+    const storageRef = firebase.storage().ref();
+    const uploadTask = storageRef.child(`${this.basePath}/${fileUpload.$key}`).put(fileUpload.file);
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        // in progress
+        const snap = snapshot as firebase.storage.UploadTaskSnapshot;
+      },
+      (error) => {
+        // fail
+        console.log(error);
+      },
+      () => {
+        // success
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          cliente.Capturas.foto = downloadURL;
+          var f = new Date();
+          cliente.Capturas.fecha = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear() + "-" + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds();
+          this.agregarProducto(cliente);
+          this.location.navigateByUrl("/mitienda");
+
+        });
+      }
+    );
+  }
+
+
 
   pushFileToStorageB(fileUpload: Imgupload, cliente?) {
     const storageRef = firebase.storage().ref();
@@ -228,6 +271,9 @@ export class SesionService {
       likes: 0,
       fecha: cliente.Publicacion.fecha
     });
+    this.fireBase.list('usuario/').update(cliente.$key,{
+      Puntos:cliente.Puntos
+    })
   }
 
   agregarCaptura(cliente: Usuario) {
@@ -242,20 +288,70 @@ export class SesionService {
       fecha: cliente.Capturas.fecha,
       donde: cliente.Capturas.donde
     });
+    this.Referido(cliente.Puntos,cliente.$key);
   }
 
 
-  nuevaNotificacion(obj) {
-   
-    if (obj.Accion !== 'comento una publicacion' || obj.Accion === undefined) {
-      obj.Accion = 'le gusto tu publicacion';
+  agregarProducto(cliente: any) {
+    this.fireBase.list('usuario/' + cliente.$key + "/Capturas").push({
+      foto: cliente.Capturas.foto,
+      descripcion: cliente.Capturas.descripcion,
+      forma: cliente.Capturas.forma,
+      Nick: cliente.Capturas.Nick,
+      likes: 0,
+      precio: cliente.Capturas.precio,
+      link: cliente.Capturas.link,
+      envio:cliente.Capturas.envio
+    });
+  }
+
+
+
+  nuevaNotificacion(obj, isComentario?, Nickobj?, duenio?) {
+
+
+    let key = null;
+    let Nick = null;
+    if (isComentario !== undefined) {
+      key = obj.$key;
+    } else {
+      key = obj.keypadre;
     }
-    this.fireBase.list('usuario/' + obj.$key + '/Notificacion').push({
+    if (Nickobj !== undefined) {
+      Nick = Nickobj;
+    } else {
+      Nick = obj.Nick;
+    }
+    if (obj.Accion !== 'comento una publicacion' || obj.Accion === undefined) {
+      console.log("me gusta");
+      obj.Accion = 'le gusto tu publicacion';
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+        }
+      };
+      xmlhttp.open("GET", "/assets/php/nuevomegusta.php?Nick=" + duenio.Nick + "&email=" + duenio.Correo, true);
+      xmlhttp.send();
+      console.log("me gusta al afue");
+
+    } else {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+        }
+      };
+      xmlhttp.open("GET", "/assets/php/nuevocomentario.php?Nick=" + duenio.Nick + "&email=" + duenio.Correo, true);
+      xmlhttp.send();
+    }
+    this.fireBase.list('usuario/' + key + '/Notificacion').push({
       Foto: obj.Foto,
-      Nick: obj.Nick,
+      Nick: Nick,
       Accion: obj.Accion,
       Publicacion: obj.publi,
-      Visto:false
+      url: obj.url,
+      Visto: false
     });
   }
 
@@ -263,12 +359,12 @@ export class SesionService {
     if (obj.Accion !== 'comento una publicacion' || obj.Accion === undefined) {
       obj.Accion = 'le gusto tu publicacion';
     }
-      this.listNotif.update(obj.$key,{
+    this.listNotif.update(obj.$key, {
       Foto: obj.Foto,
       Nick: obj.Nick,
       Accion: obj.Accion,
       Publicacion: obj.Publicacion,
-      Visto:obj.Visto
+      Visto: obj.Visto
     });
   }
 
@@ -335,6 +431,7 @@ export class SesionService {
     if (captura.$key == undefined) {
       captura.$key = captura.key;
     }
+    console.log(captura);
     this.fireBase.list("usuario/" + captura.keypadre + "/Capturas").update(captura.$key, {
       foto: captura.foto,
       descripcion: captura.descripcion,
@@ -412,6 +509,35 @@ export class SesionService {
     });
   }
 
+  Referido(puntos,key){
+    this.fireBase.list('usuario/'+key+"/Puntos").push({
+      puntos:puntos.puntos,
+      fecha:puntos.fecha
+    });
+  }
+
+  meGustaProducto(captura) {
+    if (captura.comentarios === undefined) {
+      captura.comentarios = null;
+    }
+    if (captura.quienLike === undefined) {
+      captura.quienLike = null;
+    }
+    if (captura.$key == undefined) {
+      captura.$key = captura.key;
+    }
+    this.fireBase.list("usuario/" + captura.keypadre + "/Capturas").update(captura.$key, {
+      foto: captura.foto,
+      descripcion: captura.descripcion,
+      link:captura.link,
+      precio:captura.precio,
+      envio:captura.envio,
+      forma: captura.forma,
+      Nick: captura.Nick,
+      likes: captura.likes,
+      quienLike: captura.quienLike,
+    });
+  }
 }
 
 

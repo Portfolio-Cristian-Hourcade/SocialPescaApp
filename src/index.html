@@ -5,12 +5,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-    content="Como vender por internet en 2018. Una mini guía para cualquier persona que quiere empezar a vender por intenernet y necesita una ayuda." />
-  <meta name="keywords"
-    content="crear mi tienda online, crear mi ecommerce, como vender en internet, crear un carrito de compra, tienda online, changofree, chango free, venta online, compra online, carrito de compra, carrito, marketing, ventas" />
+    content="SocialPesca, una red social enfocada a pescadores. Vas poder compartir fotos con otros pescadores y disfrutar buenos momentos." />
+  <meta name="keywords" content="" />
   <meta name="author" content="Cristian Hourcade - ChangoFree" />
   <meta name="copyright" content="Cristian Hourcade - ChangoFree" />
-  <title> Modelos y Fotografia - AlphaGolf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="HandheldFriendly" content="true" />
+
+  <title> SocialPesca - El portal de pescadores más grande de LatinoAmerica</title>
   <base href="/">
   <!-- <base href="/"> -->
   <script>// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -38,7 +40,7 @@
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
       };
       if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
       n.queue = []; t = b.createElement(e); t.async = !0;
@@ -55,10 +57,15 @@
 </head>
 
 <body>
+
   <script>
-    fbq('track', 'CompleteRegistration');
+    if (window.innerWidth > 768) {
+      document.getElementsByTagName("BODY")[0].style.display = "none";
+    }
   </script>
   <app-root></app-root>
+
+  
 </body>
 
 </html>

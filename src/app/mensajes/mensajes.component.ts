@@ -22,7 +22,9 @@ export class MensajesComponent implements OnInit {
   listadoMensajes;
   unicaVez : boolean;
   ngOnInit() {
-
+    if (localStorage.getItem("cliente") === null) {
+      location.href="/inicio";
+    }
     this.unicaVez = true;
     this.listado();
   }
@@ -42,7 +44,9 @@ export class MensajesComponent implements OnInit {
               this.NickOnline = x["Nick"];
               this.FotoNick = x["Foto"];
             }
-            this.listadoUsuarios.push(x);
+            if(x["Nick"] !== undefined){
+              this.listadoUsuarios.push(x);
+            }
             this.unicaVez = false;
         });
         this.dashboardService.listadoChats()
@@ -150,7 +154,6 @@ export class MensajesComponent implements OnInit {
 
   enviar() {
     if (this.texto !== "") {
-
       if (this.mensaje.$key === undefined) {
         this.mensaje.mensaje = this.texto;
         this.texto = "";
@@ -175,9 +178,22 @@ export class MensajesComponent implements OnInit {
         this.texto = "";
         this.dashboardService.UpdateChat(this.mensaje);
         aux = false;
-
       }
     }
+    this.listadoUsuarios.forEach(element => {
+      if(element.Nick === ((this.mensaje.Responsable1 === this.NickOnline) ? this.mensaje.Responsable2 : this.mensaje.Responsable1)){
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+          }
+        };
+
+
+        xmlhttp.open("GET", "/assets/php/nuevomensaje.php?Nick=" + this.NickOnline + "&email=" + element.Correo, true);
+        xmlhttp.send();
+      }
+    });
   }
 
 

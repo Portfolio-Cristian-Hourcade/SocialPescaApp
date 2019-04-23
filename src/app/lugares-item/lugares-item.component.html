@@ -7,7 +7,7 @@
   </div>
 </header>
 <section>
-  <div class="container">
+  <div class="container" style="margin-bottom:8vh">
     <div class="row">
       <div class="col-12 text-center">
         <h1 class="h3">{{item.Nombre}}</h1>
@@ -50,7 +50,7 @@
         <b>Alojamientos certificados</b>
       </div>
       <div class="col-12 text-center" *ngFor="let x of item.Alojamiento">
-        {{x}} <i class="material-icons" style="font-size:20px">touch_app</i>
+        <a href="{{x.url}}">{{x.nombre}} <i class="material-icons" style="font-size:20px">touch_app</i></a>
       </div>
     </div>
 
@@ -59,7 +59,7 @@
         <b>Guias certificados</b>
       </div>
       <div class="col-12 text-center" *ngFor="let x of item.Guia">
-        {{x}} <i class="material-icons" style="font-size:20px">touch_app</i>
+        <a href="{{x.url}}">{{x.nombre}} <i class="material-icons" style="font-size:20px">touch_app</i></a>
       </div>
     </div>
   </div>
