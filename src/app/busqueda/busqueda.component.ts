@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionService } from '../services/sesion.service';
+import { GlobalService } from '../global.service';
+
+// Declaramos las variables para jQuery
+declare var jQuery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-busqueda',
@@ -13,6 +18,7 @@ export class BusquedaComponent implements OnInit {
   isBusqueda: boolean;
   listadoTodos: any[];
 
+  cargo: boolean;
   myNick;
   isMobile: boolean;
   listadoTodosView: any[];
@@ -22,68 +28,90 @@ export class BusquedaComponent implements OnInit {
   usuario;
 
   constructor(
+    private GlobalService: GlobalService,
     private dashboardService: SesionService
   ) {
+    this.cargo = false;
     this.isBusqueda = false;
     this.isGrupo = false;
     this.isPerfil = false;
     this.isMobile = false;
   }
+  isDataAvailable: boolean = false;
 
   ngOnInit() {
-    this.isPerfil = true;
-    if (window.innerWidth < 768) {
+    var x = this.GlobalService.getListadoPerfilesBusqueda();
+    if (x.length !== 0) {
+      this.cargo = true;
       this.isMobile = true;
+      this.isPerfil = true; 
+      
+      this.listPerfil = this.GlobalService.getListadoBusqueda();
+      this.listadoTodos = x;
+    } else {
+
+      this.isPerfil = true;
+      if (window.innerWidth < 768) {
+        this.isMobile = true;
+      }
+      let primeraVez = true;
+      this.dashboardService.listadoUsuario()
+        .snapshotChanges()
+        .subscribe(Data => {
+          if (primeraVez) {
+
+            this.listadoTodos = [];
+            Data.map(element => {
+              let x = element.payload.toJSON();
+              x["$key"] = element.key;
+              if (x["Nick"] !== undefined) {
+                this.listadoTodos.push(x);
+              }
+              if (x["Correo"] === localStorage.getItem("cliente")) {
+                this.usuario = x;
+                this.GlobalService.setNick(this.usuario);
+                this.myNick = x["Nick"];
+              }
+              if (x["Correo"] === localStorage.getItem("tienda")) {
+                this.usuario = x;
+                this.GlobalService.setNick(this.usuario);
+
+                this.myNick = x["Nick"];
+              }
+              if (x["Capturas"] !== undefined) {
+
+                this.listPerfil = [];
+                let aux = true;
+                this.dashboardService.listadoCaptuasLikes(x["$key"])
+                  .snapshotChanges()
+                  .subscribe(data => {
+                    if (aux) {
+                      data.map(element => {
+                        let z = element.payload.toJSON();
+                        z["key"] = element.key;
+                        z["fperfil"] = x["Foto"];
+                        z["keypadre"] = x["$key"];
+                        z["Correo"] = x["Correo"];
+                        this.listPerfil.push(z);
+                      });
+                      aux = false;
+                    }
+                  });
+              }
+            });
+
+            this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
+            this.listadoTodos = this.listadoTodos.sort(function () { return Math.random() - 0.5 });
+            this.GlobalService.setListadoBusqueda(this.listPerfil);
+            this.GlobalService.setListadoPerfilesBusqueda(this.listadoTodos);
+            this.cargo = true;
+            primeraVez = false;
+          }
+        });
     }
-    let primeraVez = true;
-    this.dashboardService.listadoUsuario()
-      .snapshotChanges()
-      .subscribe(Data => {
-        if (primeraVez) {
-
-          this.listadoTodos = [];
-          Data.map(element => {
-            let x = element.payload.toJSON();
-            x["$key"] = element.key;
-            if(x["Nick"] !== undefined){
-              this.listadoTodos.push(x);
-            }
-            if (x["Correo"] === localStorage.getItem("cliente")) {
-              this.usuario = x;
-              this.myNick = x["Nick"];
-            }
-            if (x["Correo"] === localStorage.getItem("tienda")) {
-              this.usuario = x;
-              this.myNick = x["Nick"];
-            }
-            if (x["Capturas"] !== undefined) {
-
-              this.listPerfil = [];
-              let aux = true;
-              this.dashboardService.listadoCaptuasLikes(x["$key"])
-                .snapshotChanges()
-                .subscribe(data => {
-                  if (aux) {
-                    data.map(element => {
-                      let z = element.payload.toJSON();
-                      z["key"] = element.key;
-                      z["fperfil"] = x["Foto"];
-                      z["keypadre"] = x["$key"];
-                      z["Correo"] = x["Correo"];
-                      this.listPerfil.push(z);
-                    });
-                    aux = false;
-                  }
-                });
-            }
-          });
-          this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
-          this.listadoTodos = this.listadoTodos.sort(function () { return Math.random() - 0.5 });
-          primeraVez = false;
-        }
-      });
 
   }
+
   meGusta(x) {
     if (x.quienLike === undefined) {
       x.likes = 1;

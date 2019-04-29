@@ -5,14 +5,28 @@
     cursor: pointer;
 }
 section{
-    background-image: url('/assets/3.jpg');
+    /* background-image: url('/assets/3.jpg'); */
     background-position: center center;
     background-size: cover;
+    background: white;
+}
+
+
+.tarjeta-entrada{
+    animation: entrada 1s;
+}
+@keyframes entrada {
+    0%{
+        transform: translate(0%,-100%);
+    }
+    100%{
+        transform: translate(0%,0%);
+    }
 }
 .contenedor{
 }
 section{
-    background-image: url('/assets/3.jpg');
+    /* background-image: url('/assets/3.jpg'); */
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
@@ -21,13 +35,9 @@ section{
     border-left:1px solid gainsboro;
 }
 .tarjeta-i{
-    background: white;
-    border-top: 1px solid gainsboro;
-    border-bottom:1px solid gainsboro;
     height: 10vh;
     width: 100%;
     margin: auto;
-    background-color: white;
 }
 
 #contenedor-img{

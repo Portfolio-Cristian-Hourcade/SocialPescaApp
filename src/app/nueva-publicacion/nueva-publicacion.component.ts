@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../interfaces/usuario';
 import { SesionService } from '../services/sesion.service';
 import { Imgupload } from '../interfaces/imgupload';
+import { Ng2ImgMaxService } from 'ng2-img-max';
+import { GlobalService } from '../global.service';
+import { Router } from '@angular/router';
+import { delay } from 'q';
+
 
 @Component({
   selector: 'app-nueva-publicacion',
@@ -26,7 +31,10 @@ export class NuevaPublicacionComponent implements OnInit {
   etiqueta1: boolean;
   etiqueta2: boolean;
   constructor(
-    private usuarioService: SesionService
+    private usuarioService: SesionService,
+    private GlobalService: GlobalService,
+    private ng2ImgMax: Ng2ImgMaxService,
+    private Router : Router
   ) {
     this.etiqueta1 = false;
     this.etiqueta2 = false;
@@ -88,38 +96,43 @@ export class NuevaPublicacionComponent implements OnInit {
     this.imagen = [];
   }
 
+
+  subiendo: boolean = false;
   seleccionarFoto(event) {
-    this.selectedFiles = event.target.files;
-    var files = event.target.files; // FileList object
-    if (this.selectedFiles[0].size > 2000000 && (this.selectedFiles[0].type !== "image/jpg" && this.selectedFiles[0].type !== "image/jpeg" && this.selectedFiles[0].type !== "image/png")) {
-      this.selectedFiles = null;
-      this.ErrorImg = true;
-    } else {
-      this.isFoto = true;
-      //Obtenemos la imagen del campo "file". 
-      for (var i = 0, f; f = files[i]; i++) {
-        //Solo admitimos imágenes.
-        if (!f.type.match('image.*')) {
-          continue;
+    this.subiendo = true;
+    let image = event.target.files[0];
+    this.ng2ImgMax.resizeImage(image, 800, 600).subscribe(
+      result => {
+        this.selectedFiles = result;
+        console.log(result)
+        var files = result; // FileList object
+        if (result.size > 2000000 && (result.type !== "image/jpg" && result.type !== "image/jpeg" && result.type !== "image/png")) {
+          this.subiendo = false;
+          this.selectedFiles = null;
+          this.ErrorImg = true;
+        } else {
+
+          this.isFoto = true;
+          var reader = new FileReader();
+
+          reader.onload = (function (theFile) {
+            return function (e) {
+              // Creamos la imagen.
+              document.getElementById("img").innerHTML =
+                ['<img class="thumb" id="thumb" style="width:100%;height:100%;" src="', e.target.result, '" title="', '"/>'].join('');
+            };
+          })(files);
+
+          reader.readAsDataURL(files);
+          this.subiendo = false;
+          this.imagen.push(files);
         }
-
-        var reader = new FileReader();
-
-        reader.onload = (function (theFile) {
-          return function (e) {
-            // Creamos la imagen.
-            document.getElementById("img").innerHTML =
-              ['<img class="thumb" id="thumb" style="width:100%;height:100%;" src="', e.target.result, '" title="', '"/>'].join('');
-          };
-        })(f);
-
-        reader.readAsDataURL(f);
-
-        this.imagen.push(f);
+      },
+      error => {
+        console.log('😢 Oh no!', error);
       }
+    );
 
-      // reader.readAsDataURL(f);
-    }
   }
   imagen;
   BorrarImagen() {
@@ -148,7 +161,7 @@ export class NuevaPublicacionComponent implements OnInit {
         let puntos = 0;
         Object.keys(this.cliente.Puntos).map(key => {
           puntos = puntos + this.cliente.Puntos[key].puntos;
-        }); 
+        });
         this.cliente.Puntos = {
           puntos: puntos + 10,
           fecha: f.getMonth() + 1 + "/" + f.getFullYear()
@@ -160,6 +173,8 @@ export class NuevaPublicacionComponent implements OnInit {
       this.currentFileUpload = new Imgupload(file[0]);
       this.currentFileUpload.$key = Math.random();
       this.usuarioService.pushFileToStorageB(this.currentFileUpload, this.cliente);
+      this.listadoHome();
+    
     }
   }
   agregarPublicacion() {
@@ -176,17 +191,21 @@ export class NuevaPublicacionComponent implements OnInit {
           puntos: 10,
           fecha: f.getMonth() + 1 + "/" + f.getFullYear()
         }
+        
       } else {
         let puntos = 0;
         Object.keys(this.cliente.Puntos).map(key => {
           puntos = puntos + this.cliente.Puntos[key].puntos;
-        }); 
+        });
         this.cliente.Puntos = {
           puntos: puntos + 10,
           fecha: f.getMonth() + 1 + "/" + f.getFullYear()
         }
       }
       this.usuarioService.pushFileToStorage(this.currentFileUpload, this.cliente);
+      
+      this.listadoHome()
+
     }
   }
 
@@ -220,5 +239,125 @@ export class NuevaPublicacionComponent implements OnInit {
     }
     this.listadoFiltrado.length = 0
   }
+
+  listadoHome() {
+    this.usuarioService.listadoUsuario()
+      .snapshotChanges()
+      .subscribe(data => {
+        let myCapturas = [];
+        let myPublicaciones = [];
+        let myTotal = [];
+        let Usuarios = [];
+        let Listado = [];
+        let arraySeguidores = [];
+        data.map(element => {
+          let x = element.payload.toJSON();
+          x["$key"] = element.key;
+          if (x["Correo"] === localStorage.getItem("cliente")) {
+            this.GlobalService.setUsuarioOnline(x);
+            if (x["Capturas"] !== undefined) {
+              let a = 0;
+              Object.keys(x["Capturas"]).map(item => {
+                x["Capturas"][item]["$key"] = Object.keys(x["Capturas"])[a];
+                myCapturas.push(x["Capturas"][item]);
+                myTotal.push(x["Capturas"][item]);
+              });
+              this.GlobalService.setListadoMiPerfilCapturas(myCapturas);
+            }
+            if (x["Publicacion"] !== undefined) {
+              let a = 0;
+              Object.keys(x["Publicacion"]).map(item => {
+                x["Publicacion"][item]["$key"] = Object.keys(x["Publicacion"])[a];
+                myPublicaciones.push(x["Publicacion"][item]);
+                myTotal.push(x["Publicacion"][item]);
+              });
+              this.GlobalService.setListadoMiPerfilPublicaciones(myPublicaciones);
+            }
+            let aux = x["quienSeguidos"];
+
+            if (aux !== undefined) {
+              Object.keys(aux).map(elements => {
+                arraySeguidores.push(aux[elements]);
+              });
+            }
+            arraySeguidores.push(x["Nick"]);
+          }
+          Usuarios.push(x);
+        });
+
+        Listado = [];
+
+        Usuarios.map(elemento => {
+          arraySeguidores.forEach(padre => {
+            if (padre === elemento.Nick) {
+              if (elemento.Capturas !== undefined) {
+                let y = 0;
+                Object.keys(elemento.Capturas).map(key => {
+                  let z = elemento.Capturas[key];
+                  z.$key = Object.keys(elemento.Capturas)[y];
+                  z.keypadre = elemento.$key;
+                  z.fperfil = elemento.Foto;
+                  z.Correo = elemento.Correo;
+                  Listado.push(z);
+                  y++;
+                });
+              }
+              if (elemento.Publicacion !== undefined) {
+                let y = 0;
+                Object.keys(elemento.Publicacion).map(key => {
+                  let k = elemento.Publicacion[key];
+                  k.$key = Object.keys(elemento.Publicacion)[y];
+                  k.keypadre = elemento.$key;
+                  k.fperfil = elemento.Foto;
+                  k.Correo = elemento.Correo;
+                  Listado.push(k);
+                  y++;
+                });
+              }
+            }
+          });
+        });
+
+        for (let j = 0; j < Listado.length; j++) {
+          for (let c = 0; c < Listado.length - 1; c++) {
+            let aux = Listado[c].fecha.split("-");
+            let aux2 = Listado[c + 1].fecha.split("-");
+            let fecha = aux[0].split("/");
+            let fecha2 = aux2[0].split("/");
+
+            if (aux[0] === aux2[0]) {
+              if (aux[1] < aux2[1]) {
+                var temp = Listado[c];
+                Listado[c] = Listado[c + 1];
+                Listado[c + 1] = temp;
+              }
+            } else if (Number(fecha[2]) === Number(fecha2[2])) {
+              if (Number(fecha[1]) === Number(fecha2[1])) {
+                if (Number(fecha[0]) < Number(fecha2[0])) {
+                  var temp = Listado[c];
+                  Listado[c] = Listado[c + 1];
+                  Listado[c + 1] = temp;
+
+                }
+              } else if (Number(fecha[1]) < Number(fecha[2])) {
+                var temp = Listado[c];
+                Listado[c] = Listado[c + 1];
+                Listado[c + 1] = temp;
+              }
+            } else if (Number(fecha[2]) < Number(fecha2[2])) {
+              var temp = Listado[c];
+              Listado[c] = Listado[c + 1];
+              Listado[c + 1] = temp;
+            }
+
+          }
+        }
+        this.GlobalService.setListadoHome(Listado);
+        this.GlobalService.setListadoMiPerfilTotal(myTotal);
+        setTimeout(()=>{ this.Router.navigateByUrl("/home") }, 4000)
+        
+      });
+    }
+
 }
 

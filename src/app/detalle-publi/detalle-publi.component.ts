@@ -358,7 +358,6 @@ export class DetallePubliComponent implements OnInit {
     }
   }
   meGustaProducto(x) {
-    console.log("aca entro");
     if (x.quienLike === undefined) {
       x.likes = 1;
       x.quienLike = [];

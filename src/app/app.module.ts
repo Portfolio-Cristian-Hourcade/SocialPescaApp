@@ -88,6 +88,9 @@ import { LogintiendasComponent } from './logintiendas/logintiendas.component';
 import { PerfiltiendaComponent } from './perfiltienda/perfiltienda.component';
 import { NuevoproductoComponent } from './nuevoproducto/nuevoproducto.component';
 import { OtroperfiltiendaComponent } from './otroperfiltienda/otroperfiltienda.component';
+import { GlobalService } from './global.service';
+import { ImageCompressService,ResizeOptions,ImageUtilityService } from 'ng2-image-compress';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 
 @NgModule({
@@ -125,6 +128,7 @@ import { OtroperfiltiendaComponent } from './otroperfiltienda/otroperfiltienda.c
     AppRoutingModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    Ng2ImgMaxModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     BrowserAnimationsModule,
@@ -168,7 +172,7 @@ import { OtroperfiltiendaComponent } from './otroperfiltienda/otroperfiltienda.c
     BrowserModule,
     HttpClientModule
   ],
-  providers: [SesionService],
+  providers: [SesionService,GlobalService,ImageCompressService,ResizeOptions],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

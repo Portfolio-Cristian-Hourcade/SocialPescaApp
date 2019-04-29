@@ -1,15 +1,25 @@
 <app-nav-top></app-nav-top>
 <section *ngIf="carga">
-  <section>
+  <section class="carga">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
           <div class="row contenedor">
             <div class="col-12 mt-5 text-center" *ngIf="Listado.length === 0">
-              <h3 class="text-muted ">¡No estas siguendo a nadie! Empezá a seguir pescadores y comunica con ellos <a
-                  routerLink="/explorar">Explorar</a></h3>
+              <h4 class="mt-3"><b>¡Bienvenido a SocialPesca!</b> </h4>
+              <p>Cuando sigas a algun pescador, vas a ver sus publicaciones acá</p>
+              <p><button routerLink="/explorar" style="    width: 90%;
+                background-image: linear-gradient(90deg,blue,#4dc9e6fc);
+                border: 0;
+                color: white;
+                font-weight: bold;
+                padding: 7px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 4px 0px grey;">Buscar pescadores</button></p>
+
             </div>
-            <div class="col-md-4 px-0" *ngFor="let x of Listado; let z = index">
+
+            <div class="col-md-4 px-0" *ngFor="let x of Listado ; let z = index ">
               <div class="row tarjeta-feed mx-auto " [style.margin-bottom]="(z === cantidad-1) ? '11vh' : '2vh'">
                 <div class="col-12 d-flex" style="height:8vh">
                   <div class="my-auto mr-auto">
@@ -24,7 +34,7 @@
                 </div>
                 <div class="col-md-12  cp px-0"
                   routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">
-                  <img src="{{x.foto}}" style="width:100%;height:auto">
+                  <img src="{{x.foto}}" style="width:100%;height:auto;    border-radius: 15px;">
                   <!-- <div class="col-md-12 imagen cp" (click)="selected = x"  [style.background-image]="'url('+x.foto+')'"> -->
                 </div>
                 <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
@@ -32,11 +42,11 @@
                     <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
                     <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
                     <a class="mr-3">{{x.likes}}</a>
+
                     <i class="material-icons mr-3 cp"
                       routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">comment</i>
-                      <i class="material-icons ml-auto my-auto"
-                      (click)="compartir(x)">share</i>
-          
+                    <i class="material-icons ml-auto my-auto" (click)="compartir(x)">share</i>
+
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -50,7 +60,7 @@
                   <p class="text-muted my-0" *ngIf="x.etiqueta">
                     <a *ngIf="x.etiqueta !== 'nadie'">
                       <b>Etiquetas:</b>
-                      <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas"
+                      <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas "
                         routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</a>
                     </a>
                   </p>
@@ -58,6 +68,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -78,9 +89,9 @@
       </p>
     </div>
   </div>
-  <app-navbar></app-navbar>
 
 </section>
+<app-navbar></app-navbar>
 
 
 <div style="height:103vh;position:fixed; z-index:999999; background-color:white;width:100%;top:0" *ngIf="uno && isNick">
@@ -100,7 +111,7 @@
         <p *ngIf="tres"> <b>¡Hora de disfrutar SocialPesca!</b></p>
       </div>
     </div>
-    <div class="row" style="height:25vh; margin-bottom:5vh">
+    <div class="row" style="height:20vh; margin-bottom:10vh">
 
       <div class="col-12 mt-4 d-flex">
         <div class=" mt-auto {{((tres)?'mx-auto':'ml-auto')}}" style="width:100%">
@@ -118,3 +129,25 @@
     </div>
   </div>
 </div>
+
+
+
+<section *ngIf="primeraVez === null" class="{{(cargax!==2)?'':'desvanecer'}}"
+  style="height:100vh;position:fixed;width:100%;z-index:9999999999999999999999999999999999999999999999999999;top:0;background-image: linear-gradient(#efefef,white);">
+  <div class="my-auto mx-auto text-center" style="width:75%;margin-top: 55vh!important;">
+    <p>
+      <i class="fa fa-gear reload"></i>
+    </p>
+    <p>
+      <b>
+        ¡Bienvenido a SocialPesca!
+      </b>
+      <br>
+      <small>
+        Danos unos segundos mientras terminamos de cargar la aplicación.
+        <br>
+        ¡Gracias!
+      </small>
+    </p>
+  </div>
+</section>

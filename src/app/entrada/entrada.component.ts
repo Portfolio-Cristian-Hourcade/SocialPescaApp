@@ -47,6 +47,7 @@ export class EntradaComponent implements OnInit {
   }
   puntos;
   ngOnInit() {
+    
     this.sesionService.nuevo();
 
     localStorage.clear();
@@ -131,13 +132,13 @@ export class EntradaComponent implements OnInit {
       this.nuevoUsuario.Portada = "/assets/1.jpg";
       let aux = true;
       this.ListadoUsuarios.forEach(element => {
-        if (element.Correo === this.nuevoUsuario.Correo) {
+        if (element.Correo.toLowerCase() === this.nuevoUsuario.Correo.toLowerCase()) {
           aux = false;
         }
       });
       if (aux) {
         this.sesionService.nuevoUsuario(this.nuevoUsuario);
-        localStorage.setItem("cliente", this.nuevoUsuario.Correo);
+        localStorage.setItem("cliente", this.nuevoUsuario.Correo.toLowerCase());
         location.href = "/home";
       } else {
         this.isCorreo = true;
@@ -145,19 +146,24 @@ export class EntradaComponent implements OnInit {
     }
   }
 
+
+  verificando : boolean = false;
   iniciarSesion() {
+    this.verificando = true;
     if (this.Correo === "" || this.Contrasena === "") {
       this.isUsuario = true;
+      this.verificando = false;
     } else {
       let x = true;
       this.ListadoUsuarios.forEach(element => {
         if (element.Correo.toUpperCase() === this.Correo.toUpperCase() && element.Contrasena === this.Contrasena) {
           x = false;
-          localStorage.setItem("cliente", this.Correo);
+          localStorage.setItem("cliente", this.Correo.toLowerCase());
           location.href = "/home";
         }
       });
       if (x) {
+        this.verificando = false;
         this.isUsuario = true;
       }
     }

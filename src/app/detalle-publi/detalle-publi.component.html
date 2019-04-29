@@ -1,9 +1,9 @@
-<app-nav-top></app-nav-top>
 <section *ngIf="cargando" style="height: 80vh;display: flex;">
   <i class="material-icons mx-auto my-auto display-4 reload">cached</i>
 </section>
 
 <section style="padding-bottom:8vh" *ngIf="!cargando">
+  <app-nav-top></app-nav-top>
   <div class="container ">
 
 
@@ -89,6 +89,5 @@
 
     </div>
   </div>
+  <app-navbar></app-navbar>
 </section>
-
-<app-navbar></app-navbar>

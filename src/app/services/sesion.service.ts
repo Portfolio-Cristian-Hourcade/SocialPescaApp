@@ -6,6 +6,7 @@ import { Usuario } from '../interfaces/usuario';
 import { Imgupload } from '../interfaces/imgupload';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { NuevaPublicacionComponent } from '../nueva-publicacion/nueva-publicacion.component';
 
 @Injectable({
   providedIn: 'root'
@@ -143,7 +144,6 @@ export class SesionService {
           var f = new Date();
           cliente.Capturas.fecha = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear() + "-" + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds();
           this.agregarCaptura(cliente);
-          this.location.navigateByUrl("/home");
 
         });
       }
@@ -538,6 +538,7 @@ export class SesionService {
       quienLike: captura.quienLike,
     });
   }
+  
 }
 
 

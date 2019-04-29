@@ -8,4 +8,12 @@ export const environment = {
     storageBucket: "socialpesca-b4535.appspot.com",
     messagingSenderId: "1047307543610"
   }
+  // firebase:{
+  //   apiKey: "AIzaSyDBd67xz97YyBRnXkSaOUkjRDx2s_18pEk",
+  //   authDomain: "socialpescabeta.firebaseapp.com",
+  //   databaseURL: "https://socialpescabeta.firebaseio.com",
+  //   projectId: "socialpescabeta",
+  //   storageBucket: "socialpescabeta.appspot.com",
+  //   messagingSenderId: "260016690446"
+  // }
 };

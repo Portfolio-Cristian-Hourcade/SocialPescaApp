@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionService } from '../services/sesion.service';
 import { Usuario } from '../interfaces/usuario';
+import { GlobalService } from '../global.service';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +14,10 @@ export class HomeComponent implements OnInit {
   key;
   listadoTodos: any[];
   usuario;
+  cantidad;
+
   isNick: boolean;
-  thisNick;
+  primeraVez;
   isNickError;
   quienSigo: any[];
   selected;
@@ -25,127 +28,166 @@ export class HomeComponent implements OnInit {
   uno;
   dos;
   tres;
+  cargax: number;
+  listPerfil;
+
   constructor(
+    private GlobalService: GlobalService,
     private sesionService: SesionService
   ) {
-    this.carga = false;
+    this.cargax = 0;
     this.uno = true;
     this.dos = false;
     this.tres = false;
     this.usuarioOnline = null;
     this.isNickError = false;
     this.isNick = false;
+    this.carga = false;
     this.usuario = {};
     this.Listado = [];
   }
 
-  cantidad;
   list() {
     this.cantidad = 0;
+    let uno = true;
     this.sesionService.listadoUsuario()
       .snapshotChanges()
       .subscribe(data => {
+        if (uno) {
+        let myCapturas = [];
+        let myPublicaciones = [];
+        let myTotal = [];
+
         this.listadoUsuario = [];
         let Usuarios = [];
         this.Listado = [];
         let arraySeguidores = [];
-        data.map(element => {
-          let x = element.payload.toJSON();
-          x["$key"] = element.key;
-          if (x["Correo"] === localStorage.getItem("cliente")) {
-            if (x["Nick"] === undefined) {
-              this.isNick = true;
-            } else {
-              this.isNick = false;
-            }
-            this.key = element.key;
-            let aux = x["quienSeguidos"];
-            this.usuarioOnline = x;
-            if (aux !== undefined) {
-              Object.keys(aux).map(elements => {
-                arraySeguidores.push(aux[elements]);
-              });
-            }
-            arraySeguidores.push(x["Nick"]);
-          }
-          Usuarios.push(x);
-          this.listadoUsuario.push(x);
-        });
-        this.Listado = [];
-        Usuarios.map(elemento => {
-          arraySeguidores.forEach(padre => {
-            if (padre === elemento.Nick) {
-              if (elemento.Capturas !== undefined) {
-                let y = 0;
-                Object.keys(elemento.Capturas).map(key => {
-                  let z = elemento.Capturas[key];
-                  z.$key = Object.keys(elemento.Capturas)[y];
-                  z.keypadre = elemento.$key;
-                  z.fperfil = elemento.Foto;
-                  z.Correo = elemento.Correo;
-                  this.Listado.push(z);
-                  y++;
+
+          data.map(element => {
+            let x = element.payload.toJSON();
+            x["$key"] = element.key;
+            if (x["Correo"] === localStorage.getItem("cliente")) {
+              if (x["Capturas"] !== undefined) {
+                let a = 0;
+                Object.keys(x["Capturas"]).map(item => {
+                  x["Capturas"][item]["$key"] = Object.keys(x["Capturas"])[a];
+                  myCapturas.push(x["Capturas"][item]);
+                  myTotal.push(x["Capturas"][item]);
+                });
+                this.GlobalService.setListadoMiPerfilCapturas(myCapturas);
+              }
+              if (x["Publicacion"] !== undefined) {
+                let a = 0;
+                Object.keys(x["Publicacion"]).map(item => {
+                  x["Publicacion"][item]["$key"] = Object.keys(x["Publicacion"])[a];
+                  myPublicaciones.push(x["Publicacion"][item]);
+                  myTotal.push(x["Publicacion"][item]);
+                });
+                this.GlobalService.setListadoMiPerfilPublicaciones(myPublicaciones);
+              }
+
+              if (x["Nick"] === undefined) {
+                this.isNick = true;
+              } else {
+                this.isNick = false;
+              }
+              this.key = element.key;
+              let aux = x["quienSeguidos"];
+              this.usuarioOnline = x;
+              if (aux !== undefined) {
+                Object.keys(aux).map(elements => {
+                  arraySeguidores.push(aux[elements]);
                 });
               }
-              if (elemento.Publicacion !== undefined) {
-                let y = 0;
-                Object.keys(elemento.Publicacion).map(key => {
-                  let k = elemento.Publicacion[key];
-                  k.$key = Object.keys(elemento.Publicacion)[y];
-                  k.keypadre = elemento.$key;
-                  k.fperfil = elemento.Foto;
-                  k.Correo = elemento.Correo;
-                  this.Listado.push(k);
-                  y++;
-                });
-              }
+              arraySeguidores.push(x["Nick"]);
             }
+            Usuarios.push(x);
+            this.listadoUsuario.push(x);
           });
-        });
-
-        for (let j = 0; j < this.Listado.length; j++) {
-          for (let c = 0; c < this.Listado.length - 1; c++) {
-            let aux = this.Listado[c].fecha.split("-");
-            let aux2 = this.Listado[c + 1].fecha.split("-");
-            let fecha = aux[0].split("/");
-            let fecha2 = aux2[0].split("/");
-
-            if (aux[0] === aux2[0]) {
-              if (aux[1] < aux2[1]) {
-                var temp = this.Listado[c];
-                this.Listado[c] = this.Listado[c + 1];
-                this.Listado[c + 1] = temp;
+          this.Listado = [];
+          Usuarios.map(elemento => {
+            arraySeguidores.forEach(padre => {
+              if (padre === elemento.Nick) {
+                if (elemento.Capturas !== undefined) {
+                  let y = 0;
+                  Object.keys(elemento.Capturas).map(key => {
+                    let z = elemento.Capturas[key];
+                    z.$key = Object.keys(elemento.Capturas)[y];
+                    z.keypadre = elemento.$key;
+                    z.fperfil = elemento.Foto;
+                    z.Correo = elemento.Correo;
+                    this.Listado.push(z);
+                    y++;
+                  });
+                }
+                if (elemento.Publicacion !== undefined) {
+                  let y = 0;
+                  Object.keys(elemento.Publicacion).map(key => {
+                    let k = elemento.Publicacion[key];
+                    k.$key = Object.keys(elemento.Publicacion)[y];
+                    k.keypadre = elemento.$key;
+                    k.fperfil = elemento.Foto;
+                    k.Correo = elemento.Correo;
+                    this.Listado.push(k);
+                    y++;
+                  });
+                }
               }
-            } else if (Number(fecha[2]) === Number(fecha2[2])) {
-              if (Number(fecha[1]) === Number(fecha2[1])) {
-                if (Number(fecha[0]) < Number(fecha2[0])) {
+            });
+          });
+
+          for (let j = 0; j < this.Listado.length; j++) {
+            for (let c = 0; c < this.Listado.length - 1; c++) {
+              let aux = this.Listado[c].fecha.split("-");
+              let aux2 = this.Listado[c + 1].fecha.split("-");
+              let fecha = aux[0].split("/");
+              let fecha2 = aux2[0].split("/");
+
+              if (aux[0] === aux2[0]) {
+                if (aux[1] < aux2[1]) {
                   var temp = this.Listado[c];
                   this.Listado[c] = this.Listado[c + 1];
                   this.Listado[c + 1] = temp;
-
                 }
-              } else if (Number(fecha[1]) < Number(fecha[2])) {
+              } else if (Number(fecha[2]) === Number(fecha2[2])) {
+                if (Number(fecha[1]) === Number(fecha2[1])) {
+                  if (Number(fecha[0]) < Number(fecha2[0])) {
+                    var temp = this.Listado[c];
+                    this.Listado[c] = this.Listado[c + 1];
+                    this.Listado[c + 1] = temp;
+
+                  }
+                } else if (Number(fecha[1]) < Number(fecha[2])) {
+                  var temp = this.Listado[c];
+                  this.Listado[c] = this.Listado[c + 1];
+                  this.Listado[c + 1] = temp;
+                }
+              } else if (Number(fecha[2]) < Number(fecha2[2])) {
                 var temp = this.Listado[c];
                 this.Listado[c] = this.Listado[c + 1];
                 this.Listado[c + 1] = temp;
               }
-            } else if (Number(fecha[2]) < Number(fecha2[2])) {
-              var temp = this.Listado[c];
-              this.Listado[c] = this.Listado[c + 1];
-              this.Listado[c + 1] = temp;
-            }
 
+            }
           }
+          this.cantidad = this.Listado.length;
+          this.carga = true;
+          console.log(this.Listado);
+          this.GlobalService.setUsuarioOnline(this.usuarioOnline);
+          this.GlobalService.setListadoHome(this.Listado);
+          this.GlobalService.setListadoMiPerfilTotal(myTotal);
+          this.cargax++;
+          uno = false;
         }
-        this.cantidad = this.Listado.length;
-        this.carga = true;
       });
   }
 
   ngOnInit() {
-    this.listadoTodos = [];
+    this.Listado = [];
+    this.primeraVez = localStorage.getItem("primeraVez");
+    this.cargax = 0;
     this.listadoUsuario = [];
-    this.list();
+    this.cargarBusqueda();
   }
 
   compartir(x) {
@@ -249,7 +291,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
   meGustaP(x) {
 
     if (x.quienLike === undefined) {
@@ -297,4 +338,72 @@ export class HomeComponent implements OnInit {
       this.sesionService.meGustaPub(x);
     }
   }
+
+  cargarBusqueda() {
+    if (localStorage.getItem("primeraVez") === null) {
+      this.list();
+      var primeraVez = true;
+      this.sesionService.listadoUsuario()
+        .snapshotChanges()
+        .subscribe(Data => {
+          if (primeraVez) {
+
+            this.listadoTodos = [];
+            Data.map(element => {
+              let x = element.payload.toJSON();
+              x["$key"] = element.key;
+              if (x["Nick"] !== undefined) {
+                this.listadoTodos.push(x);
+              }
+              if (x["Correo"] === localStorage.getItem("cliente")) {
+                this.GlobalService.setNick(this.usuario);
+              }
+              if (x["Correo"] === localStorage.getItem("tienda")) {
+                this.GlobalService.setNick(this.usuario);
+              }
+              if (x["Capturas"] !== undefined) {
+
+                this.listPerfil = [];
+                let aux = true;
+                this.sesionService.listadoCaptuasLikes(x["$key"])
+                  .snapshotChanges()
+                  .subscribe(data => {
+                    console.log("entrando");
+                    if (aux) {
+                      data.map(element => {
+                        let z = element.payload.toJSON();
+                        z["key"] = element.key;
+                        z["fperfil"] = x["Foto"];
+                        z["keypadre"] = x["$key"];
+                        z["Correo"] = x["Correo"];
+                        this.listPerfil.push(z);
+                      });
+                      this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
+                      this.GlobalService.setListadoBusqueda(this.listPerfil);
+                      aux = false;
+                    }
+                  });
+              }
+            });
+
+
+            this.listadoTodos = this.listadoTodos.sort(function () { return Math.random() - 0.5 });
+            this.GlobalService.setListadoPerfilesBusqueda(this.listadoTodos);
+            primeraVez = false;
+            this.cargax++;
+
+            localStorage.setItem("primeraVez", "true");
+          }
+        });
+
+    } else {
+
+      
+        this.Listado = this.GlobalService.getListadoHome();
+        this.usuarioOnline = this.GlobalService.getUsuarioOnline();
+        this.carga = true;
+      this.cargax++;
+    }
+  }
+
 }

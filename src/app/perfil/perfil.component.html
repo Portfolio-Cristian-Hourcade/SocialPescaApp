@@ -21,7 +21,7 @@
           <p>Cambiar Foto</p>
         </div>
       </div>
-      <div class="col-md-9 h40 d-flex">
+      <!-- <div class="col-md-9 h40 d-flex">
 
         <div class="mt-auto">
           <h2 class="text-white"><b style="text-shadow: 2px 2px 7px black;" *ngIf="!isMobile">{{usuario.Nick}}</b></h2>
@@ -33,15 +33,15 @@
         <div class="text-white mt-auto">
           <h5>{{usuario.Seguidos}} Seguidos</h5>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
 </section>
 <section id="feed" class="">
   <section style="background-color:white">
-    <div class="container">
-      <div class="row text-center" *ngIf="isMobile">
+    <div class="container" style="background:#eeeeee;    padding-bottom: 20px;">
+      <div class="row text-center" *ngIf="isMobile" style="background:white;">
         <div class="col-12 my-3 text-center">
           <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
         </div>
@@ -56,37 +56,38 @@
 
         </div>
       </div>
-      <div class="row">
+      <div class="row" style="    border-radius: 0px 0px 50px 50px;
+      background: white;    box-shadow: 0px 4px 10px -1px #c1c1c1;">
 
         <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isCaptura"
-          (click)="isCaptura = true; isPublicacion = false;isGrupo = false" style="border-right:1px solid gray">
+          (click)="isCaptura = true; isPublicacion = false;isGrupo = false" style="">
           <img src="/assets/7.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
         </div>
         <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isCaptura" (click)="isCaptura = false;" style="border-right:1px solid gray">
+          *ngIf="isCaptura" (click)="isCaptura = false;" style="">
           <img src="/assets/7.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
         </div>
 
         <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isPublicacion"
-          (click)="isPublicacion = true; isCaptura = false;isGrupo = false" style="border-right:1px solid gray">
+          (click)="isPublicacion = true; isCaptura = false;isGrupo = false" style="">
           <img src="/assets/9.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
         </div>
         <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isPublicacion" (click)="isPublicacion = false;" style="border-right:1px solid gray">
+          *ngIf="isPublicacion" (click)="isPublicacion = false;" style="">
           <img src="/assets/9.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
         </div>
 
         <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isGrupo"
-          (click)="isGrupo = true; isPublicacion = false; isCaptura = false;" style="border-right:1px solid gray">
+          (click)="isGrupo = true; isPublicacion = false; isCaptura = false;" style="">
           <img src="/assets/4.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
         </div>
         <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isGrupo" (click)="isGrupo = false;" style="border-right:1px solid gray">
+          *ngIf="isGrupo" (click)="isGrupo = false;" style="">
           <img src="/assets/4.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
         </div>
@@ -160,5 +161,4 @@
   </div>
 </section>
 <app-borrarpubli [variable]="selectedBorrar" [variable2]="key" (var2)="selectedBorrar = undefined"></app-borrarpubli>
-<app-view [variable]="selected" [usuario]="usuario" (var)="selected = undefined"></app-view>
 <app-navbar [foto]="usuario.Foto">

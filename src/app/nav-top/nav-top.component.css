@@ -13,10 +13,10 @@ header .cont{
     height: 8vh;
     margin-left: auto;
     position: fixed;
-    width: 34%;
+    width: 39%;
     border-radius: 10px 0px 0px 30px;
     display: flex;
-    left: calc(100% - 34%);
+    right: 0;
     box-shadow: 1px 0px 7px 0px grey;
 }
 
@@ -49,7 +49,7 @@ h1{
     max-width: 100%;
 }
 .notif{
-    font-size: 32px;
+    font-size: 9vw;
 }
 .imagen{
     height: 350px;

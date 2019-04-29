@@ -44,6 +44,41 @@ h1{
 }
 .tarjeta-feed:hover{
 }
+.desvanecer{
+    animation: dev 3.5s;
+    animation-fill-mode: forwards;
+    display: block;
+}
+
+@keyframes dev{
+    0%{
+        opacity: 1;
+    }
+    80%{
+        opacity: 1;
+    }
+    to{
+       opacity: 0;
+       visibility: hidden;
+      
+    }
+
+}
+.reload{
+    font-size:50px;
+    animation: reload 3s infinite;
+}
+@keyframes reload{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
 .empezar{
     animation: boton 2s;
 }

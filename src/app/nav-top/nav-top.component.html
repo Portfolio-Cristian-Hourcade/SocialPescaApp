@@ -9,7 +9,7 @@
           </div>
         </div> -->
         <div class="col-12 d-flex">
-          <div class="ml-auto my-auto d-flex" style="position:relative">
+          <div class="mr-auto my-auto d-flex" style="position:relative">
 
             <i class="material-icons text-white notif cp mr-3" (click)="notificacion = true">favorite</i>
             <div (click)="notificacion = true" *ngIf="notificaciones > 0" style="width: 22px;
@@ -20,14 +20,14 @@
             color: white;
             font-weight: bold;
             position: absolute;
-            left: 25%;
+            left: 15%;
             bottom: 18px;
         ">
               <a class="mx-auto my-auto">
                 {{(notificaciones > 9) ? '9+' : notificaciones}}
               </a>
             </div>
-            <i class="ml-auto material-icons text-white notif cp" routerLink="/mensajes">question_answer</i>
+            <i class="ml-auto material-icons text-white notif cp mr-2" routerLink="/mensajes">question_answer</i>
             <div *ngIf="Mensajes > 0" routerLink="/mensajes" style="width: 22px;
             height: 22px;
             background: red;
@@ -36,7 +36,7 @@
             color: white;
             font-weight: bold;
             position: absolute;
-            left: 80%;
+            left: 50%;
             bottom: 18px;
         ">
               <a class="mx-auto my-auto">

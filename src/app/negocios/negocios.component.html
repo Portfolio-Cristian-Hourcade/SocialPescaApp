@@ -1,13 +1,26 @@
 <app-nav-top></app-nav-top>
 <section>
-  <div class="container" style="height:100vh">
-    <div class="row" style="height:100vh">
-      <div class="col-12 my-5 text-center d-flex" style="height:100vh">
-        <div class="mx-auto my-auto">
+  <div class="container" style="height:100vh;padding-top:10vh">
+    <div class="row">
+      <div class="col-12">
+        <h4>¡Vamos de compras!</h4>
+        <p>Estas son todas las tiendas certificadas por SocialPesca</p>
+        <p>Si querés publicar tu tienda <a href="https://wa.me/541138459621">¡Contactanos!</a></p>
 
-          <a>Todavía no hay negocios registrados en SocialPesca :'( <br>
-            Si te gustaría que tu negocio esté aca, mandanos un mensaje. <a href="https://wa.me/541138459621">WhatsApp</a>
-          </a>
+      </div>
+      <div class="col-12 text-center" *ngFor="let x of listadoTiendas" routerLink="/tienda/{{x.Nick}}">
+        <div class="row" style="background: #f0f0f0;
+        padding: 13px 0px;
+        border: 1px solid gainsboro;">
+          <div class="col-4">
+            <img src="{{x.Foto}}" style="width:40x;height:40px">
+          </div>
+          <div class="col-5 d-flex">
+            <a class="my-auto"><b>{{x.Nick}}</b></a>
+          </div>
+          <div class="col-3 d-flex">
+              <i class="material-icons my-auto">keyboard_arrow_right</i>
+            </div>
         </div>
       </div>
     </div>
