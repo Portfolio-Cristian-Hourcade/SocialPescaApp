@@ -16,6 +16,9 @@ body::-webkit-scrollbar-thumb {
   outline: 1px solid slategrey;
 
 }
+i,div,button,img{
+    outline: transparent!important;
+}
 body{
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;

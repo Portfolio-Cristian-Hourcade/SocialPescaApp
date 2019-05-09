@@ -46,7 +46,7 @@ top: 0;" class="d-flex" (click)="registro()">
   <div class="container" *ngIf="isMobile">
     <div class="row" style="position:relative">
       <div class="col-3 he8 d-flex">
-        <div class="mx-auto my-auto d-flex {{(url.indexOf('/home') !== -1) ? 'selected' : 'nin' }}">
+        <div class="mx-auto my-auto d-flex {{(url.indexOf('/home') !== -1) ? 'selected' : 'nin' }}" (click)="scrollTop()">
           <i class="material-icons text-white mx-auto my-auto {{(url.indexOf('/home') !== -1) ? 'nin' : 'mr-3' }} notif cp"
             routerLink="/home">home</i>
         </div>

@@ -10,7 +10,20 @@ section{
     background-size: cover;
     background: white;
 }
-
+.actualizar{
+    background-image: linear-gradient(to right,#979595,#b8b4b4);
+    color: white;
+    border: 0px;
+    border-radius: 40px;
+    padding: 0px 25px;
+    font-weight: bold;
+    height: 38px;
+    box-shadow: 1px 1px 19px 0px black;
+    position: fixed;
+    left: calc(20% - 65px);
+    z-index: 9;
+    opacity: 0;
+}
 
 .tarjeta-entrada{
     animation: entrada 1s;

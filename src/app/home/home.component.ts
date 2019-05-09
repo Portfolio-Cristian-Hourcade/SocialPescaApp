@@ -182,6 +182,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
+
   ngOnInit() {
     this.Listado = [];
     this.primeraVez = localStorage.getItem("primeraVez");
@@ -339,8 +340,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  isCarga : any;
   cargarBusqueda() {
-    if (localStorage.getItem("primeraVez") === null) {
+    this.isCarga = this.GlobalService.getNick();
+    if (localStorage.getItem("primeraVez") === null || this.isCarga === null ) {
       this.list();
       var primeraVez = true;
       this.sesionService.listadoUsuario()

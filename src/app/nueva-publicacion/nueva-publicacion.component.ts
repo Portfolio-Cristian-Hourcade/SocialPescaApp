@@ -153,27 +153,14 @@ export class NuevaPublicacionComponent implements OnInit {
 
       let f = new Date();
       if (this.cliente.Puntos === undefined) {
-        this.cliente.Puntos = {
-          puntos: 10,
-          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
-        }
-      } else {
-        let puntos = 0;
-        Object.keys(this.cliente.Puntos).map(key => {
-          puntos = puntos + this.cliente.Puntos[key].puntos;
-        });
-        this.cliente.Puntos = {
-          puntos: puntos + 10,
-          fecha: f.getMonth() + 1 + "/" + f.getFullYear()
-        }
-      }
+        this.cliente.Puntos = null;
+      } 
 
       this.isCarga = true;
       const file = this.imagen;
       this.currentFileUpload = new Imgupload(file[0]);
       this.currentFileUpload.$key = Math.random();
       this.usuarioService.pushFileToStorageB(this.currentFileUpload, this.cliente);
-      this.listadoHome();
     
     }
   }
@@ -204,8 +191,6 @@ export class NuevaPublicacionComponent implements OnInit {
       }
       this.usuarioService.pushFileToStorage(this.currentFileUpload, this.cliente);
       
-      this.listadoHome()
-
     }
   }
 
@@ -239,125 +224,5 @@ export class NuevaPublicacionComponent implements OnInit {
     }
     this.listadoFiltrado.length = 0
   }
-
-  listadoHome() {
-    this.usuarioService.listadoUsuario()
-      .snapshotChanges()
-      .subscribe(data => {
-        let myCapturas = [];
-        let myPublicaciones = [];
-        let myTotal = [];
-        let Usuarios = [];
-        let Listado = [];
-        let arraySeguidores = [];
-        data.map(element => {
-          let x = element.payload.toJSON();
-          x["$key"] = element.key;
-          if (x["Correo"] === localStorage.getItem("cliente")) {
-            this.GlobalService.setUsuarioOnline(x);
-            if (x["Capturas"] !== undefined) {
-              let a = 0;
-              Object.keys(x["Capturas"]).map(item => {
-                x["Capturas"][item]["$key"] = Object.keys(x["Capturas"])[a];
-                myCapturas.push(x["Capturas"][item]);
-                myTotal.push(x["Capturas"][item]);
-              });
-              this.GlobalService.setListadoMiPerfilCapturas(myCapturas);
-            }
-            if (x["Publicacion"] !== undefined) {
-              let a = 0;
-              Object.keys(x["Publicacion"]).map(item => {
-                x["Publicacion"][item]["$key"] = Object.keys(x["Publicacion"])[a];
-                myPublicaciones.push(x["Publicacion"][item]);
-                myTotal.push(x["Publicacion"][item]);
-              });
-              this.GlobalService.setListadoMiPerfilPublicaciones(myPublicaciones);
-            }
-            let aux = x["quienSeguidos"];
-
-            if (aux !== undefined) {
-              Object.keys(aux).map(elements => {
-                arraySeguidores.push(aux[elements]);
-              });
-            }
-            arraySeguidores.push(x["Nick"]);
-          }
-          Usuarios.push(x);
-        });
-
-        Listado = [];
-
-        Usuarios.map(elemento => {
-          arraySeguidores.forEach(padre => {
-            if (padre === elemento.Nick) {
-              if (elemento.Capturas !== undefined) {
-                let y = 0;
-                Object.keys(elemento.Capturas).map(key => {
-                  let z = elemento.Capturas[key];
-                  z.$key = Object.keys(elemento.Capturas)[y];
-                  z.keypadre = elemento.$key;
-                  z.fperfil = elemento.Foto;
-                  z.Correo = elemento.Correo;
-                  Listado.push(z);
-                  y++;
-                });
-              }
-              if (elemento.Publicacion !== undefined) {
-                let y = 0;
-                Object.keys(elemento.Publicacion).map(key => {
-                  let k = elemento.Publicacion[key];
-                  k.$key = Object.keys(elemento.Publicacion)[y];
-                  k.keypadre = elemento.$key;
-                  k.fperfil = elemento.Foto;
-                  k.Correo = elemento.Correo;
-                  Listado.push(k);
-                  y++;
-                });
-              }
-            }
-          });
-        });
-
-        for (let j = 0; j < Listado.length; j++) {
-          for (let c = 0; c < Listado.length - 1; c++) {
-            let aux = Listado[c].fecha.split("-");
-            let aux2 = Listado[c + 1].fecha.split("-");
-            let fecha = aux[0].split("/");
-            let fecha2 = aux2[0].split("/");
-
-            if (aux[0] === aux2[0]) {
-              if (aux[1] < aux2[1]) {
-                var temp = Listado[c];
-                Listado[c] = Listado[c + 1];
-                Listado[c + 1] = temp;
-              }
-            } else if (Number(fecha[2]) === Number(fecha2[2])) {
-              if (Number(fecha[1]) === Number(fecha2[1])) {
-                if (Number(fecha[0]) < Number(fecha2[0])) {
-                  var temp = Listado[c];
-                  Listado[c] = Listado[c + 1];
-                  Listado[c + 1] = temp;
-
-                }
-              } else if (Number(fecha[1]) < Number(fecha[2])) {
-                var temp = Listado[c];
-                Listado[c] = Listado[c + 1];
-                Listado[c + 1] = temp;
-              }
-            } else if (Number(fecha[2]) < Number(fecha2[2])) {
-              var temp = Listado[c];
-              Listado[c] = Listado[c + 1];
-              Listado[c + 1] = temp;
-            }
-
-          }
-        }
-        this.GlobalService.setListadoHome(Listado);
-        this.GlobalService.setListadoMiPerfilTotal(myTotal);
-        setTimeout(()=>{ this.Router.navigateByUrl("/home") }, 4000)
-        
-      });
-    }
-
 }
 

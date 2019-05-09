@@ -15,25 +15,13 @@
   </div>
   <div class="container">
     <div class="row">
-
       <div class="col-md-3 h40 d-flex">
-        <div class="foto-perfil bg-info" [style.background-image]="'url('+usuario.Foto+')'" (click)="CambiarFoto()">
+        <div class="foto-perfil bg-info" style="z-index:0" *ngIf="usuario.Foto" [style.background-image]="'url('+usuario.Foto+')'"
+          (click)="CambiarFoto()">
           <p>Cambiar Foto</p>
         </div>
       </div>
-      <!-- <div class="col-md-9 h40 d-flex">
 
-        <div class="mt-auto">
-          <h2 class="text-white"><b style="text-shadow: 2px 2px 7px black;" *ngIf="!isMobile">{{usuario.Nick}}</b></h2>
-        </div>
-        <div class="mt-auto text-white ml-auto mr-5">
-          <h5>{{usuario.Seguidores}} Seguidores</h5>
-
-        </div>
-        <div class="text-white mt-auto">
-          <h5>{{usuario.Seguidos}} Seguidos</h5>
-        </div>
-      </div> -->
     </div>
   </div>
 
@@ -49,8 +37,9 @@
           <h6><b>{{usuario.Seguidores}}</b> <br>Seguidores</h6>
         </div>
         <div class="col-4 text-center mt-2">
-            <h6><b>{{puntos}}</b> <br>Puntos</h6>
-          </div>
+          <h6><b>{{puntos}}</b> <br>Puntos</h6>
+        </div>
+
         <div class="col-4 text-center mt-2">
           <h6><b>{{usuario.Seguidos}}</b> <br>Seguidos</h6>
 
@@ -64,8 +53,9 @@
           <img src="/assets/7.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isCaptura" (click)="isCaptura = false;" style="">
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isCaptura"
+          (click)="isCaptura = false;" style="">
           <img src="/assets/7.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
         </div>
@@ -75,8 +65,9 @@
           <img src="/assets/9.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isPublicacion" (click)="isPublicacion = false;" style="">
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isPublicacion"
+          (click)="isPublicacion = false;" style="">
           <img src="/assets/9.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
         </div>
@@ -86,8 +77,9 @@
           <img src="/assets/4.png" style="width:50px;" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
         </div>
-        <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-          *ngIf="isGrupo" (click)="isGrupo = false;" style="">
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isGrupo"
+          (click)="isGrupo = false;" style="">
           <img src="/assets/4.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
           <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
         </div>

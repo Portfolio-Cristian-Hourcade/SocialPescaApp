@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionService } from '../services/sesion.service';
 import { GlobalService } from '../global.service';
+import { _CdkTextareaAutosize } from '@angular/material';
 
 // Declaramos las variables para jQuery
 declare var jQuery: any;
@@ -25,29 +26,65 @@ export class BusquedaComponent implements OnInit {
   listPerfil: any[];
   listGrupos: any[];
   selected: any[];
+  top: string;
   usuario;
+  isDataAvailable: boolean = false;
+  private NumberItem: number;
+  isBlock: boolean;
+
+  usoInterno : boolean;
 
   constructor(
     private GlobalService: GlobalService,
     private dashboardService: SesionService
   ) {
+    this.top = "auto";
+    const offset = 125;
+    this.NumberItem = 12;
+    this.isBlock = false;
+    this.usoInterno = false;
+    var _x = this;
+    $(window).scroll(function () {
+      if ($(window).scrollTop() + $(window).height() > $(document).height() - offset) {
+        _x.NumberItem = _x.NumberItem + 12;
+        if (_x.NumberItem > _x.listPerfil.length) {
+          const y = _x.listPerfil;
+          y.map(element => {
+            _x.listPerfil.push(element);
+          });
+        }
+      }
+      
+      _x.top = "2vh";
+      if ($(window).scrollTop() < 290 && _x.usoInterno == true) {
+        _x.usoInterno = false;
+        $('.actualizar').animate({ opacity: 0 }, 800);
+        
+      }else if( $(window).scrollTop() > 290 && _x.usoInterno == false){
+        _x.usoInterno = true;
+        $('.actualizar').animate({ opacity: 1 }, 800);
+      }
+    });
+
     this.cargo = false;
     this.isBusqueda = false;
     this.isGrupo = false;
     this.isPerfil = false;
     this.isMobile = false;
   }
-  isDataAvailable: boolean = false;
-
+  ttt;
   ngOnInit() {
+
     var x = this.GlobalService.getListadoPerfilesBusqueda();
     if (x.length !== 0) {
       this.cargo = true;
       this.isMobile = true;
-      this.isPerfil = true; 
-      
+      this.isPerfil = true;
+
       this.listPerfil = this.GlobalService.getListadoBusqueda();
       this.listadoTodos = x;
+      const usuario = this.GlobalService.getUsuarioOnline();;
+      this.myNick = usuario.Nick;
     } else {
 
       this.isPerfil = true;
@@ -221,5 +258,45 @@ export class BusquedaComponent implements OnInit {
     });
   }
 
+  actualizar() {
+    $('html, body').animate({ scrollTop: 0 }, 800);
+    $('.actualizar').animate({ opacity: 0 }, 800);
+    this.usoInterno = false;
+    this.listPerfil  = [];
+    let primeraVez = true;
+    this.dashboardService.listadoUsuario()
+      .snapshotChanges()
+      .subscribe(Data => {
+        if (primeraVez) {
+          Data.map(element => {
+            let x = element.payload.toJSON();
+            x["$key"] = element.key;
+            if (x["Capturas"] !== undefined) {
+              this.listPerfil = [];
+              let aux = true;
+              this.dashboardService.listadoCaptuasLikes(x["$key"])
+                .snapshotChanges()
+                .subscribe(data => {
+                  if (aux) {
+                    data.map(element => {
+                      let z = element.payload.toJSON();
+                      z["key"] = element.key;
+                      z["fperfil"] = x["Foto"];
+                      z["keypadre"] = x["$key"];
+                      z["Correo"] = x["Correo"];
+                      this.listPerfil.push(z);
+                    });
+                    aux = false;
+                  }
+                  this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
+                });
+              }
+            });
+            
+          this.GlobalService.setListadoBusqueda(this.listPerfil);
+          primeraVez = false;
+        }
+      });
+  }
 }
 

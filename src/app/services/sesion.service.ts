@@ -7,6 +7,7 @@ import { Imgupload } from '../interfaces/imgupload';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NuevaPublicacionComponent } from '../nueva-publicacion/nueva-publicacion.component';
+import { GlobalService } from '../global.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,11 @@ export class SesionService {
   listadoNotif: AngularFireList<any>;
 
   constructor(
+    private Router: Router,
     private fireBase: AngularFireDatabase,
     private auth: AngularFireAuth,
-    private location: Router
+    private location: Router,
+    private GlobalService: GlobalService
   ) { }
 
   private basePath = '/uploads';
@@ -102,7 +105,7 @@ export class SesionService {
     if (usuario.quienSeguidores === undefined) {
       usuario.quienSeguidores = null;
     }
-    if(usuario.Puntos === undefined){
+    if (usuario.Puntos === undefined) {
       usuario.Puntos = null;
     }
     this.listadoUsuarios.update(usuario.$key, {
@@ -116,13 +119,29 @@ export class SesionService {
       Seguidos: usuario.Seguidos,
       Pais: usuario.Pais,
       Nick: usuario.Nick,
-      Puntos:usuario.Puntos,
+      Puntos: usuario.Puntos,
       Foto: usuario.Foto,
       Portada: usuario.Portada,
       Capturas: usuario.Capturas,
       Publicacion: usuario.Publicacion,
       Grupos: usuario.Grupos
     });
+
+    let aux = true;
+    this.listadoUsuario()
+      .snapshotChanges()
+      .subscribe(Data => {
+        if (aux) {
+          Data.map(element => {
+            let x = element.payload.toJSON();
+            if (x["Correo"] === localStorage.getItem("cliente")) {
+              x["$key"] = element.key;
+              this.GlobalService.setUsuarioOnline(x);
+            }
+          });
+          aux = false;
+        }
+      });
   }
 
   pushFileToStorage(fileUpload: Imgupload, cliente?) {
@@ -271,9 +290,11 @@ export class SesionService {
       likes: 0,
       fecha: cliente.Publicacion.fecha
     });
-    this.fireBase.list('usuario/').update(cliente.$key,{
-      Puntos:cliente.Puntos
+    this.fireBase.list('usuario/').update(cliente.$key, {
+      Puntos: cliente.Puntos
     })
+    this.setNewCapturaOrPublication();
+
   }
 
   agregarCaptura(cliente: Usuario) {
@@ -288,7 +309,9 @@ export class SesionService {
       fecha: cliente.Capturas.fecha,
       donde: cliente.Capturas.donde
     });
-    this.Referido(cliente.Puntos,cliente.$key);
+    this.Referido(cliente.Puntos, cliente.$key);
+
+    this.setNewCapturaOrPublication();
   }
 
 
@@ -301,7 +324,7 @@ export class SesionService {
       likes: 0,
       precio: cliente.Capturas.precio,
       link: cliente.Capturas.link,
-      envio:cliente.Capturas.envio
+      envio: cliente.Capturas.envio
     });
   }
 
@@ -413,10 +436,13 @@ export class SesionService {
   borrarCaptura(key, keytwo) {
     this.fireBase.list("/usuario/" + keytwo + "/Capturas")
       .remove(key);
+      this.setNewCapturaOrPublication('perfil');
+    
   }
   borrarPubli(key, keytwo) {
     this.fireBase.list("/usuario/" + keytwo + "/Publicacion")
       .remove(key);
+    this.setNewCapturaOrPublication('perfil');
   }
 
 
@@ -509,10 +535,10 @@ export class SesionService {
     });
   }
 
-  Referido(puntos,key){
-    this.fireBase.list('usuario/'+key+"/Puntos").push({
-      puntos:puntos.puntos,
-      fecha:puntos.fecha
+  Referido(puntos, key) {
+    this.fireBase.list('usuario/' + key + "/Puntos").push({
+      puntos: puntos.puntos,
+      fecha: puntos.fecha
     });
   }
 
@@ -529,16 +555,143 @@ export class SesionService {
     this.fireBase.list("usuario/" + captura.keypadre + "/Capturas").update(captura.$key, {
       foto: captura.foto,
       descripcion: captura.descripcion,
-      link:captura.link,
-      precio:captura.precio,
-      envio:captura.envio,
+      link: captura.link,
+      precio: captura.precio,
+      envio: captura.envio,
       forma: captura.forma,
       Nick: captura.Nick,
       likes: captura.likes,
       quienLike: captura.quienLike,
     });
   }
-  
+
+  setNewCapturaOrPublication(url?) {
+    let aux = true;
+    this.listadoUsuario()
+      .snapshotChanges()
+      .subscribe(data => {
+        if (aux) {
+
+          let myCapturas = [];
+          let myPublicaciones = [];
+          let myTotal = [];
+          let Usuarios = [];
+          let Listado = [];
+          let arraySeguidores = [];
+          data.map(element => {
+            let x = element.payload.toJSON();
+            x["$key"] = element.key;
+            if (x["Correo"] === localStorage.getItem("cliente")) {
+              this.GlobalService.setUsuarioOnline(x);
+              if (x["Capturas"] !== undefined) {
+                let a = 0;
+                Object.keys(x["Capturas"]).map(item => {
+                  x["Capturas"][item]["$key"] = Object.keys(x["Capturas"])[a];
+                  myCapturas.push(x["Capturas"][item]);
+                  myTotal.push(x["Capturas"][item]);
+                });
+                this.GlobalService.setListadoMiPerfilCapturas(myCapturas);
+              }
+              if (x["Publicacion"] !== undefined) {
+                let a = 0;
+                Object.keys(x["Publicacion"]).map(item => {
+                  x["Publicacion"][item]["$key"] = Object.keys(x["Publicacion"])[a];
+                  myPublicaciones.push(x["Publicacion"][item]);
+                  myTotal.push(x["Publicacion"][item]);
+                });
+                this.GlobalService.setListadoMiPerfilPublicaciones(myPublicaciones);
+              }
+              let aux = x["quienSeguidos"];
+
+              if (aux !== undefined) {
+                Object.keys(aux).map(elements => {
+                  arraySeguidores.push(aux[elements]);
+                });
+              }
+              arraySeguidores.push(x["Nick"]);
+            }
+            Usuarios.push(x);
+          });
+
+          Listado = [];
+
+          Usuarios.map(elemento => {
+            arraySeguidores.forEach(padre => {
+              if (padre === elemento.Nick) {
+                if (elemento.Capturas !== undefined) {
+                  let y = 0;
+                  Object.keys(elemento.Capturas).map(key => {
+                    let z = elemento.Capturas[key];
+                    z.$key = Object.keys(elemento.Capturas)[y];
+                    z.keypadre = elemento.$key;
+                    z.fperfil = elemento.Foto;
+                    z.Correo = elemento.Correo;
+                    Listado.push(z);
+                    y++;
+                  });
+                }
+                if (elemento.Publicacion !== undefined) {
+                  let y = 0;
+                  Object.keys(elemento.Publicacion).map(key => {
+                    let k = elemento.Publicacion[key];
+                    k.$key = Object.keys(elemento.Publicacion)[y];
+                    k.keypadre = elemento.$key;
+                    k.fperfil = elemento.Foto;
+                    k.Correo = elemento.Correo;
+                    Listado.push(k);
+                    y++;
+                  });
+                }
+              }
+            });
+          });
+
+          for (let j = 0; j < Listado.length; j++) {
+            for (let c = 0; c < Listado.length - 1; c++) {
+              let aux = Listado[c].fecha.split("-");
+              let aux2 = Listado[c + 1].fecha.split("-");
+              let fecha = aux[0].split("/");
+              let fecha2 = aux2[0].split("/");
+
+              if (aux[0] === aux2[0]) {
+                if (aux[1] < aux2[1]) {
+                  var temp = Listado[c];
+                  Listado[c] = Listado[c + 1];
+                  Listado[c + 1] = temp;
+                }
+              } else if (Number(fecha[2]) === Number(fecha2[2])) {
+                if (Number(fecha[1]) === Number(fecha2[1])) {
+                  if (Number(fecha[0]) < Number(fecha2[0])) {
+                    var temp = Listado[c];
+                    Listado[c] = Listado[c + 1];
+                    Listado[c + 1] = temp;
+
+                  }
+                } else if (Number(fecha[1]) < Number(fecha[2])) {
+                  var temp = Listado[c];
+                  Listado[c] = Listado[c + 1];
+                  Listado[c + 1] = temp;
+                }
+              } else if (Number(fecha[2]) < Number(fecha2[2])) {
+                var temp = Listado[c];
+                Listado[c] = Listado[c + 1];
+                Listado[c + 1] = temp;
+              }
+
+            }
+          }
+          this.GlobalService.setListadoHome(Listado);
+          this.GlobalService.setListadoMiPerfilTotal(myTotal);
+          if(url === undefined){
+            url = '/home';
+          }else{
+            url = '/perfil'
+          }
+          this.Router.navigateByUrl(url);
+        }
+
+      });
+  }
 }
 
 

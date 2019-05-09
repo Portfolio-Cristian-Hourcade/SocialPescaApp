@@ -53,7 +53,7 @@ export class DetallePubliComponent implements OnInit {
             this.correo = x["Correo"];
             this.duenio = x;
           }
-          if(x["Correo"] === localStorage.getItem("tienda")){
+          if (x["Correo"] === localStorage.getItem("tienda")) {
             this.usuarioOnline = x;
             if (keypadre === element.key) {
               this.seguir = false;
@@ -99,7 +99,7 @@ export class DetallePubliComponent implements OnInit {
   meGustaP(x) {
 
     if (x.quienLike === undefined || x.quienLike.length === 0) {
-      x.likes = 1;
+      // x.likes = 1;
       x.quienLike = [];
       x.quienLike.push(localStorage.getItem("cliente"));
       this.variable.Foto = this.usuarioOnline.Foto;
@@ -107,6 +107,9 @@ export class DetallePubliComponent implements OnInit {
       this.variable.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/publicacion';
       if (x.Correo !== localStorage.getItem("cliente")) {
         this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
+        Notification.requestPermission(function(permission){
+          var notification = new Notification("Hola Mundo");
+          });
       }
       this.usuarioService.modificarGeneralPublicacion(x);
       this.listadoPublicacion(this.variable.keypadre, this.variable.$key);
@@ -123,12 +126,12 @@ export class DetallePubliComponent implements OnInit {
         }
       });
       if (aux) {
-        x.likes = x.likes - 1;
+        // x.likes = x.likes - 1;
         array = array.slice(1, position);
         x.quienLike = [];
         x.quienLike = array;
       } else {
-        x.likes = x.likes + 1;
+        // x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
         x.quienLike = [];
         x.quienLike = array;
@@ -138,6 +141,9 @@ export class DetallePubliComponent implements OnInit {
 
         if (this.usuarioOnline.Correo !== localStorage.getItem("cliente")) {
           this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
+          Notification.requestPermission(function(permission){
+            var notification = new Notification("Hola Mundo");
+            });
         }
       }
       this.usuarioService.modificarGeneralPublicacion(x);
@@ -148,7 +154,7 @@ export class DetallePubliComponent implements OnInit {
 
   meGusta(x) {
     if (x.quienLike === undefined) {
-      x.likes = 1;
+      // x.likes = 1;
       x.quienLike = [];
       x.quienLike.push(localStorage.getItem("cliente"));
       this.variable.publi = x.foto;
@@ -157,6 +163,9 @@ export class DetallePubliComponent implements OnInit {
 
       if (this.correo !== localStorage.getItem("cliente")) {
         this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
+        Notification.requestPermission(function(permission){
+          var notification = new Notification("Hola Mundo");
+          });
       }
       this.usuarioService.meGustaCap(x);
       this.listadoCaptura(this.variable.keypadre, this.variable.$key);
@@ -174,10 +183,10 @@ export class DetallePubliComponent implements OnInit {
         }
       });
       if (aux) {
-        x.likes = x.likes - 1;
+        // x.likes = x.likes - 1;
         x.quienLike = array;
       } else {
-        x.likes = x.likes + 1;
+        // x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
         x.quienLike = [];
         x.quienLike = array;
@@ -189,6 +198,9 @@ export class DetallePubliComponent implements OnInit {
 
           // this.duenio.Nick = this.usuarioOnline.Nick;
           this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
+          Notification.requestPermission(function(permission){
+            var notification = new Notification("Hola Mundo");
+            });
         }
       }
 
@@ -215,7 +227,16 @@ export class DetallePubliComponent implements OnInit {
                 this.comentarios.push(aux[element]);
               });
             }
-            console.log(x);
+            if (x["quienLike"] !== undefined) {
+              var y = [];
+              Object.keys(x["quienLike"]).map(element => {
+                y.push(x["quienLike"][element]);
+              });
+              x["likes"] = y.length;
+            } else {
+              x["likes"] = 0;
+            }
+
             if (x["quienSeguidos"] !== undefined) {
               let aux = x["quienSeguidos"];
               Object.keys(aux).map(element => {
@@ -227,9 +248,11 @@ export class DetallePubliComponent implements OnInit {
             }
             this.variable = x;
             this.variable.keypadre = keypadre;
-          
+            console.log(this.variable);
           };
         });
+
+
         this.cargando = false;
         primeraVez = false;
       });
@@ -254,25 +277,37 @@ export class DetallePubliComponent implements OnInit {
                 this.comentarios.push(aux[element]);
               });
             }
-
+            if (x["quienLike"] !== undefined) {
+              var y = [];
+              Object.keys(x["quienLike"]).map(element => {
+                y.push(x["quienLike"][element]);
+              });
+              x["likes"] = y.length;
+            } else {
+              x["likes"] = 0;
+            }
             this.variable = x;
             // let a  = document.getElementsByTagName("BODY") as HTMLCollectionOf<HTMLElement>;
             // a[0].style.zoom='0.0';
             document.body.style.zoom = '100%';
-            
+
           };
         });
+
         this.cargando = false;
       });
   }
 
-  borrar(){
-    const tipo = this.activatedRoute.snapshot.paramMap.get("tipo");
-    
-    if( tipo === 'publicacion'){
-      this.usuarioService.borrarPubli(this.variable.$key,this.variable.keypadre);
-    }else{
-      this.usuarioService.borrarCaptura(this.variable.$key,this.variable.keypadre);
+  borrar() {
+    let confirmar = confirm("¿Estas seguro de querer borrar esta publicación? No se podrá recuperar");
+    if (confirmar) {
+      const tipo = this.activatedRoute.snapshot.paramMap.get("tipo");
+
+      if (tipo === 'publicacion') {
+        this.usuarioService.borrarPubli(this.variable.$key, this.variable.keypadre);
+      } else {
+        this.usuarioService.borrarCaptura(this.variable.$key, this.variable.keypadre);
+      }
     }
 
   }
@@ -330,6 +365,9 @@ export class DetallePubliComponent implements OnInit {
         }
         if (this.variable.Nick !== this.usuarioOnline.Nick) {
           this.usuarioService.nuevaNotificacion(auxd, true, undefined, this.duenio);
+          Notification.requestPermission(function(permission){
+            var notification = new Notification("Hola Mundo");
+            });
         }
         console.log(publi);
         if (this.variable.forma === undefined) {
@@ -345,7 +383,7 @@ export class DetallePubliComponent implements OnInit {
   compartir() {
     if (window.navigator && window.navigator['share']) {
 
-      
+
       window.navigator['share']({
         title: 'Esta es una publicacion de SocialPesca',
         text: '¡Mirá esta publicación de SocialPesca!',
@@ -359,7 +397,7 @@ export class DetallePubliComponent implements OnInit {
   }
   meGustaProducto(x) {
     if (x.quienLike === undefined) {
-      x.likes = 1;
+      // x.likes = 1;
       x.quienLike = [];
       x.quienLike.push(localStorage.getItem("tienda"));
       this.variable.publi = x.foto;
@@ -385,10 +423,10 @@ export class DetallePubliComponent implements OnInit {
         }
       });
       if (aux) {
-        x.likes = x.likes - 1;
+        // x.likes = x.likes - 1;
         x.quienLike = array;
       } else {
-        x.likes = x.likes + 1;
+        // x.likes = x.likes + 1;
         array.push(localStorage.getItem("tienda"));
         x.quienLike = [];
         x.quienLike = array;

@@ -132,7 +132,7 @@
 
 
 
-<section *ngIf="primeraVez === null" class="{{(cargax!==2)?'':'desvanecer'}}"
+<section *ngIf="primeraVez === null || isCarga === null" class="{{(cargax!==2)?'':'desvanecer'}}"
   style="height:100vh;position:fixed;width:100%;z-index:9999999999999999999999999999999999999999999999999999;top:0;background-image: linear-gradient(#efefef,white);">
   <div class="my-auto mx-auto text-center" style="width:75%;margin-top: 55vh!important;">
     <p>
