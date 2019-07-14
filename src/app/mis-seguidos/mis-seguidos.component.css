@@ -1,0 +1,9 @@
+.imagen{
+    text-shadow: 1px 1px 1px black;
+    padding-top: 100%;
+    color: white;
+    width: 98%;
+    background-size: cover;
+    box-shadow: inset 0px -35px 48px -22px #000000ab;
+    background-position: center;
+}

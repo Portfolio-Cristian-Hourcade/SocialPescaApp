@@ -3,6 +3,9 @@
   <div class="container pt-3 cont">
 
     <div class="row" style="margin-bottom:5rem">
+      <div class="col-12 text-center">
+        <h3><b>Nuevo producto</b></h3>
+      </div>
       <div class=" col-md-6 col-12 d-flex pt-5" id="contenedor-img">
         <div class="mx-auto my-auto" *ngIf="isFoto" id="img" style="height: 100%">
 
@@ -27,17 +30,16 @@
       </div>
       <div class="col-md-6 pt-5 col-12">
         <div id="formulario">
-          <p><b>Nueva captura</b></p>
           <p>
             <textarea placeholder="Escribí una descripcion del producto" name="sd"
               [(ngModel)]="cliente.Capturas.descripcion"></textarea>
           </p>
-          <p><input type="text" placeholder="¿Cuál es el precio?" name="sd" [(ngModel)]="cliente.Capturas.precio"></p>
+          <p><input type="number" placeholder="¿Cuál es el precio?" name="sd" [(ngModel)]="cliente.Capturas.precio"></p>
           <p><input type="text" placeholder="¿Forma de envio?" [(ngModel)]="cliente.Capturas.envio"></p>
           <p><input type="text" placeholder="¿Forma de pago?" name="sd" [(ngModel)]="cliente.Capturas.forma"></p>
           <p><input type="text" placeholder="Link del producto (Mercadolibre, Mercadopago, Whatsapp)" name="sd" [(ngModel)]="cliente.Capturas.link"></p>
           <p class="text-danger" *ngIf="isProblema"> ¡No podes agregar una captura sin agregar la información!</p>
-          <p><button (click)="agregarPublicacion()">Publicar captura</button></p>
+          <p class="text-center"><button (click)="agregarPublicacion()">Publicar captura</button></p>
         </div>
       </div>
     </div>

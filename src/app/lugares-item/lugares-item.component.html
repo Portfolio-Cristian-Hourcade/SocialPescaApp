@@ -7,9 +7,9 @@
   </div>
 </header>
 <section>
-  <div class="container" style="margin-bottom:8vh">
+  <div class="container" style="margin-bottom:15vh">
     <div class="row">
-      <div class="col-12 text-center">
+      <div class="col-12 text-center mt-3">
         <h1 class="h3">{{item.Nombre}}</h1>
         <p>Rank: {{item.Opinion}}</p>
 
@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row mb-5" *ngIf="item.Carnada.length  !== 1 ">
       <div class="col-12 my-2 text-center">
         <b>Carnadas</b>
       </div>
@@ -44,6 +44,16 @@
         {{x}}
       </div>
     </div>
+
+    <div class="row mb-5" *ngIf="item.Carnada.length  === 1 ">
+      <div class="col-12 my-2 text-center">
+        <b>Carnadas</b>
+      </div>
+      <div class="col-12 text-center" *ngFor="let x of item.Carnada">
+        {{x}}
+      </div>
+    </div>
+
 
     <div class="row mb-5">
       <div class="col-12 my-2 text-center">
@@ -54,7 +64,7 @@
       </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row" class="padding-bottom:10vh">
       <div class="col-12 my-2 text-center">
         <b>Guias certificados</b>
       </div>

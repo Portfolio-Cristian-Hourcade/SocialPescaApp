@@ -1,43 +1,50 @@
 <app-nav-top></app-nav-top>
-<section style="padding-top: 8vh;">
+<section style="padding-top: 8vh;background: #eeeeee7a;">
   <div class="container">
     <div class="row my-3">
       <div class="col-12 text-center">
-        <h4>¡Vamos de pesca!</h4>
-        <input type="text" placeholder="¿Qué pez te gustaría pescar?" (keyup)="filtro($event.target.value)">
+        <h4 class="mb-3" style="font-weight:bolder;">¡Vamos de pesca!</h4>
+        <input style="text-align: center;
+        width: 100%;
+        /* border: 1px solid gainsboro; */
+        padding: 10px;
+        border: 0;
+        border-radius: 13px;
+        box-shadow: 0px 0px 11px -6px black;" type="text" placeholder="¿Qué pez te gustaría pescar?" (keyup)="filtro($event.target.value)">
       </div>
     </div>
     <div class="row">
       <div class="col-12 text-center">
-        <a>Si conoces un lugar que te gustaría que aparezca, sos guia o tenes un local <a
+        <a>¿Conoces algún lugar que te gustaría que aparezca aca? <a
             href="https://wa.me/541138459621">Contactanos</a></a>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row "
+    style="    background: white;
+    padding: 15px 0px;
+    border-radius: 20px 20px 0px 0px;
+    margin-top: 30px;
+    box-shadow: 0px 0px 10px -5px grey;">
       <div class="col-12 text-center">
         <h5>Top Lugares</h5>
       </div>
     </div>
-    <div class="row" style="    background-color: #e6e6e6;
-    min-height: 80vh;" *ngIf="JsonFiltro.length === 0">
+    <div class="row" style="min-height: 80vh;background-color: white;" *ngIf="JsonFiltro.length === 0">
 
       <div class="col-6 item d-flex" *ngFor="let x of JsonLugares" routerLink="/lugares/{{x.Slug}}"
         [style.background-image]="'url('+x.Portada+')'">
         <div class="mt-auto text-center">
-          <p class="mb-0 mx-auto" style="font-weight:100!important">{{x.Nombre}}</p>
-          <p class="mb-0 mx-auto">Rank: {{x.Opinion}}</p>
+          <p class="mb-0 mx-auto" style="font-weight:100!important;    font-size: 4.3vw;">{{x.Nombre}}</p>
         </div>
       </div>
 
     </div>
-    <div class="row" style="    background-color: #e6e6e6;
-    min-height: 80vh;" *ngIf="JsonFiltro !== []">
+    <div class="row" style="min-height: 80vh;" *ngIf="JsonFiltro.length !== 0">
 
       <div class="col-6 item d-flex" *ngFor="let x of JsonFiltro" routerLink="/lugares/{{x.Slug}}"
         [style.background-image]="'url('+x.Portada+')'">
         <div class="mt-auto text-center">
-          <p class="mb-0 mx-auto" style="font-weight:100!important">{{x.Nombre}}</p>
-          <p class="mb-0 mx-auto">Rank: {{x.Opinion}}</p>
+          <p class="mb-0 mx-auto" style="font-weight:100!important;    font-size: 4.3vw;">{{x.Nombre}}</p>
         </div>
       </div>
 

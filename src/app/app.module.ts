@@ -53,6 +53,7 @@ import { environment } from '../environments/environment';
 
 
 //Assets
+import { PushNotificationsModule } from 'ng-push'; //import the module
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
@@ -91,6 +92,11 @@ import { OtroperfiltiendaComponent } from './otroperfiltienda/otroperfiltienda.c
 import { GlobalService } from './global.service';
 import { ImageCompressService,ResizeOptions,ImageUtilityService } from 'ng2-image-compress';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { MessagingService } from './services/messaging.service';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { MisSeguidoresComponent } from './mis-seguidores/mis-seguidores.component';
+import { MisSeguidosComponent } from './mis-seguidos/mis-seguidos.component';
+import { RecortPipe } from './pipes/recort.pipe';
 
 
 @NgModule({
@@ -123,6 +129,9 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     PerfiltiendaComponent,
     NuevoproductoComponent,
     OtroperfiltiendaComponent,
+    MisSeguidoresComponent,
+    MisSeguidosComponent,
+    RecortPipe,
   ],
   imports: [
     AppRoutingModule,
@@ -170,9 +179,11 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     MatFormFieldModule,
     FormsModule,
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    PushNotificationsModule,
+    AngularFireMessagingModule,
   ],
-  providers: [SesionService,GlobalService,ImageCompressService,ResizeOptions],
+  providers: [SesionService,GlobalService,ImageCompressService,ResizeOptions,MessagingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

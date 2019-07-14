@@ -12,30 +12,56 @@ header{
     border-radius: 21px;
     border: 2px solid white;
     box-shadow: 0px 0px 7px -1px black;
+    animation: select 1s;
+}
+
+@keyframes select{
+    0%{
+        border:0;
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+    100%{
+        border:2px solid white;
+        box-shadow: 0px 0px 7px -1px black;
+    }
 }
 
 .action{
-    display: flex;
+    /* display: flex;
     width: 45px;
     background-image: linear-gradient(to right,blue,#00c2ff);
     height: 45px;
-    position: absolute;
-    left: calc(56% - 45px);
+    position: relative; */
+    /* left: calc(56% - 45px); */
+    /* bottom: 20px;
     box-shadow: 0px 1px 12px 0px #000000ba;
     border-radius: 25px;
     bottom: calc(134% - 45px);
+     */
+    margin: auto;
+    display: flex;
+    width: 45px;
+    background-image: linear-gradient(to right,#369bf9,#8dc9d0);
+    /* height: 7vh; */
+    height: 7vh;
+    position: relative;
+    bottom: 3vh;
+    box-shadow: 0px 1px 12px -2px #000000fa;
+    border-radius: 18%;
 }
 
 header{
     background-image: linear-gradient(to right,#0092ff, #81ccf1);
-    border-radius: 10px 10px 30px 30px;
+    border-radius: 20px 20px 0px 0px;
     box-shadow: 0px 1px 10px 0px #262626;
     height: 8vh;
-    bottom: 9px;
-    /* background-color: #6a95cc; */
+    bottom: 0px;
     position: fixed;
-    width: 96%;
-    left: 2%;
+    width: 100%;
+    left: 0%;
+}
+.tamano-t{
+    width:20%;
 }
 h1{
     font-weight: bolder;

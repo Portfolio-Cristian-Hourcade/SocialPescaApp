@@ -1,0 +1,26 @@
+<app-nav-top></app-nav-top>
+<section style="padding-top:8vh">
+  <div class="container">
+    <div class="row pb-3" style="background:#eee">
+      <div class="col-12 text-center" style="background: white;
+      border-radius: 0px 0px 40px 40px;
+      box-shadow: 0px 30px 6px -27px #c1c1c1;">
+        <h3 class="py-3">Seguidos de {{Nick}}</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-4" *ngFor="let x of listSeguidores">
+        <div class="row" routerLink="/perfil/{{x.Nick}}">
+          <div class="col-md-6 px-0">
+            <div class="row tarjeta-feed mx-auto d-flex mb-1">
+              <div class="col-md-12 imagen cp mx-auto" [style.background-image]="'url('+x.Foto+')'">
+                  {{x.Nick}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  <app-navbar></app-navbar>

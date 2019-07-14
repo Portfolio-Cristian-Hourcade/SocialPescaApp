@@ -1,8 +1,8 @@
 .item{
     height: 130px;
     background-size: cover;
-    box-shadow: inset 0px -8px 122px 7px black;
-    color:white;
+    box-shadow: inset 0px -31px 34px -10px #0e0e0e;
+        color:white;
 }
 .item div p{
     font-weight: bold;

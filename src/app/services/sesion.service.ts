@@ -89,13 +89,13 @@ export class SesionService {
     return this.listNotif = this.fireBase.list('usuario/' + key + '/Notificacion');
   }
 
-  updateNick(usuario: Usuario) {
-    if (usuario.Capturas === undefined) {
-      usuario.Capturas = null;
-    }
-    if (usuario.Publicacion === undefined) {
-      usuario.Publicacion = null;
-    }
+  updateNick(usuario: any) {
+    // if (usuario.Capturas === undefined) {
+    //   usuario.Capturas = null;
+    // }
+    // if (usuario.Publicacion === undefined) {
+    //   usuario.Publicacion = null;
+    // }
     if (usuario.Grupos === undefined) {
       usuario.Grupos = null;
     }
@@ -108,6 +108,7 @@ export class SesionService {
     if (usuario.Puntos === undefined) {
       usuario.Puntos = null;
     }
+    console.log(usuario.Capturas);
     this.listadoUsuarios.update(usuario.$key, {
       Nombre: usuario.Nombre,
       Apellido: usuario.Apellido,
@@ -122,8 +123,8 @@ export class SesionService {
       Puntos: usuario.Puntos,
       Foto: usuario.Foto,
       Portada: usuario.Portada,
-      Capturas: usuario.Capturas,
-      Publicacion: usuario.Publicacion,
+      // Capturas: usuario.Capturas,
+      // Publicacion: usuario.Publicacion,
       Grupos: usuario.Grupos
     });
 
@@ -255,6 +256,7 @@ export class SesionService {
       (error) => {
         // fail
         console.log(error);
+        alert(error);
       },
       () => {
         // success
@@ -436,8 +438,8 @@ export class SesionService {
   borrarCaptura(key, keytwo) {
     this.fireBase.list("/usuario/" + keytwo + "/Capturas")
       .remove(key);
-      this.setNewCapturaOrPublication('perfil');
-    
+    this.setNewCapturaOrPublication('perfil');
+
   }
   borrarPubli(key, keytwo) {
     this.fireBase.list("/usuario/" + keytwo + "/Publicacion")
@@ -447,7 +449,9 @@ export class SesionService {
 
 
 
-  meGustaCap(captura) {
+  meGustaCap(captura, like?) {
+    let entrada = true;
+
     if (captura.comentarios === undefined) {
       captura.comentarios = null;
     }
@@ -457,23 +461,53 @@ export class SesionService {
     if (captura.$key == undefined) {
       captura.$key = captura.key;
     }
-    console.log(captura);
-    this.fireBase.list("usuario/" + captura.keypadre + "/Capturas").update(captura.$key, {
-      foto: captura.foto,
-      descripcion: captura.descripcion,
-      pescado: captura.pescado,
-      peso: captura.peso,
-      forma: captura.forma,
-      donde: captura.donde,
-      fecha: captura.fecha,
-      Nick: captura.Nick,
-      likes: captura.likes,
-      quienLike: captura.quienLike,
-      comentarios: captura.comentarios,
-    });
+    this.fireBase.list("/usuario/" + captura.keypadre + "/Capturas")
+      .snapshotChanges()
+      .subscribe(data => {
+        if (entrada) {
+          let arrayLikes = [];
+          data.map(element => {
+            if (element.key === captura.$key) {
+              let x = element.payload.toJSON();
+              if (x["quienLike"] !== undefined) {
+                let aux = x["quienLike"]
+                Object.keys(aux).map(elementoTwo => {
+                  arrayLikes.push(aux[elementoTwo]);
+                });
+              }
+              if (!like) {
+                let aux = [];
+                arrayLikes.forEach(element => {
+                  if(element !== captura.email){
+                    aux.push(element);
+                  }
+                });
+                arrayLikes = aux;
+              } else {
+                arrayLikes.push(captura.quienLike[captura.quienLike.length - 1]);
+              }
+            }
+          });
+          entrada = false;
+          this.fireBase.list("usuario/" + captura.keypadre + "/Capturas").update(captura.$key, {
+            foto: captura.foto,
+            descripcion: captura.descripcion,
+            pescado: captura.pescado,
+            peso: captura.peso,
+            forma: captura.forma,
+            donde: captura.donde,
+            fecha: captura.fecha,
+            Nick: captura.Nick,
+            likes: 0,
+            quienLike: arrayLikes,
+            comentarios: captura.comentarios,
+          });
+        }
+      });
   }
 
-  meGustaPub(captura) {
+  meGustaPub(captura, like?) {
+    let entrada = true;
     if (captura.comentarios === undefined) {
       captura.comentarios = null;
     }
@@ -481,16 +515,48 @@ export class SesionService {
       captura.quienLike = null;
     }
 
-    this.fireBase.list("/usuario/" + captura.keypadre + "/Publicacion").update(captura.$key, {
-      foto: captura.foto,
-      descripcion: captura.descripcion,
-      likes: captura.likes,
-      Nick: captura.Nick,
-      fecha: captura.fecha,
-      quienLike: captura.quienLike,
-      comentarios: captura.comentarios,
-      etiqueta: captura.etiqueta,
-    });
+    this.fireBase.list("/usuario/" + captura.keypadre + "/Publicacion")
+      .snapshotChanges()
+      .subscribe(data => {
+        if (entrada) {
+          let arrayLikes = [];
+          data.map(element => {
+            console.log(element.key === captura.$key);
+            if (element.key === captura.$key) {
+              let x = element.payload.toJSON();
+              if (x["quienLike"] !== undefined) {
+                let aux = x["quienLike"];
+                Object.keys(aux).map(elementoTwo => {
+                  arrayLikes.push(aux[elementoTwo]);
+                });
+                console.log(arrayLikes);
+              }
+              if (!like) {
+                let aux = [];
+                arrayLikes.forEach(element => {
+                  if(element !== captura.email){
+                    aux.push(element);
+                  }
+                });
+                arrayLikes = aux;                
+              } else {
+                arrayLikes.push(captura.quienLike[captura.quienLike.length - 1]);
+              }
+            }
+          });
+          this.fireBase.list("/usuario/" + captura.keypadre + "/Publicacion").update(captura.$key, {
+            foto: captura.foto,
+            descripcion: captura.descripcion,
+            likes: 0,
+            Nick: captura.Nick,
+            fecha: captura.fecha,
+            quienLike: arrayLikes,
+            comentarios: captura.comentarios,
+            etiqueta: captura.etiqueta,
+          });
+          entrada = false;
+        }
+      });
   }
 
   comentarPubli(captura) {
@@ -567,6 +633,7 @@ export class SesionService {
 
   setNewCapturaOrPublication(url?) {
     let aux = true;
+    let user;
     this.listadoUsuario()
       .snapshotChanges()
       .subscribe(data => {
@@ -581,8 +648,14 @@ export class SesionService {
           data.map(element => {
             let x = element.payload.toJSON();
             x["$key"] = element.key;
-            if (x["Correo"] === localStorage.getItem("cliente")) {
+            if (x["Correo"] === localStorage.getItem("cliente") || x["Correo"] === localStorage.getItem("tienda")) {
+              if (localStorage.getItem("tienda") !== null) {
+                user = false;
+              } else {
+                user = true;
+              }
               this.GlobalService.setUsuarioOnline(x);
+
               if (x["Capturas"] !== undefined) {
                 let a = 0;
                 Object.keys(x["Capturas"]).map(item => {
@@ -650,14 +723,35 @@ export class SesionService {
             for (let c = 0; c < Listado.length - 1; c++) {
               let aux = Listado[c].fecha.split("-");
               let aux2 = Listado[c + 1].fecha.split("-");
+
+              let hora1 = Number(aux[1].split(":")[0]);
+              let hora2 = Number(aux2[1].split(":")[0]);
+              let minuto1 = Number(aux[1].split(":")[1]);
+              let minuto2 = Number(aux2[1].split(":")[1]);
+              let segundo1 = Number(aux[1].split(":")[2]);
+              let segundo2 = Number(aux2[1].split(":")[2]);
+
               let fecha = aux[0].split("/");
               let fecha2 = aux2[0].split("/");
 
               if (aux[0] === aux2[0]) {
-                if (aux[1] < aux2[1]) {
+      
+                if (hora1 < hora2) {
                   var temp = Listado[c];
                   Listado[c] = Listado[c + 1];
                   Listado[c + 1] = temp;
+                } else if (hora1 === hora2) {
+                  if (minuto1 < minuto2) {
+                    var temp = Listado[c];
+                    Listado[c] = Listado[c + 1];
+                    Listado[c + 1] = temp;
+                  } else if (minuto1 === minuto2) {
+                    if (segundo1 < segundo2) {
+                      var temp = Listado[c];
+                      Listado[c] = Listado[c + 1];
+                      Listado[c + 1] = temp;
+                    }
+                  }
                 }
               } else if (Number(fecha[2]) === Number(fecha2[2])) {
                 if (Number(fecha[1]) === Number(fecha2[1])) {
@@ -682,10 +776,14 @@ export class SesionService {
           }
           this.GlobalService.setListadoHome(Listado);
           this.GlobalService.setListadoMiPerfilTotal(myTotal);
-          if(url === undefined){
+          if (url === undefined) {
             url = '/home';
-          }else{
-            url = '/perfil'
+          } else {
+            if (user) {
+              url = '/perfil'
+            } else {
+              url = "/mitienda";
+            }
           }
           this.Router.navigateByUrl(url);
         }

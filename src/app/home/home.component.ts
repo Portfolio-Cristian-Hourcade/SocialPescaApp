@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SesionService } from '../services/sesion.service';
 import { Usuario } from '../interfaces/usuario';
 import { GlobalService } from '../global.service';
+import { PushNotificationsService } from 'ng-push';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-home',
@@ -33,8 +35,10 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private GlobalService: GlobalService,
-    private sesionService: SesionService
+    private sesionService: SesionService,
+    private pushNotifications: PushNotificationsService
   ) {
+    this.pushNotifications.requestPermission();
     this.cargax = 0;
     this.uno = true;
     this.dos = false;
@@ -54,19 +58,19 @@ export class HomeComponent implements OnInit {
       .snapshotChanges()
       .subscribe(data => {
         if (uno) {
-        let myCapturas = [];
-        let myPublicaciones = [];
-        let myTotal = [];
+          let myCapturas = [];
+          let myPublicaciones = [];
+          let myTotal = [];
 
-        this.listadoUsuario = [];
-        let Usuarios = [];
-        this.Listado = [];
-        let arraySeguidores = [];
+          this.listadoUsuario = [];
+          let Usuarios = [];
+          this.Listado = [];
+          let arraySeguidores = [];
 
           data.map(element => {
             let x = element.payload.toJSON();
             x["$key"] = element.key;
-            if (x["Correo"] === localStorage.getItem("cliente")) {
+            if (x["Correo"] === localStorage.getItem("cliente") || x["Correo"] === localStorage.getItem("tienda")) {
               if (x["Capturas"] !== undefined) {
                 let a = 0;
                 Object.keys(x["Capturas"]).map(item => {
@@ -113,6 +117,15 @@ export class HomeComponent implements OnInit {
                   Object.keys(elemento.Capturas).map(key => {
                     let z = elemento.Capturas[key];
                     z.$key = Object.keys(elemento.Capturas)[y];
+                    if (z.quienLike !== undefined) {
+                      var c = [];
+                      Object.keys(z.quienLike).map(element => {
+                        c.push(z.quienLike[element]);
+                      });
+                      z.likes = c.length;
+                    } else {
+                      z.likes = 0;
+                    }
                     z.keypadre = elemento.$key;
                     z.fperfil = elemento.Foto;
                     z.Correo = elemento.Correo;
@@ -125,6 +138,15 @@ export class HomeComponent implements OnInit {
                   Object.keys(elemento.Publicacion).map(key => {
                     let k = elemento.Publicacion[key];
                     k.$key = Object.keys(elemento.Publicacion)[y];
+                    if (k.quienLike !== undefined) {
+                      var c = [];
+                      Object.keys(k.quienLike).map(element => {
+                        c.push(k.quienLike[element]);
+                      });
+                      k.likes = c.length;
+                    } else {
+                      k.likes = 0;
+                    }
                     k.keypadre = elemento.$key;
                     k.fperfil = elemento.Foto;
                     k.Correo = elemento.Correo;
@@ -140,14 +162,37 @@ export class HomeComponent implements OnInit {
             for (let c = 0; c < this.Listado.length - 1; c++) {
               let aux = this.Listado[c].fecha.split("-");
               let aux2 = this.Listado[c + 1].fecha.split("-");
+
+              let hora1 = Number(aux[1].split(":")[0]);
+              let hora2 = Number(aux2[1].split(":")[0]);
+              let minuto1 = Number(aux[1].split(":")[1]);
+              let minuto2 = Number(aux2[1].split(":")[1]);
+              let segundo1 = Number(aux[1].split(":")[2]);
+              let segundo2 = Number(aux2[1].split(":")[2]);
+
               let fecha = aux[0].split("/");
               let fecha2 = aux2[0].split("/");
 
               if (aux[0] === aux2[0]) {
-                if (aux[1] < aux2[1]) {
+                console.log(hora1);
+                console.log(hora2);
+                console.log(hora1 > hora2)
+                if (hora1 < hora2) {
                   var temp = this.Listado[c];
                   this.Listado[c] = this.Listado[c + 1];
                   this.Listado[c + 1] = temp;
+                } else if (hora1 === hora2) {
+                  if (minuto1 < minuto2) {
+                    var temp = this.Listado[c];
+                    this.Listado[c] = this.Listado[c + 1];
+                    this.Listado[c + 1] = temp;
+                  } else if (minuto1 === minuto2) {
+                    if (segundo1 < segundo2) {
+                      var temp = this.Listado[c];
+                      this.Listado[c] = this.Listado[c + 1];
+                      this.Listado[c + 1] = temp;
+                    }
+                  }
                 }
               } else if (Number(fecha[2]) === Number(fecha2[2])) {
                 if (Number(fecha[1]) === Number(fecha2[1])) {
@@ -172,7 +217,6 @@ export class HomeComponent implements OnInit {
           }
           this.cantidad = this.Listado.length;
           this.carga = true;
-          console.log(this.Listado);
           this.GlobalService.setUsuarioOnline(this.usuarioOnline);
           this.GlobalService.setListadoHome(this.Listado);
           this.GlobalService.setListadoMiPerfilTotal(myTotal);
@@ -184,6 +228,7 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit() {
+
     this.Listado = [];
     this.primeraVez = localStorage.getItem("primeraVez");
     this.cargax = 0;
@@ -192,7 +237,6 @@ export class HomeComponent implements OnInit {
   }
 
   compartir(x) {
-    console.log(x);
     if (window.navigator && window.navigator['share']) {
       window.navigator['share']({
         title: 'Esta es una publicacion de SocialPesca',
@@ -229,12 +273,11 @@ export class HomeComponent implements OnInit {
   }
 
   meGusta(x) {
-
     if (x.quienLike === undefined) {
       x.likes = 1;
       x.quienLike = [];
       x.quienLike.push(localStorage.getItem("cliente"));
-      this.sesionService.meGustaCap(x);
+      this.sesionService.meGustaCap(x, true);
       this.usuario.publi = x.foto;
       this.usuario.Foto = this.usuarioOnline.Foto;
       this.usuario.$key = x.keypadre;
@@ -256,11 +299,13 @@ export class HomeComponent implements OnInit {
           position = key;
         }
       });
+      let isLike = true;
       if (aux) {
         x.likes = x.likes - 1;
         array = array.slice(1, position);
         x.quienLike = [];
         x.quienLike = array;
+        isLike = false;
       } else {
         x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
@@ -274,7 +319,7 @@ export class HomeComponent implements OnInit {
           this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
         }
       }
-      this.sesionService.meGustaCap(x);
+      this.sesionService.meGustaCap(x, isLike);
 
     }
 
@@ -298,7 +343,7 @@ export class HomeComponent implements OnInit {
       x.likes = 1;
       x.quienLike = [];
       x.quienLike.push(localStorage.getItem("cliente"));
-      this.sesionService.meGustaPub(x);
+      this.sesionService.meGustaPub(x, true);
       this.usuario.publi = x.foto;
       this.usuario.Foto = this.usuarioOnline.Foto;
       this.usuario.$key = x.keypadre;
@@ -311,18 +356,24 @@ export class HomeComponent implements OnInit {
       var aux = false;
       var position;
       var array = [];
-      Object.keys(x.quienLike).map(function (key) {
+
+      Object.keys(x.quienLike).map(key => {
+        console.log(key);
         array.push(x.quienLike[key]);
         if (x.quienLike[key] === localStorage.getItem("cliente")) {
           aux = true;
           position = key;
         }
       });
+
+      let isLike = true;
       if (aux) {
         x.likes = x.likes - 1;
         array = array.slice(1, position);
         x.quienLike = [];
         x.quienLike = array;
+        x.email = localStorage.getItem("cliente");
+        isLike = false;
       } else {
         x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
@@ -336,14 +387,14 @@ export class HomeComponent implements OnInit {
           this.sesionService.nuevaNotificacion(this.usuario, null, this.usuarioOnline.Nick, x);
         }
       }
-      this.sesionService.meGustaPub(x);
+      this.sesionService.meGustaPub(x, isLike);
     }
   }
 
-  isCarga : any;
+  isCarga: any;
   cargarBusqueda() {
     this.isCarga = this.GlobalService.getNick();
-    if (localStorage.getItem("primeraVez") === null || this.isCarga === null ) {
+    if (localStorage.getItem("primeraVez") === null || this.isCarga === null) {
       this.list();
       var primeraVez = true;
       this.sesionService.listadoUsuario()
@@ -359,9 +410,11 @@ export class HomeComponent implements OnInit {
                 this.listadoTodos.push(x);
               }
               if (x["Correo"] === localStorage.getItem("cliente")) {
+                this.usuario = x;
                 this.GlobalService.setNick(this.usuario);
               }
               if (x["Correo"] === localStorage.getItem("tienda")) {
+                this.usuario = x;
                 this.GlobalService.setNick(this.usuario);
               }
               if (x["Capturas"] !== undefined) {
@@ -371,7 +424,6 @@ export class HomeComponent implements OnInit {
                 this.sesionService.listadoCaptuasLikes(x["$key"])
                   .snapshotChanges()
                   .subscribe(data => {
-                    console.log("entrando");
                     if (aux) {
                       data.map(element => {
                         let z = element.payload.toJSON();
@@ -401,12 +453,16 @@ export class HomeComponent implements OnInit {
 
     } else {
 
-      
-        this.Listado = this.GlobalService.getListadoHome();
-        this.usuarioOnline = this.GlobalService.getUsuarioOnline();
-        this.carga = true;
+
+      this.Listado = this.GlobalService.getListadoHome();
+      this.usuarioOnline = this.GlobalService.getUsuarioOnline();
+      this.carga = true;
       this.cargax++;
     }
   }
 
+  actualizarListado() {
+    console.log("listado");
+    this.Listado = this.GlobalService.getListadoHome();
+  }
 }

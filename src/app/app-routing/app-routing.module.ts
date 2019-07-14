@@ -20,6 +20,8 @@ import { LogintiendasComponent } from '../logintiendas/logintiendas.component';
 import { PerfiltiendaComponent } from '../perfiltienda/perfiltienda.component';
 import { NuevoproductoComponent } from '../nuevoproducto/nuevoproducto.component';
 import { OtroperfiltiendaComponent } from '../otroperfiltienda/otroperfiltienda.component';
+import { MisSeguidoresComponent } from '../mis-seguidores/mis-seguidores.component';
+import { MisSeguidosComponent } from '../mis-seguidos/mis-seguidos.component';
 
 
 const routes: Routes = [
@@ -43,6 +45,9 @@ const routes: Routes = [
   { path: 'lugares/:lugar', component: LugaresItemComponent  },
   { path: 'mitienda/login', component: LogintiendasComponent  },
   { path: 'tienda/:nick', component: OtroperfiltiendaComponent  },
+  { path: 'seguidores/:nick', component: MisSeguidoresComponent  },
+  { path: 'seguidos/:nick', component: MisSeguidosComponent  },
+
 
 ];
 

@@ -8,11 +8,12 @@
             <img src="/assets/add.png" style="width:25px; height:25px;filter:invert(1)" routerLink="/nueva-publicacion">
           </div>
         </div> -->
-        <div class="col-12 d-flex">
-          <div class="mr-auto my-auto d-flex" style="position:relative">
+        <div class="d-flex" style="width:100%">
+          <div class="mr-auto my-auto d-flex" style="position:relative;width:100%;padding: 0px 15px;">
+            <div style="width:33%;" class="d-flex mx-auto my-auto">
 
-            <i class="material-icons text-white notif cp mr-3" (click)="notificacion = true">favorite</i>
-            <div (click)="notificacion = true" *ngIf="notificaciones > 0" style="width: 22px;
+              <i class="material-icons text-white notif cp" (click)="notificacion = true">favorite</i>
+              <div (click)="notificacion = true" *ngIf="notificaciones > 0" style="width: 22px;
             height: 22px;
             background: red;
             display: flex;
@@ -20,15 +21,18 @@
             color: white;
             font-weight: bold;
             position: absolute;
-            left: 15%;
+            left: 23%;
             bottom: 18px;
-        ">
-              <a class="mx-auto my-auto">
-                {{(notificaciones > 9) ? '9+' : notificaciones}}
-              </a>
+            ">
+                <a class="mx-auto my-auto">
+                  {{(notificaciones > 9) ? '9+' : notificaciones}}
+                </a>
+              </div>
             </div>
-            <i class="ml-auto material-icons text-white notif cp mr-2" routerLink="/mensajes">question_answer</i>
-            <div *ngIf="Mensajes > 0" routerLink="/mensajes" style="width: 22px;
+            <div style="width:33%" class="d-flex mx-auto my-auto">
+
+              <i class="ml-auto material-icons text-white notif cp mx-auto my-auto" routerLink="/mensajes">question_answer</i>
+              <div *ngIf="Mensajes > 0" routerLink="/mensajes" style="width: 22px;
             height: 22px;
             background: red;
             display: flex;
@@ -38,23 +42,26 @@
             position: absolute;
             left: 50%;
             bottom: 18px;
-        ">
-              <a class="mx-auto my-auto">
-                {{(Mensajes > 9) ? '9+' : Mensajes }}
-              </a>
+            ">
+                <a class="mx-auto my-auto">
+                  {{(Mensajes > 9) ? '9+' : Mensajes }}
+                </a>
+              </div>
             </div>
-            <i class=" material-icons text-white notif cp" (click)="menu = true">more_vert</i>
-            <div *ngIf="menu" (click)="menu = false;" style="
-          width: 100%;
-    height: 100vh;
-    background: #0000007a;
-    position: fixed;
-            top:0;
-            left:0;
-">
+            <div style="width:33%" class="d-flex mx-auto my-auto">
+
+              <i class=" material-icons text-white notif cp mx-auto" (click)="menu = true">more_vert</i>
               <div *ngIf="menu" (click)="menu = false;" style="
+          width: 100%;
+          height: 100vh;
+          background: #0000007a;
+          position: fixed;
+          top:0;
+          left:0;
+          ">
+                <div *ngIf="menu" (click)="menu = false;" style="
              width: 64%;
-       height: 147px;
+             height: 147px;
        background: white;
        color: black!important;
        font-size: 15px;
@@ -65,10 +72,11 @@
        padding: 10px;
        bottom: 45.5vh;
        box-shadow: 1px 1px 10px -1px #000000cc;
-               ">
-                <p routerLink="/ranking">Tabla de pescadores</p>
-                <p (click)="compartir()">Invitá amigos y <b>¡Ganá puntos!</b></p>
-                <p (click)="cerrar()">Cerrar sesión</p>
+       ">
+                  <p routerLink="/ranking">Tabla de pescadores</p>
+                  <p (click)="compartir()">Invitá amigos y <b>¡Ganá puntos!</b></p>
+                  <p (click)="cerrar()">Cerrar sesión</p>
+                </div>
               </div>
             </div>
           </div>

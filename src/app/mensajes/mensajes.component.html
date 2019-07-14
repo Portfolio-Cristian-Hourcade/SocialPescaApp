@@ -1,52 +1,104 @@
 <section>
   <div class="container-fluid">
-    <div class="row top">
-      <div class="col-12 d-flex">
-        <div class="mr-auto my-auto d-flex">
-          <i class="material-icons" routerLink="/home" *ngIf="!mensaje">keyboard_arrow_left</i>
-          <i class="material-icons" (click)="mensaje = false" *ngIf="mensaje">keyboard_arrow_left</i>
-          Mensajes
-        </div>
-        <div class="ml-auto my-auto">
+    <div class="row top" style="position:relative;background:white">
+      <div style="position: absolute;
+      display: flex;
+      left: 15px;
+      height: 8vh;
+    top: 0px;">
+        <i class="material-icons mx-auto my-auto" routerLink="/home" *ngIf="!mensaje">keyboard_arrow_left</i>
+        <i class="material-icons mx-auto my-auto" (click)="mensaje = false" *ngIf="mensaje">keyboard_arrow_left</i>
+      </div>
+      <div style="position: absolute;
+      display: flex;
+      right:15px;
+      height: 8vh;
+    top: 0px;">
+        <i class="material-icons mx-auto my-auto" (click)="Busqueda = !Busqueda;" *ngIf="!mensaje">search</i>
+        <!-- <i class="material-icons mx-auto my-auto" (click)="mensaje = false" *ngIf="mensaje">search</i> -->
+      </div>
+      <div class="col-12 d-flex" *ngIf="!mensaje">
+        <b style="    font-size: 5vw;
+        color: #242424;" class="my-auto mx-auto">Mensajes</b>
+      </div>
+      <div class="col-12 d-flex" *ngIf="mensaje">
+        <div class="mx-auto my-auto d-flex" style="height:100%">
+          <div class="my-auto">
+            <img *ngIf="mensaje"
+              src="{{(mensaje.Responsable2 === NickOnline) ? mensaje.Responsable1Foto : mensaje.Responsable2Foto }}"
+              style="width: 10vw;
+              height: 10vw;
+                border-radius: 25px;
+                border: 2px solid #cbecfd;
+                box-shadow: 1px 1px 6px -2px #00000082;">
+          </div>
+          <b style="font-size:20px;color: #474747;" class="my-auto ml-3"
+            *ngIf="mensaje">{{(mensaje.Responsable2 === NickOnline) ? mensaje.Responsable1 : mensaje.Responsable2 }}</b>
+
         </div>
       </div>
     </div>
 
     <!-- HEADER MENSAJES -->
 
-    <div class="row" style="height:8vh">
-      <div class="col-12 d-flex text-center" style="height:100%">
-        <div class="mx-auto my-auto">
+    <div class="row" *ngIf="Busqueda && !mensaje">
+      <div class="col-12 my-3" style="position:relative">
+        <input  style="width: 100%;
+        border: 0;
+        background: white;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
+        padding: 8px 40px;
+        outline: 0;
+        box-shadow: 1px 1px 12px -6px #000000c9;" type="text" name="sd" class="show-input" (keyup)="filtro($event.target.value)"
+          placeholder="¿Un mensaje para quién?">
+        <i class="material-icons show-input" style="    position: absolute;
+      top: 9px;
+      left: 26px;
+      color: gray;">search</i>
+      </div>
+    </div>
+    <!-- <div class="row" style="height:8vh" *ngIf="mensaje">
 
-          <b style="font-size:20px" *ngIf="!mensaje">Mensajes</b>
-          <b style="font-size:20px"
+      <div class="col-12 d-flex text-center" style="height:100%">
+
+        <div class="mx-auto my-auto d-flex">
+          <div class="my-auto">
+            <img *ngIf="mensaje"
+              src="{{(mensaje.Responsable2 === NickOnline) ? mensaje.Responsable1Foto : mensaje.Responsable2Foto }}"
+              style="width: 40px;
+                height: 40px;
+                border-radius: 25px;
+                border: 2px solid #cbecfd;
+                box-shadow: 1px 1px 6px -2px #00000082;">
+          </div>
+          <b style="font-size:20px;color: #474747;" class="my-auto ml-3"
             *ngIf="mensaje">{{(mensaje.Responsable2 === NickOnline) ? mensaje.Responsable1 : mensaje.Responsable2 }}</b>
+
         </div>
       </div>
-    </div>
+    </div> -->
 
 
-    <div class="row" *ngIf="!mensaje"   >
-      <div class="col-12 my-3" >
-        <mat-form-field style="width:100%">
-          <input matInput type="text" name="sd" (keyup)="filtro($event.target.value)" placeholder="Nuevo mensaje para">
-        </mat-form-field>
-      </div>
-    </div>
     <!-- ./ -->
 
     <!-- BODY DE MENSAJES -->
 
-    <div class="row"
-      style="overflow:auto; height: 64vh;background: hsl(0, 0%, 96%);    box-shadow: inset 0px 11px 46px -13px #a7a7a7;"
-      *ngIf="mensaje" id="mensajes">
+    <div class="row" style="overflow:auto; height: 80vh;    background: hsla(196, 100%, 50%, 0.26);
+      box-shadow: inset 0px 11px 46px -13px #a7a7a7;" *ngIf="mensaje" id="mensajes">
       <div class="col-12 d-flex mt-auto">
         <div style="width:100%" id="tamano">
-          <p style="border-radius: 5px;box-shadow: 1px 1px 1px 1px gainsboro;background: white;padding: 10px 50px 10px 10px;max-width: 70%;"
-            class="{{(NickOnline === x.quien) ? 'ml-auto' : ''}} mensaje"
-            [style.background-color]="(NickOnline === x.quien) ? '#d0f4ff' : 'white'"
-            *ngFor="let x of mensaje.mensajes">
-            {{x.mensaje}}
+          <p style="    border-radius: 5px;
+                  box-shadow: rgb(61, 61, 61) 1px 1px 5px -5px;
+          background: rgb(255, 255, 255);
+          color: #858585;
+          padding: 6px 50px 6px 10px;
+          font-size: 3.8vw;
+          max-width: 70%;" class="{{(NickOnline === x.quien) ? 'ml-auto' : ''}} mensaje"
+            [style.background-color]="(NickOnline === x.quien) ? 'white' : 'white'" *ngFor="let x of mensaje.mensajes">
+            <b>{{x.quien}}</b>
+            <br>
+            {{x.mensaje }}
           </p>
         </div>
       </div>
@@ -81,7 +133,7 @@
 
     <!-- LISTADO DE CHATS INICIADOS -->
 
-    <div *ngIf="!mensaje">
+    <div *ngIf="!mensaje && listadoVista.length === 0">
       <div class="row mt-3" style="position:relative" *ngFor="let x of listadoMensajes">
         <div *ngIf="!x.view" style="width: 20px;
         left: 92%;
@@ -91,21 +143,23 @@
         position: absolute;
         height: 20px;
         background-color: #00c4ff;"></div>
-        <div class="col-2 d-flex">
-          <div class="my-auto">
-            <img src="{{(x.Responsable2 === NickOnline) ? x.Responsable1Foto : x.Responsable2Foto }}"
-              style="width: 40px;height: 40px;border-radius: 20px;">
-          </div>
-        </div>
-        <div class="col-10 d-flex" (click)="abrir(x)">
-          <div class="my-auto" style="    background: #f4f4f4;
+        <div class="col-12 d-flex" (click)="abrir(x)">
+          <div class="my-auto" style="    background: white;
           border: 1px solid #e0e0e0;
-          box-shadow: 1px 1px 8px -3px black;
+          box-shadow: 0px 0px 7px -10px black;
           border-radius: 6px;
-          padding: 5px 5px 5px 15px;
+          padding: 15px 5px 15px 15px;
           width: 100%;">
-            <p class="mb-0"><b>{{(x.Responsable2 === NickOnline) ? x.Responsable1 : x.Responsable2 }}</b></p>
-            <p class="mb-0"><small>{{(x.quien === NickOnline) ? 'Yo' : x.quien}}: {{x.ultimo}} </small></p>
+            <div class="row">
+              <div class="col-2 my-auto">
+                <img src="{{(x.Responsable2 === NickOnline) ? x.Responsable1Foto : x.Responsable2Foto }}"
+                  style="width: 45px;height: 45px;border-radius: 20px;">
+              </div>
+              <div class="col-10">
+                <p class="mb-0"><b>{{(x.Responsable2 === NickOnline) ? x.Responsable1 : x.Responsable2 }}</b></p>
+                <p class="mb-0"><small>{{(x.quien === NickOnline) ? 'Yo' : x.quien}}: {{x.ultimo | recort}} </small></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -114,7 +168,7 @@
     <!-- ./ -->
     <div class="row" *ngIf="listadoMensajes.length === 0 && !mensaje && listadoVista.length === 0">
       <div class="col-12 text-center">
-        <h5 class="text-muted">No hay ningun mensaje</h5>
+        <h5 class="text-muted" style="font-size:5vw">Tu bandeja de entrada está vacía ¡Iniciá una conversación! </h5>
       </div>
     </div>
 
@@ -122,20 +176,28 @@
   </div>
 
   <!-- ENVIAR MENSAJES, FOOTER DE MENSAJES -->
-  <div class="container" style="height: calc(20vh - 70px)!important; height:20vh;" *ngIf="mensaje">
+  <div class="container" style="height: 12vh!important;background:white;padding-top: 2vh;padding-bottom: 3vh"
+    *ngIf="mensaje">
     <div class="row" style="height:100%">
-      <div class="col-9 d-flex">
-        <div class="mx-auto my-auto" style="width:100%">
-          <input type="text" (keyup.enter)="enviar()" name="texto"  autocomplete="off" [(ngModel)]="texto" placeholder="Enviar mensaje"
-            style="width: 100%;padding: 8px 10px;border-radius: 5px;border: 1px solid gainsboro;">
-        </div>
-      </div>
-      <div class="col-3 d-flex pl-0">
-        <div class="mx-auto my-auto" style="width:100%">
-          <button style="width:100%" class="d-flex" (click)="enviar()"><i
+      <div class="col-12 d-flex pr-0">
+        <div class="my-auto d-flex" style="
+        width: calc(100% - 15px);box-shadow: 0px 0px 6px -5px black;
+    border-radius: 8px;">
+          <input type="text" class="" (keyup.enter)="enviar()" name="texto" autocomplete="off" [(ngModel)]="texto"
+            placeholder="Enviar mensaje" style="width: 100%;
+            padding: 8px 10px;
+            border-radius: 8px 0px 0px 8px;
+            /* border: 1px solid gainsboro; */
+            border: 0;
+            background: #e6e6e6;">
+          <button style="width:33%" class="d-flex" (click)="enviar()"><i
               class="material-icons d-flex mx-auto">send</i></button>
         </div>
       </div>
+      <!-- <div class="col-3 d-flex pl-0">
+        <div class="mx-auto my-auto" style="width:100%">
+        </div>
+      </div> -->
     </div>
   </div>
 </section>

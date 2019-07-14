@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Imgupload } from '../interfaces/imgupload';
 import { SesionService } from '../services/sesion.service';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-perfiltienda',
@@ -23,7 +24,8 @@ export class PerfiltiendaComponent implements OnInit {
   key: string;
   puntos;
   constructor(
-    private usuarioService: SesionService
+    private usuarioService: SesionService,
+    private ng2ImgMax: Ng2ImgMaxService,
   ) {
     this.isGrupo = false;
     this.isCaptura = false;
@@ -58,7 +60,7 @@ export class PerfiltiendaComponent implements OnInit {
 
             x["$key"] = element.key;
             this.usuario = x;
-            
+            console.log(this.usuario);
             if(x["Puntos"]!== undefined){
               Object.keys(this.usuario.Puntos).map(elemento => {
                 this.puntos = this.usuario.Puntos[elemento].puntos + this.puntos;
@@ -204,27 +206,49 @@ export class PerfiltiendaComponent implements OnInit {
   CambiarFoto() {
     var input = document.createElement('input');
     input.type = 'file';
+    input.click();
 
     input.onchange = e => {
       var file = (<HTMLInputElement>e.target).files[0];
-      this.currentFileUpload = new Imgupload(file);
-      this.currentFileUpload.$key = Math.random();
-      this.usuarioService.CambiarPerfil(this.currentFileUpload, this.usuario);
+      let image = file;
+      this.ng2ImgMax.resizeImage(image, 800, 600).subscribe(
+        result => {
+          var files = result; // FileList object
+          image = result;
+          
+            this.currentFileUpload = new Imgupload(image);
+            this.currentFileUpload.$key = Math.random();
+            this.usuarioService.CambiarPerfil(this.currentFileUpload, this.usuario);
+          console.log("Se supone que termino");
+        },
+        error => {
+          alert('¡La foto que estas intentando subir no es un formato permitido 😢!');
+        }
+      );
     }
 
-    input.click();
   }
   CambiarPortada() {
+  
     var input = document.createElement('input');
     input.type = 'file';
+    input.click();
 
     input.onchange = e => {
       var file = (<HTMLInputElement>e.target).files[0];
-      this.currentFileUpload = new Imgupload(file);
-      this.currentFileUpload.$key = Math.random();
-      this.usuarioService.CambiarPortada(this.currentFileUpload, this.usuario);
+      let image = file;
+      this.ng2ImgMax.resizeImage(image, 800, 600).subscribe(
+        result => {
+          var files = result; // FileList object
+          image = result;
+            this.currentFileUpload = new Imgupload(image);
+            this.currentFileUpload.$key = Math.random();
+            this.usuarioService.CambiarPortada(this.currentFileUpload, this.usuario);
+        },
+        error => {
+          alert('¡La foto que estas intentando subir no es un formato permitido 😢!');
+        }
+      );
     }
-
-    input.click();
   }
 }

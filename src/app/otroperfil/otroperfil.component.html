@@ -59,61 +59,65 @@
 </section>
 <section id="feed">
 
-    <section style="background-color:white">
-        <div class="container" style="background:#eeeeee;    padding-bottom: 20px;">
-          <div class="row text-center" *ngIf="isMobile" style="background:white;">
-            <div class="col-12 my-3 text-center">
-              <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
-            </div>
-            <div class="col-4 text-center mt-2">
-              <h6><b>{{usuario.Seguidores}}</b> <br>Seguidores</h6>
-            </div>
-            <div class="col-4 text-center mt-2">
-                <h6><b>{{puntos}}</b> <br>Puntos</h6>
-              </div>
-            <div class="col-4 text-center mt-2">
-              <h6><b>{{usuario.Seguidos}}</b> <br>Seguidos</h6>
-    
-            </div>
-          </div>
-          <div class="row" style="    border-radius: 0px 0px 50px 50px;
-          background: white;    box-shadow: 0px 4px 10px -1px #c1c1c1;">
-    
-            <div class="col-4 text-center  d-flex h13 cp" *ngIf="!isCaptura"
-              (click)="isCaptura = true; isPublicacion = false;isGrupo = false" style="">
-              <img src="/assets/7.png" style="width:50px;" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
-            </div>
-            <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-              *ngIf="isCaptura" (click)="isCaptura = false;" style="">
-              <img src="/assets/7.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
-            </div>
-    
-            <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isPublicacion"
-              (click)="isPublicacion = true; isCaptura = false;isGrupo = false" style="">
-              <img src="/assets/9.png" style="width:50px;" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
-            </div>
-            <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-              *ngIf="isPublicacion" (click)="isPublicacion = false;" style="">
-              <img src="/assets/9.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
-            </div>
-    
-            <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isGrupo"
-              (click)="isGrupo = true; isPublicacion = false; isCaptura = false;" style="">
-              <img src="/assets/4.png" style="width:50px;" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
-            </div>
-            <div class="col-4 text-center d-flex h13 cp bg-b" style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;"
-              *ngIf="isGrupo" (click)="isGrupo = false;" style="">
-              <img src="/assets/4.png" style="width:50px;filter:invert(1)" class="my-auto mx-auto mr-3">
-              <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
-            </div>
-          </div>
+  <section style="background-color:white">
+    <div class="container" style="background:#eeeeee;    padding-bottom: 20px;">
+      <div class="row text-center" *ngIf="isMobile" style="background:white;">
+        <div class="col-12 my-3 text-center">
+          <b class="h2 my-2 mx-auto">{{usuario.Nick}}</b>
         </div>
-      </section>
+        <div class="col-4 text-center mt-2">
+          <h6 routerLink="/seguidores/{{usuario.Nick}}"><b>{{usuario.Seguidores}}</b> <br>Seguidores</h6>
+        </div>
+        <div class="col-4 text-center mt-2">
+          <h6><b>{{puntos}}</b> <br>Puntos</h6>
+        </div>
+
+        <div class="col-4 text-center mt-2">
+          <h6 routerLink="/seguidos/{{usuario.Nick}}"><b>{{usuario.Seguidos}}</b> <br>Seguidos</h6>
+
+        </div>
+      </div>
+      <div class="row" style="    border-radius: 0px 0px 50px 50px;
+          background: white;    box-shadow: 0px 30px 6px -27px #c1c1c1;">
+
+        <div class="col-4 text-center  d-flex h13 cp" *ngIf="!isCaptura"
+          (click)="isCaptura = true; isPublicacion = false;isGrupo = false" style="">
+          <img src="/assets/7.png" style="width:50px;height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isCaptura"
+          (click)="isCaptura = false;" style="">
+          <img src="/assets/7.png" style="width:50px;filter:invert(1);height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile">Mis Capturas</a>
+        </div>
+
+        <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isPublicacion"
+          (click)="isPublicacion = true; isCaptura = false;isGrupo = false" style="">
+          <img src="/assets/9.png" style="width:50px;height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isPublicacion"
+          (click)="isPublicacion = false;" style="">
+          <img src="/assets/9.png" style="width:50px;filter:invert(1);height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Publicaciones</a>
+        </div>
+
+        <div class="col-4 text-center item-hov d-flex h13 cp" *ngIf="!isGrupo"
+          (click)="isGrupo = true; isPublicacion = false; isCaptura = false;" style="">
+          <img src="/assets/4.png" style="width:50px;height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
+        </div>
+        <div class="col-4 text-center d-flex h13 cp bg-b"
+          style="background-image: linear-gradient(to right,#0092ff, #81ccf1);color:white;" *ngIf="isGrupo"
+          (click)="isGrupo = false;" style="">
+          <img src="/assets/4.png" style="width:50px;filter:invert(1);height: 50px" class="my-auto mx-auto mr-3">
+          <a class="my-auto h3 mx-auto" *ngIf="!isMobile"> Mis Grupos y Eventos</a>
+        </div>
+      </div>
+    </div>
+  </section>
   <div class="container" style="min-height:100vh">
     <div class="row mt-1" *ngIf="!isCaptura && !isPublicacion && !isGrupo">
       <div class="col-md-4 col-4" *ngFor="let x of listadoTodo">
@@ -163,7 +167,7 @@
       <div class="col-md-12 ">
         <div class="row" style="height:45vh">
           <div class="col-4 d-flex">
-            <img src="/assets/6.png" style="width:50px" class="my-auto ml-auto">
+            <img src="/assets/6.png" style="width:50px;height:50px" class="my-auto ml-auto">
           </div>
           <div class="col-8 d-flex">
             <div class="my-auto">

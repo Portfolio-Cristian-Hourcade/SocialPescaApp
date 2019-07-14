@@ -1,7 +1,7 @@
 .tarjeta{
-    margin: auto!important;
     padding: 5px;
     width:45%;
+    height: 33vw;
     box-shadow: 1px 0px 5px 0px grey;
     background-image: linear-gradient(to right, blue , #78caeb);
     border-radius: 4px;
@@ -12,7 +12,7 @@
     filter: invert(1);
 }
 .container{
-    height: 84vh;
+    height: 100vh;
 }
 .row{
     height: 100%;

@@ -23,21 +23,23 @@
             *ngIf="(variable.Nick === usuarioOnline.Nick) && variable.precio" routerLink="/mitienda">Ver perfil</a>
 
           <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
-            *ngIf="(variable.Nick !== usuarioOnline.Nick) && variable.precio" routerLink="/tienda/{{variable.Nick}}">Ver perfil</a>
+            *ngIf="(variable.Nick !== usuarioOnline.Nick) && variable.precio" routerLink="/tienda/{{variable.Nick}}">Ver
+            perfil</a>
 
         </b>
-    
+
 
       </div>
 
       <div class="col-12 foto px-0" style="    min-height: 100vh;">
-        <img src="{{variable.foto}}">
+        <img src="{{variable.foto}}" style="border-radius: 10px;
+        box-shadow: 0px 4px 17px -5px #00000057;">
         <div class="px-4 d-flex" style="height:8vh;border-bottom: 1px solid gainsboro;background: white;">
           <i class="material-icons mr-1 cp my-auto" (click)="meGusta(variable)"
             *ngIf="variable.forma !== undefined && !variable.precio">{{variable.quienLike | like}}</i>
           <i class="material-icons mr-1 cp my-auto" (click)="meGustaP(variable)"
             *ngIf="variable.forma === undefined  && !variable.precio">{{variable.quienLike | like}}</i>
-            <i class="material-icons mr-1 cp my-auto" (click)="meGustaProducto(variable)"
+          <i class="material-icons mr-1 cp my-auto" (click)="meGustaProducto(variable)"
             *ngIf="variable.forma !== undefined && variable.precio">{{variable.quienLike | like}}</i>
           <a class="mr-3  my-auto">{{variable.likes}}</a>
           <i class="material-icons ml-auto my-auto" (click)="borrar()"
@@ -48,10 +50,10 @@
         </div>
 
         <div class="px-4 mt-2">
-          <p class="mb-4"><b style="font-size:14px">{{variable.Nick}}</b> {{variable.descripcion}}
-            <p class="my-0" *ngIf="variable.envio"><b>Formas de envio:</b> {{variable.envio}}.</p>
-            <p class="my-0" *ngIf="variable.precio"><b>Forma de pago:</b> {{variable.forma}}.</p>
-            <p class="my-0" *ngIf="variable.precio"><b>Precio:</b> ${{variable.precio}}.</p>
+          <p class="mb-4"><b style="font-size:14px">{{variable.Nick}}</b><br> {{variable.descripcion}}
+            <p class="my-0" style="font-size: 4vw;" *ngIf="variable.envio"><b>Formas de envio:</b> {{variable.envio}}.</p>
+            <p class="my-0" *ngIf="variable.precio" style="font-size: 4vw;"><b>Forma de pago:</b> {{variable.forma}}.</p>
+            <p class="my-0" *ngIf="variable.precio" style="font-size: 4vw;"><b>Precio:</b> ${{variable.precio}}.</p>
             <p class="my-4 text-center" *ngIf="variable.link"><a style="    background-image: linear-gradient(to right,#0092ff, #81ccf1);
               color: white;
               padding: 10px 30px;
@@ -59,10 +61,10 @@
               border-radius: 5px;
               box-shadow: 1px 1px 7px 0px grey; " href="{{variable.link}}">Comprar producto</a></p>
 
-            <p class="my-0" *ngIf="variable.pescado"><b>Pescado:</b> {{variable.pescado}}.</p>
-            <p class=" my-0" *ngIf="variable.forma && !variable.precio"><b>Estilo:</b> {{variable.forma}}. </p>
-            <p class=" my-0" *ngIf="variable.donde"><b>Lugar:</b> {{variable.donde}}.</p>
-            <p class=" my-0" *ngIf="variable.etiqueta">
+            <p class="my-0" *ngIf="variable.pescado" style="font-size: 4vw;"><b>Pescado:</b> {{variable.pescado}}.</p>
+            <p class=" my-0" *ngIf="variable.forma && !variable.precio" style="font-size: 4vw;"><b>Estilo:</b> {{variable.forma}}. </p>
+            <p class=" my-0" *ngIf="variable.donde" style="font-size: 4vw;"><b>Lugar:</b> {{variable.donde}}.</p>
+            <p class=" my-0" *ngIf="variable.etiqueta" style="font-size: 4vw;">
               <a *ngIf="variable.etiqueta !== 'nadie'">
                 <b>Etiquetas:</b>
                 <a class="ml-2" style="word-break:break-all" *ngFor="let x of variable.etiqueta | etiquetas"

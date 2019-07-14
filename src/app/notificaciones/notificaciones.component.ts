@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input, EventEmitter, Output } from '@angular/core';
 import { SesionService } from '../services/sesion.service';
+import { MessagingService } from '../services/messaging.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -15,14 +16,17 @@ export class NotificacionesComponent implements OnInit, OnChanges {
   @Output() var = new EventEmitter();
 
   constructor(
-    private dashboardService: SesionService
+    private dashboardService: SesionService,
   ) {
     this.notificaciones = false;
   }
   abierto;
   listadoNotif;
   key;
+  message;
   ngOnInit() {
+    
+   
     let aux = true;
     this.dashboardService.listadoUsuario().snapshotChanges()
       .subscribe(Data => {

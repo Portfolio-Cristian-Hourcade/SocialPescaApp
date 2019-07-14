@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SesionService } from '../services/sesion.service';
-import { S_IXGRP } from 'constants';
 
 @Component({
   selector: 'app-detalle-publi',
@@ -30,7 +29,7 @@ export class DetallePubliComponent implements OnInit {
       };
     this.usuarioOnline = {
       Nick: null
-    };;
+    };
   }
 
   duenio;
@@ -107,17 +106,16 @@ export class DetallePubliComponent implements OnInit {
       this.variable.url = '/publicacion/' + x.keypadre + '/' + x.$key + '/publicacion';
       if (x.Correo !== localStorage.getItem("cliente")) {
         this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
-        Notification.requestPermission(function(permission){
-          var notification = new Notification("Hola Mundo");
-          });
+      
       }
-      this.usuarioService.modificarGeneralPublicacion(x);
+      this.usuarioService.meGustaPub(x,true);
       this.listadoPublicacion(this.variable.keypadre, this.variable.$key);
 
     } else {
       var aux = false;
       var position;
       var array = [];
+      var isLike = true;
       Object.keys(x.quienLike).map(function (key) {
         array.push(x.quienLike[key]);
         if (x.quienLike[key] === localStorage.getItem("cliente")) {
@@ -130,6 +128,7 @@ export class DetallePubliComponent implements OnInit {
         array = array.slice(1, position);
         x.quienLike = [];
         x.quienLike = array;
+        isLike = false;
       } else {
         // x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
@@ -141,14 +140,10 @@ export class DetallePubliComponent implements OnInit {
 
         if (this.usuarioOnline.Correo !== localStorage.getItem("cliente")) {
           this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
-          Notification.requestPermission(function(permission){
-            var notification = new Notification("Hola Mundo");
-            });
         }
       }
-      this.usuarioService.modificarGeneralPublicacion(x);
+      this.usuarioService.meGustaPub(x, isLike);
       this.listadoPublicacion(this.variable.keypadre, this.variable.$key);
-
     }
   }
 
@@ -163,16 +158,14 @@ export class DetallePubliComponent implements OnInit {
 
       if (this.correo !== localStorage.getItem("cliente")) {
         this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
-        Notification.requestPermission(function(permission){
-          var notification = new Notification("Hola Mundo");
-          });
       }
-      this.usuarioService.meGustaCap(x);
+      this.usuarioService.meGustaCap(x,true);
       this.listadoCaptura(this.variable.keypadre, this.variable.$key);
 
     } else {
       var aux = false;
       var position;
+      var isLike = true;
       var array = [];
       Object.keys(x.quienLike).map(function (key) {
         if (x.quienLike[key] === localStorage.getItem("cliente")) {
@@ -185,6 +178,7 @@ export class DetallePubliComponent implements OnInit {
       if (aux) {
         // x.likes = x.likes - 1;
         x.quienLike = array;
+        isLike = false;
       } else {
         // x.likes = x.likes + 1;
         array.push(localStorage.getItem("cliente"));
@@ -198,13 +192,10 @@ export class DetallePubliComponent implements OnInit {
 
           // this.duenio.Nick = this.usuarioOnline.Nick;
           this.usuarioService.nuevaNotificacion(this.variable, undefined, this.usuarioOnline.Nick, this.duenio);
-          Notification.requestPermission(function(permission){
-            var notification = new Notification("Hola Mundo");
-            });
         }
       }
 
-      this.usuarioService.meGustaCap(x);
+      this.usuarioService.meGustaCap(x,isLike);
       this.listadoCaptura(this.variable.keypadre, this.variable.$key);
     }
 
@@ -365,9 +356,9 @@ export class DetallePubliComponent implements OnInit {
         }
         if (this.variable.Nick !== this.usuarioOnline.Nick) {
           this.usuarioService.nuevaNotificacion(auxd, true, undefined, this.duenio);
-          Notification.requestPermission(function(permission){
-            var notification = new Notification("Hola Mundo");
-            });
+          // Notification.requestPermission(function(permission){
+          //   var notification = new Notification("Hola Mundo");
+          //   });
         }
         console.log(publi);
         if (this.variable.forma === undefined) {
@@ -438,11 +429,9 @@ export class DetallePubliComponent implements OnInit {
 
         }
       }
-
       this.usuarioService.meGustaProducto(x);
       this.listadoCaptura(this.variable.keypadre, this.variable.$key);
     }
-
   }
 }
 

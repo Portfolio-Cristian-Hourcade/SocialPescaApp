@@ -8,13 +8,7 @@
 .h40{
     height: 40vh;
 }
-.item-hov:hover {
-    background-color: blue;
-    color: white;
-}
-.item-hov:hover img{
-    filter: invert(1);
-}
+
 button{
     background-image: linear-gradient(to right,#3176fb,#45c3ff);
     color: white;

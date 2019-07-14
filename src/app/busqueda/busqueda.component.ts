@@ -32,39 +32,17 @@ export class BusquedaComponent implements OnInit {
   private NumberItem: number;
   isBlock: boolean;
 
-  usoInterno : boolean;
+  usoInterno: boolean;
 
   constructor(
     private GlobalService: GlobalService,
     private dashboardService: SesionService
   ) {
     this.top = "auto";
-    const offset = 125;
     this.NumberItem = 12;
     this.isBlock = false;
     this.usoInterno = false;
-    var _x = this;
-    $(window).scroll(function () {
-      if ($(window).scrollTop() + $(window).height() > $(document).height() - offset) {
-        _x.NumberItem = _x.NumberItem + 12;
-        if (_x.NumberItem > _x.listPerfil.length) {
-          const y = _x.listPerfil;
-          y.map(element => {
-            _x.listPerfil.push(element);
-          });
-        }
-      }
-      
-      _x.top = "2vh";
-      if ($(window).scrollTop() < 290 && _x.usoInterno == true) {
-        _x.usoInterno = false;
-        $('.actualizar').animate({ opacity: 0 }, 800);
-        
-      }else if( $(window).scrollTop() > 290 && _x.usoInterno == false){
-        _x.usoInterno = true;
-        $('.actualizar').animate({ opacity: 1 }, 800);
-      }
-    });
+
 
     this.cargo = false;
     this.isBusqueda = false;
@@ -74,8 +52,33 @@ export class BusquedaComponent implements OnInit {
   }
   ttt;
   ngOnInit() {
+    var _x = this;
+    const offset = 125;
 
+    $(window).scroll(function () {
+      if (window.location.href.indexOf("/explorar") !== -1) {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - offset) {
+          _x.NumberItem = _x.NumberItem + 12;
+          if (_x.NumberItem > _x.listPerfil.length) {
+            const y = _x.listPerfil;
+            y.map(element => {
+              _x.listPerfil.push(element);
+            });
+          }
+        }
+        _x.top = "2vh";
+        if ($(window).scrollTop() < 290 && _x.usoInterno == true) {
+          _x.usoInterno = false;
+          $('.actualizar').animate({ opacity: 0 }, 800);
+
+        } else if ($(window).scrollTop() > 290 && _x.usoInterno == false) {
+          _x.usoInterno = true;
+          $('.actualizar').animate({ opacity: 1 }, 800);
+        }
+      }
+    });
     var x = this.GlobalService.getListadoPerfilesBusqueda();
+    console.log(x);
     if (x.length !== 0) {
       this.cargo = true;
       this.isMobile = true;
@@ -83,7 +86,8 @@ export class BusquedaComponent implements OnInit {
 
       this.listPerfil = this.GlobalService.getListadoBusqueda();
       this.listadoTodos = x;
-      const usuario = this.GlobalService.getUsuarioOnline();;
+      const usuario = this.GlobalService.getUsuarioOnline();
+      console.log(usuario);
       this.myNick = usuario.Nick;
     } else {
 
@@ -262,7 +266,7 @@ export class BusquedaComponent implements OnInit {
     $('html, body').animate({ scrollTop: 0 }, 800);
     $('.actualizar').animate({ opacity: 0 }, 800);
     this.usoInterno = false;
-    this.listPerfil  = [];
+    this.listPerfil = [];
     let primeraVez = true;
     this.dashboardService.listadoUsuario()
       .snapshotChanges()
@@ -290,9 +294,9 @@ export class BusquedaComponent implements OnInit {
                   }
                   this.listPerfil = this.listPerfil.sort(function () { return Math.random() - 0.5 });
                 });
-              }
-            });
-            
+            }
+          });
+
           this.GlobalService.setListadoBusqueda(this.listPerfil);
           primeraVez = false;
         }

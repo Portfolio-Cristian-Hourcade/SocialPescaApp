@@ -1,5 +1,5 @@
 <app-nav-top></app-nav-top>
-<section *ngIf="carga">
+<section *ngIf="true">
   <section class="carga">
     <div class="container">
       <div class="row">
@@ -23,7 +23,9 @@
               <div class="row tarjeta-feed mx-auto " [style.margin-bottom]="(z === cantidad-1) ? '11vh' : '2vh'">
                 <div class="col-12 d-flex" style="height:8vh">
                   <div class="my-auto mr-auto">
-                    <a><b>{{x.Nick}}</b></a>
+                    <img src="{{x.fperfil}}" class="ft-per mr-2">
+                    <a routerLink="/perfil{{(x.Nick !== usuarioOnline.Nick)?'/'+x.Nick:''}}"
+                      style="color:black!important;"><b>{{x.Nick}}</b></a>
                     <a class="text-info ml-3 my-auto" style="font-size: 12px;font-weight: 100;"
                       *ngIf="(x.Nick !== usuarioOnline.Nick)" routerLink="/perfil/{{x.Nick}}">Ver
                       perfil</a>
@@ -34,30 +36,35 @@
                 </div>
                 <div class="col-md-12  cp px-0"
                   routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">
-                  <img src="{{x.foto}}" style="width:100%;height:auto;    border-radius: 15px;">
-                  <!-- <div class="col-md-12 imagen cp" (click)="selected = x"  [style.background-image]="'url('+x.foto+')'"> -->
+                  <img src="{{x.foto}}"
+                    style="width: 100%;height: auto;border-radius: 10px;box-shadow: 0px 4px 17px -5px #00000057;">
                 </div>
-                <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 10px 15px;">
+                <div class="col-md-12" style="border-bottom: 1px solid #80808021;padding: 15px 15px;">
                   <div class="d-flex">
                     <i class="material-icons mr-1 cp" (click)="meGusta(x)" *ngIf="x.forma">{{x.quienLike | like}}</i>
                     <i class="material-icons mr-1 cp" (click)="meGustaP(x)" *ngIf="!x.forma">{{x.quienLike | like}}</i>
                     <a class="mr-3">{{x.likes}}</a>
-
-                    <i class="material-icons mr-3 cp"
-                      routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">comment</i>
+                    <img src="/assets/noComment.png" style="width: 7vw;
+                    height: 7vw;
+                    margin-bottom: auto;
+                    display: flex;
+                    margin-top: auto;"
+                     routerLink="/publicacion/{{x.keypadre}}/{{x.$key}}/{{(x.forma === undefined) ? 'publicacion' : 'captura'}}">
+                    <!-- <i class="material-icons mr-3 cp"
+                     >comment</i> -->
                     <i class="material-icons ml-auto my-auto" (click)="compartir(x)">share</i>
 
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <p class="my-0 mt-3"><img src="{{x.fperfil}}" class="ft-per" routerLink="/perfil/{{x.Nick}}">
-                    <b class="ml-1 cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}">
+                  <p class="my-0 mt-3">
+                    <b class=" cp" style="position: relative;top: 2px;" routerLink="/perfil/{{x.Nick}}">
                       {{x.Nick}}</b></p>
-                  <p class="text-muted my-0">{{x.descripcion}}</p>
-                  <p class="text-muted my-0" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
-                  <p class="text-muted my-0" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
-                  <p class="text-muted my-0" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
-                  <p class="text-muted my-0" *ngIf="x.etiqueta">
+                  <p class="my-0" style="color:#2b2b2b">{{x.descripcion}}</p>
+                  <p class="my-0" style="color:#2b2b2b;    font-size: 4vw;" *ngIf="x.pescado"><b>Pescado:</b> {{x.pescado}}</p>
+                  <p class=" my-0" style="color:#2b2b2b;    font-size: 4vw;" *ngIf="x.forma"><b>Estilo:</b> {{x.forma}}</p>
+                  <p class=" my-0" style="color:#2b2b2b;    font-size: 4vw;" *ngIf="x.donde"><b>Lugar:</b> {{x.donde}}</p>
+                  <p class=" my-0" style="color:#2b2b2b;    font-size: 4vw;" *ngIf="x.etiqueta">
                     <a *ngIf="x.etiqueta !== 'nadie'">
                       <b>Etiquetas:</b>
                       <a class="ml-2" style="word-break:break-all" *ngFor="let x of x.etiqueta | etiquetas "
@@ -91,7 +98,7 @@
   </div>
 
 </section>
-<app-navbar></app-navbar>
+<app-navbar (valueChange)="actualizarListado()"></app-navbar>
 
 
 <div style="height:103vh;position:fixed; z-index:999999; background-color:white;width:100%;top:0" *ngIf="uno && isNick">

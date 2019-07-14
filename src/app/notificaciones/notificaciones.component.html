@@ -1,6 +1,29 @@
 <section *ngIf="notificaciones" style="overflow: auto;">
   <div class="container-fluid">
-    <div class="row top">
+    <div class="row top" style="position:relative;background:white">
+      <div style="position: absolute;
+    display: flex;
+    left: 15px;
+    height: 8vh;
+  top: 0px;">
+        <i class="material-icons mx-auto my-auto" style="z-index: 99" (click)="noti()">keyboard_arrow_left</i>
+      </div>
+      <div style="position: absolute;
+    display: flex;
+    right:15px;
+    height: 8vh;
+  top: 0px;">
+        <!-- <i class="material-icons mx-auto my-auto" (click)="Busqueda = !Busqueda;" *ngIf="!mensaje">search</i> -->
+        <!-- <i class="material-icons mx-auto my-auto" (click)="mensaje = false" *ngIf="mensaje">search</i> -->
+      </div>
+      <div class="col-12 d-flex" *ngIf="!mensaje">
+        <b style="    font-size: 5vw;
+      color: #242424;" class="my-auto mx-auto">Notificaciones</b>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <!-- <div class="row top">
       <div class="col-12 d-flex">
         <div class="mr-auto my-auto d-flex">
           <i class="material-icons" (click)="noti()">keyboard_arrow_left</i>
@@ -10,22 +33,19 @@
         <div class="ml-auto my-auto">
         </div>
       </div>
-    </div>
-    <div class="row my-3">
-      <div class="col-12 text-center">
-        <b style="font-size:20px">Nuevas notificaciones</b>
-      </div>
-    </div>
-    <div class="row" *ngFor="let x of listadoNotif">
+    </div> -->
+   
+    <div class="row py-3" *ngFor="let x of listadoNotif" style="    border-bottom: 1px solid gainsboro;    border-radius: 0px 0px 25px 25px;">
       <div class="col-2 d-flex">
         <div class="my-auto">
-          <img  routerLink="/perfil/{{x.Nick}}" src="{{x.Foto}}" style="    width: 40px;
+          <img routerLink="/perfil/{{x.Nick}}" src="{{x.Foto}}" style="    width: 40px;
           height: 40px;
           border-radius: 20px;">
         </div>
       </div>
       <div class="col-8">
-        <a *ngIf="x.Accion === 'le gusta una publicacion'">A </a> <b routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</b> {{x.Accion}}.
+        <a *ngIf="x.Accion === 'le gusta una publicacion'">A </a> <b routerLink="/perfil/{{x.Nick}}">{{x.Nick}}</b>
+        {{x.Accion}}.
       </div>
       <div class="col-2 d-flex pl-0">
         <div class="my-auto">

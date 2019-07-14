@@ -17,8 +17,10 @@ export class MensajesComponent implements OnInit {
   constructor(
     private dashboardService: SesionService
   ) {
+    this.Busqueda = false;
   }
   numero;
+  Busqueda
   listadoMensajes;
   unicaVez : boolean;
   ngOnInit() {
@@ -61,6 +63,7 @@ export class MensajesComponent implements OnInit {
 
                 if ((x["Responsable1"] === this.mensaje.Responsable1 || x["Responsable2"] === this.mensaje.Responsable1) && (x["Responsable1"] === this.mensaje.Responsable2 || x["Responsable2"] === this.mensaje.Responsable2)) {
                   this.mensaje = x;
+                  console.log(this.mensaje)
                   this.cuerpoMensaje = document.getElementById("mensajes");
                 }
 
@@ -88,7 +91,9 @@ export class MensajesComponent implements OnInit {
                 this.listadoMensajes.push(x);
                 if(this.mensaje !== undefined){
                   console.log("entro");
-                  this.cuerpoMensaje.scroll(0,20000);
+                  if(this.cuerpoMensaje !== undefined){
+                    this.cuerpoMensaje.scroll(0,20000);
+                  }
                 }
 
               }
@@ -112,7 +117,7 @@ export class MensajesComponent implements OnInit {
                   x["view"] = true;
                 }
                 this.listadoMensajes.push(x);
-                if(this.mensaje !== undefined){
+                if(this.mensaje !== undefined && this.cuerpoMensaje !== undefined){
                   this.cuerpoMensaje.scroll(0,20000);
                 }
               }
