@@ -3,6 +3,8 @@ import { Usuario } from '../interfaces/usuario';
 import { SesionService } from '../services/sesion.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+declare var FirebaseModule: any;
+
 @Component({
   selector: 'app-entrada',
   templateUrl: './entrada.component.html',
@@ -32,6 +34,9 @@ export class EntradaComponent implements OnInit {
 
   ListadoCorreo: any[];
   ListadoUsuarios: Usuario[];
+  aux : any = "";
+  // declare
+
   constructor(
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
@@ -47,9 +52,20 @@ export class EntradaComponent implements OnInit {
   }
   puntos;
   ngOnInit() {
+    var _x = this;
+
+    
     
     this.sesionService.nuevo();
-
+    
+    console.log(FirebaseModule.InitialiceFB());
+    FirebaseModule.askForPermissiontoReciveNotifications().then(function(defs){
+      _x.aux = defs;
+      console.log(_x.sesionService.exampleFunction(defs));
+    });
+    setTimeout( () => {
+      console.log();
+    }, 2000);
     localStorage.clear();
     this.sesionService.listadoUsuario()
       .snapshotChanges()
@@ -139,6 +155,7 @@ export class EntradaComponent implements OnInit {
       if (aux) {
         this.sesionService.nuevoUsuario(this.nuevoUsuario);
         localStorage.setItem("cliente", this.nuevoUsuario.Correo.toLowerCase());
+        console.log("registro")
         location.href = "/home";
       } else {
         this.isCorreo = true;

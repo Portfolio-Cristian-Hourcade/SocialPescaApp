@@ -23,13 +23,16 @@
               "src/assets",
               "src/.htaccess",
               "src/firebase-messaging-sw.js", 
+              "src/firebaseModule",
+              "src/push-notification", 
               "src/manifest.json" 
             ],
             "styles": [
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"
+              "node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js",
+              "./src/push-notification.js"
             ]
           },
           "configurations": {

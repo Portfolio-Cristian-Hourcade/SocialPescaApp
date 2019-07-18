@@ -97,6 +97,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MisSeguidoresComponent } from './mis-seguidores/mis-seguidores.component';
 import { MisSeguidosComponent } from './mis-seguidos/mis-seguidos.component';
 import { RecortPipe } from './pipes/recort.pipe';
+import { AbrirAppComponent } from './abrir-app/abrir-app.component';
 
 
 @NgModule({
@@ -132,6 +133,7 @@ import { RecortPipe } from './pipes/recort.pipe';
     MisSeguidoresComponent,
     MisSeguidosComponent,
     RecortPipe,
+    AbrirAppComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -182,6 +184,7 @@ import { RecortPipe } from './pipes/recort.pipe';
     HttpClientModule,
     PushNotificationsModule,
     AngularFireMessagingModule,
+    HttpClientModule,
   ],
   providers: [SesionService,GlobalService,ImageCompressService,ResizeOptions,MessagingService],
   bootstrap: [AppComponent]

@@ -49,23 +49,7 @@ z-index: 9;"
           </div>
         </div>
       </div>
-      <div class="mt-5 text-center " style="width:100%;">
-        <h4><b>¿Todavía no tenes la app?</b></h4>
-      </div>
-      <div class="col-12 text-center mt-3">
-        <a href="assets/socialpesca.apk" download="SocialPescaInstaller (1.0.1).apk" class="px-3 mt-4" style="    background: white;
-        color: #2f76fb!important;
-        font-weight: bold!important;
-        /* border: 0.5px solid #2f76fb; */
-        color: white;
-        width: 30px;
-        font-weight: bold;
-        padding: 20px;
-        font-size: 13px;
-        border-radius: 5px;
-        margin: auto;
-        box-shadow: 1px 1px 9px -1px #0a0909;"> <b style="margin: auto;">DESCARGAR APP 2.0MB</b></a>
-      </div>
+      
 
     </div>
     <div class="row" *ngIf="CrearCuenta">
@@ -146,4 +130,9 @@ z-index: 9;"
       </div>
     </div>
   </div>
+
+
+  <b *ngIf="aux">
+    {{aux}}
+  </b>
 </header>

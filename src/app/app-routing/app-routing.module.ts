@@ -22,6 +22,7 @@ import { NuevoproductoComponent } from '../nuevoproducto/nuevoproducto.component
 import { OtroperfiltiendaComponent } from '../otroperfiltienda/otroperfiltienda.component';
 import { MisSeguidoresComponent } from '../mis-seguidores/mis-seguidores.component';
 import { MisSeguidosComponent } from '../mis-seguidos/mis-seguidos.component';
+import { AbrirAppComponent } from '../abrir-app/abrir-app.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'tienda/:nick', component: OtroperfiltiendaComponent  },
   { path: 'seguidores/:nick', component: MisSeguidoresComponent  },
   { path: 'seguidos/:nick', component: MisSeguidosComponent  },
+  { path: 'abrirApp', component: AbrirAppComponent}
 
 
 ];

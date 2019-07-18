@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "socialpesca"
+    "default": "socialpesca",
+    "sp": "socialpesca-b4535"
   }
 }

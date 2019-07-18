@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NuevaPublicacionComponent } from '../nueva-publicacion/nueva-publicacion.component';
 import { GlobalService } from '../global.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,9 @@ export class SesionService {
     private fireBase: AngularFireDatabase,
     private auth: AngularFireAuth,
     private location: Router,
-    private GlobalService: GlobalService
-  ) { }
+    private GlobalService: GlobalService,
+    private Http : HttpClient
+    ) { }
 
   private basePath = '/uploads';
   /**
@@ -40,6 +42,28 @@ export class SesionService {
       var errorMessage = error.message;
     });
   }
+
+  exampleFunction(any) : any {
+    // var headers = new HttpHeaders();
+    // headers.append('Content-Type', 'application/json',Authorization: key=SERVER_KEY);
+
+
+    var headers_object = new HttpHeaders();
+    headers_object.append('Content-Type', 'application/json');
+    headers_object.append("Authorization", "key=AAAA89hk5Do:APA91bGtEQIEdanTZE2xTYf7-JyQHVrpC_HWzaDPuWzyvMD-yS2oc6wVwwWN1-HCcW6yOX-Sz3IUd_NtpLWP73Lg1qnt38rTzN2ZSGK7CzI56CuLV2Foq5kn-TDd4RZO8YD7FTB1R2Qt");
+    var notification = {
+      "notification": {
+          "title": "Notificaicon de SocialPesca",
+          "body": "¡Alguien a likeado tu foto!",
+          "click_action": "https://google.com",
+          "icon": "https://st2.depositphotos.com/8696740/11950/v/950/depositphotos_119504790-stock-illustration-danger-warning-attention-sign-icon.jpg"
+      },
+      "to": any
+  };
+  console.log(notification);
+  console.log(headers_object);
+    return this.Http.post('https://fcm.googleapis.com/fcm/send', notification, {headers: headers_object});
+  };
 
   nuevoUsuario(usuario: Usuario) {
     this.listadoUsuarios = this.fireBase.list('usuario');
